@@ -36,9 +36,12 @@ WS          [ \t]
                   errorOccurred = TRUE;
                   yyterminate();
                 }
-                if (c1 == '*' && c2 == '/')
+                if (c1 == '*' && c2 == '/'){
+		  printf("Found\n");
+		  yTRACE(myToken1);
                   break;
-                c1 = c2;
+                }
+		c1 = c2;
                 c2 = yyinput();
                 if (c1 == '\n' && c2 != EOF)
                   yyline++;
