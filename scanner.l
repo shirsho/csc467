@@ -24,6 +24,8 @@ int yyline = 1;
 %option noyywrap
 
 WS          [ \t]
+digit       [0-9]
+letter      [a-zA-Z]
 
 %%
 "/*"        {
@@ -36,14 +38,129 @@ WS          [ \t]
                   errorOccurred = TRUE;
                   yyterminate();
                 }
-                if (c1 == '*' && c2 == '/')
+                if (c1 == '*' && c2 == '/'){
+                  yTRACE(COMMENT);
                   break;
+                }
                 c1 = c2;
                 c2 = yyinput();
                 if (c1 == '\n' && c2 != EOF)
                   yyline++;
               }
             }
+
+ /*********************************
+ *Operators
+ *********************************/
+"+"         { yTRACE(PLUS);
+              return PLUS;       }
+"-"         { yTRACE(MINUS);
+              return MINUS;      }
+"*"         { yTRACE(TIMES);
+              return TIMES;      }
+"/"         { yTRACE(SLASH);
+              return SLASH;      }
+"!"         { yTRACE(NOT);
+              return NOT;        }
+"^"         { yTRACE(POWER);
+              return POWER;      }
+"=="        { yTRACE(EQL);
+              return EQL;        }
+"!="        { yTRACE(NEQL);
+              return NEQL;       }
+"<"         { yTRACE(LSS);
+              return LSS;        }
+">"         { yTRACE(GTR);
+              return GTR;        }
+"<="        { yTRACE(LEQ);
+              return LEQ;        }
+">="        { yTRACE(GEQ);
+              return GEQ;        }
+"&&"        { yTRACE(ANDAND);
+              return ANDAND;     }
+"||"        { yTRACE(OROR);
+              return OROR;       }
+
+ /*********************************
+ *Terminal Symbols
+ *********************************/
+"("         { yTRACE(LPAREN);
+              return LPAREN;     }
+")"         { yTRACE(RPAREN);
+              return RPAREN;     }
+"["         { yTRACE(LBRACKET);
+              return LBRACKET;   }
+"]"         { yTRACE(RBRACKET);
+              return RBRACKET;   }
+";"         { yTRACE(SEMICOLON); 
+              return SEMICOLON;  }
+","         { yTRACE(COMMA);
+              return COMMA;      }
+"."         { yTRACE(PERIOD);
+              return PERIOD;     }
+
+ /*********************************
+ *Types
+ *********************************/
+"bool"      { yTRACE(BOOL);
+              return BOOL;       }
+"bvec2"     { yTRACE(BVEC2);
+              return BVEC2;      }
+"bvec3"     { yTRACE(BVEC3);
+              return BVEC3;      }
+"bvec4"     { yTRACE(BVEC4);
+              return BVEC4;      }
+"int"       { yTRACE(INT);
+              return INT;        }
+"ivec2"     { yTRACE(IVEC2);
+              return IVEC2;      }
+"ivec3"     { yTRACE(IVEC3);
+              return IVEC3;      }
+"ivec4"     { yTRACE(IVEC4);
+              return IVEC4;      }
+"float"     { yTRACE(FLOAT); 
+              return FLOAT;      }
+"vec2"      { yTRACE(VEC2);
+              return VEC2;       }
+"vec3"      { yTRACE(VEC3);
+              return VEC3;       }
+"vec4"      { yTRACE(VEC4);
+              return VEC4;       }
+"const"     { yTRACE(CONST);
+              return CONST;      }
+"void"      { yTRACE(VOID);
+              return VOID;       }
+
+ /*********************************
+ *Statements
+ *********************************/
+"if"        { yTRACE(IFSYM);
+              return IFSYM;      }
+"while"     { yTRACE(WHILESYM);
+              return WHILESYM;   }
+
+ /*********************************
+ *Function Names
+ *********************************/
+"dp3"       { yTRACE(DP3);
+              return DP3;        }
+"lit"       { yTRACE(LIT);
+              return LIT;        }
+"rsq"       { yTRACE(RSQ);
+              return RSQ;        }
+
+ /*********************************
+ *Identifiers
+ *********************************/
+{letter}({letter}|{digit})* {
+                       /*yylval.id = strdup(yytext);*/
+                       yTRACE(IDENT);
+                       return IDENT;      }
+{digit}+             { yylval.num = atoi(yytext);
+                       yTRACE(NUMBER);
+                       return NUMBER;     }
+
+[ \t\n\r]            /* skip whitespace */
 
 .           { yERROR("Unknown token"); }
 
