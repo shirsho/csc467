@@ -1,1 +1,13 @@
-/* What the fuck */
++
+==
+123
+dp3
+;
+)
+&&
+int
+vec2
+if
+while
+const
+/*asdwgawr*/

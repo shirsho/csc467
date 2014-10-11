@@ -52,14 +52,13 @@ extern int yyline;        /* variable holding current line number   */
 
 
 // TODO:Modify me to add more data types
-// Can access me from flex useing yyval
+// Can access me from flex using yyval
 
 %union {
   int num;
 }
 // TODO:Replace myToken with your tokens, you can use these tokens in flex
-%token           myToken1 myToken2  
-
+%token           myToken1 myToken2 PLUS MINUS TIMES SLASH NOT POWER EQL NEQL LSS GTR LEQ GEQ ANDAND OROR LPAREN RPAREN LBRACKET RBRACKET SEMICOLON COMMA PERIOD BOOL BVEC2 BVEC3 BVEC4 INT IVEC2 IVEC3 IVEC4 FLOAT VEC2 VEC3 VEC4 CONST VOID IFSYM WHILESYM DP3 LIT RSQ IDENT NUMBER COMMENT
 
 %start    program
 

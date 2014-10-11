@@ -1,3 +1,50 @@
+Terminals unused in grammar
+
+   PLUS
+   MINUS
+   TIMES
+   SLASH
+   NOT
+   POWER
+   EQL
+   NEQL
+   LSS
+   GTR
+   LEQ
+   GEQ
+   ANDAND
+   OROR
+   LPAREN
+   RPAREN
+   LBRACKET
+   RBRACKET
+   SEMICOLON
+   COMMA
+   PERIOD
+   BOOL
+   BVEC2
+   BVEC3
+   BVEC4
+   INT
+   IVEC2
+   IVEC3
+   IVEC4
+   FLOAT
+   VEC2
+   VEC3
+   VEC4
+   CONST
+   VOID
+   IFSYM
+   WHILESYM
+   DP3
+   LIT
+   RSQ
+   IDENT
+   NUMBER
+   COMMENT
+
+
 Grammar
 
     0 $accept: program $end
@@ -17,17 +64,60 @@ $end (0) 0
 error (256)
 myToken1 (258) 4
 myToken2 (259) 5
+PLUS (260)
+MINUS (261)
+TIMES (262)
+SLASH (263)
+NOT (264)
+POWER (265)
+EQL (266)
+NEQL (267)
+LSS (268)
+GTR (269)
+LEQ (270)
+GEQ (271)
+ANDAND (272)
+OROR (273)
+LPAREN (274)
+RPAREN (275)
+LBRACKET (276)
+RBRACKET (277)
+SEMICOLON (278)
+COMMA (279)
+PERIOD (280)
+BOOL (281)
+BVEC2 (282)
+BVEC3 (283)
+BVEC4 (284)
+INT (285)
+IVEC2 (286)
+IVEC3 (287)
+IVEC4 (288)
+FLOAT (289)
+VEC2 (290)
+VEC3 (291)
+VEC4 (292)
+CONST (293)
+VOID (294)
+IFSYM (295)
+WHILESYM (296)
+DP3 (297)
+LIT (298)
+RSQ (299)
+IDENT (300)
+NUMBER (301)
+COMMENT (302)
 
 
 Nonterminals, with rules where they appear
 
-$accept (5)
+$accept (48)
     on left: 0
-program (6)
+program (49)
     on left: 1, on right: 0
-tokens (7)
+tokens (50)
     on left: 2 3, on right: 1 2
-token (8)
+token (51)
     on left: 4 5, on right: 2
 
 
