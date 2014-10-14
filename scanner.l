@@ -60,6 +60,8 @@ letter      [a-zA-Z]
               return TIMES;      }
 "/"         { yTRACE(SLASH);
               return SLASH;      }
+"="         { yTRACE(EQUAL);
+              return EQUAL;      }
 "!"         { yTRACE(NOT);
               return NOT;        }
 "^"         { yTRACE(POWER);
@@ -136,6 +138,8 @@ letter      [a-zA-Z]
  *********************************/
 "if"        { yTRACE(IFSYM);
               return IFSYM;      }
+"else"        { yTRACE(ELSESYM);
+              return ELSESYM;      }
 "while"     { yTRACE(WHILESYM);
               return WHILESYM;   }
 
@@ -153,7 +157,7 @@ letter      [a-zA-Z]
  *Identifiers
  *********************************/
 {letter}({letter}|{digit})* {
-                       /*yylval.id = strdup(yytext);*/
+                       yylval.id = strdup(yytext);
                        yTRACE(IDENT);
                        return IDENT;      }
 {digit}+             { yylval.num = atoi(yytext);

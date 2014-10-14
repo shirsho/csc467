@@ -4,6 +4,7 @@ Terminals unused in grammar
    MINUS
    TIMES
    SLASH
+   EQUAL
    NOT
    POWER
    EQL
@@ -36,6 +37,7 @@ Terminals unused in grammar
    CONST
    VOID
    IFSYM
+   ELSESYM
    WHILESYM
    DP3
    LIT
@@ -68,56 +70,58 @@ PLUS (260)
 MINUS (261)
 TIMES (262)
 SLASH (263)
-NOT (264)
-POWER (265)
-EQL (266)
-NEQL (267)
-LSS (268)
-GTR (269)
-LEQ (270)
-GEQ (271)
-ANDAND (272)
-OROR (273)
-LPAREN (274)
-RPAREN (275)
-LBRACKET (276)
-RBRACKET (277)
-SEMICOLON (278)
-COMMA (279)
-PERIOD (280)
-BOOL (281)
-BVEC2 (282)
-BVEC3 (283)
-BVEC4 (284)
-INT (285)
-IVEC2 (286)
-IVEC3 (287)
-IVEC4 (288)
-FLOAT (289)
-VEC2 (290)
-VEC3 (291)
-VEC4 (292)
-CONST (293)
-VOID (294)
-IFSYM (295)
-WHILESYM (296)
-DP3 (297)
-LIT (298)
-RSQ (299)
-IDENT (300)
-NUMBER (301)
-COMMENT (302)
+EQUAL (264)
+NOT (265)
+POWER (266)
+EQL (267)
+NEQL (268)
+LSS (269)
+GTR (270)
+LEQ (271)
+GEQ (272)
+ANDAND (273)
+OROR (274)
+LPAREN (275)
+RPAREN (276)
+LBRACKET (277)
+RBRACKET (278)
+SEMICOLON (279)
+COMMA (280)
+PERIOD (281)
+BOOL (282)
+BVEC2 (283)
+BVEC3 (284)
+BVEC4 (285)
+INT (286)
+IVEC2 (287)
+IVEC3 (288)
+IVEC4 (289)
+FLOAT (290)
+VEC2 (291)
+VEC3 (292)
+VEC4 (293)
+CONST (294)
+VOID (295)
+IFSYM (296)
+ELSESYM (297)
+WHILESYM (298)
+DP3 (299)
+LIT (300)
+RSQ (301)
+IDENT (302)
+NUMBER (303)
+COMMENT (304)
 
 
 Nonterminals, with rules where they appear
 
-$accept (48)
+$accept (50)
     on left: 0
-program (49)
+program (51)
     on left: 1, on right: 0
-tokens (50)
+tokens (52)
     on left: 2 3, on right: 1 2
-token (51)
+token (53)
     on left: 4 5, on right: 2
 
 
