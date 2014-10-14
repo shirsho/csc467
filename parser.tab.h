@@ -61,29 +61,31 @@
      SEMICOLON = 279,
      COMMA = 280,
      PERIOD = 281,
-     BOOL = 282,
-     BVEC2 = 283,
-     BVEC3 = 284,
-     BVEC4 = 285,
-     INT = 286,
-     IVEC2 = 287,
-     IVEC3 = 288,
-     IVEC4 = 289,
-     FLOAT = 290,
-     VEC2 = 291,
-     VEC3 = 292,
-     VEC4 = 293,
-     CONST = 294,
-     VOID = 295,
-     IFSYM = 296,
-     ELSESYM = 297,
-     WHILESYM = 298,
-     DP3 = 299,
-     LIT = 300,
-     RSQ = 301,
-     IDENT = 302,
-     NUMBER = 303,
-     COMMENT = 304
+     TRUEBOOL = 282,
+     FALSEBOOL = 283,
+     BOOL = 284,
+     BVEC2 = 285,
+     BVEC3 = 286,
+     BVEC4 = 287,
+     INT = 288,
+     IVEC2 = 289,
+     IVEC3 = 290,
+     IVEC4 = 291,
+     FLOAT = 292,
+     VEC2 = 293,
+     VEC3 = 294,
+     VEC4 = 295,
+     CONST = 296,
+     VOID = 297,
+     IFSYM = 298,
+     ELSESYM = 299,
+     WHILESYM = 300,
+     DP3 = 301,
+     LIT = 302,
+     RSQ = 303,
+     IDENT = 304,
+     NUMBER = 305,
+     COMMENT = 306
    };
 #endif
 /* Tokens.  */
@@ -111,29 +113,31 @@
 #define SEMICOLON 279
 #define COMMA 280
 #define PERIOD 281
-#define BOOL 282
-#define BVEC2 283
-#define BVEC3 284
-#define BVEC4 285
-#define INT 286
-#define IVEC2 287
-#define IVEC3 288
-#define IVEC4 289
-#define FLOAT 290
-#define VEC2 291
-#define VEC3 292
-#define VEC4 293
-#define CONST 294
-#define VOID 295
-#define IFSYM 296
-#define ELSESYM 297
-#define WHILESYM 298
-#define DP3 299
-#define LIT 300
-#define RSQ 301
-#define IDENT 302
-#define NUMBER 303
-#define COMMENT 304
+#define TRUEBOOL 282
+#define FALSEBOOL 283
+#define BOOL 284
+#define BVEC2 285
+#define BVEC3 286
+#define BVEC4 287
+#define INT 288
+#define IVEC2 289
+#define IVEC3 290
+#define IVEC4 291
+#define FLOAT 292
+#define VEC2 293
+#define VEC3 294
+#define VEC4 295
+#define CONST 296
+#define VOID 297
+#define IFSYM 298
+#define ELSESYM 299
+#define WHILESYM 300
+#define DP3 301
+#define LIT 302
+#define RSQ 303
+#define IDENT 304
+#define NUMBER 305
+#define COMMENT 306
 
 
 
@@ -151,7 +155,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 155 "y.tab.h"
+#line 159 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

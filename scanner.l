@@ -102,6 +102,14 @@ letter      [a-zA-Z]
               return PERIOD;     }
 
  /*********************************
+ *Boolean Variables
+ *********************************/
+"true"      { yTRACE(TRUEBOOL);
+              return TRUEBOOL;   }
+"false"     { yTRACE(FALSEBOOL);
+              return FALSEBOOL;  }
+
+ /*********************************
  *Types
  *********************************/
 "bool"      { yTRACE(BOOL);
@@ -164,7 +172,8 @@ letter      [a-zA-Z]
                        yTRACE(NUMBER);
                        return NUMBER;     }
 
-[ \t\n\r]            /* skip whitespace */
+[ \t\r]            /* skip whitespace */
+[\n]                yyline++;
 
 .           { yERROR("Unknown token"); }
 

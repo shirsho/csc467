@@ -22,6 +22,8 @@ Terminals unused in grammar
    SEMICOLON
    COMMA
    PERIOD
+   TRUEBOOL
+   FALSEBOOL
    BOOL
    BVEC2
    BVEC3
@@ -88,40 +90,42 @@ RBRACKET (278)
 SEMICOLON (279)
 COMMA (280)
 PERIOD (281)
-BOOL (282)
-BVEC2 (283)
-BVEC3 (284)
-BVEC4 (285)
-INT (286)
-IVEC2 (287)
-IVEC3 (288)
-IVEC4 (289)
-FLOAT (290)
-VEC2 (291)
-VEC3 (292)
-VEC4 (293)
-CONST (294)
-VOID (295)
-IFSYM (296)
-ELSESYM (297)
-WHILESYM (298)
-DP3 (299)
-LIT (300)
-RSQ (301)
-IDENT (302)
-NUMBER (303)
-COMMENT (304)
+TRUEBOOL (282)
+FALSEBOOL (283)
+BOOL (284)
+BVEC2 (285)
+BVEC3 (286)
+BVEC4 (287)
+INT (288)
+IVEC2 (289)
+IVEC3 (290)
+IVEC4 (291)
+FLOAT (292)
+VEC2 (293)
+VEC3 (294)
+VEC4 (295)
+CONST (296)
+VOID (297)
+IFSYM (298)
+ELSESYM (299)
+WHILESYM (300)
+DP3 (301)
+LIT (302)
+RSQ (303)
+IDENT (304)
+NUMBER (305)
+COMMENT (306)
 
 
 Nonterminals, with rules where they appear
 
-$accept (50)
+$accept (52)
     on left: 0
-program (51)
+program (53)
     on left: 1, on right: 0
-tokens (52)
+tokens (54)
     on left: 2 3, on right: 1 2
-token (53)
+token (55)
     on left: 4 5, on right: 2
 
 
