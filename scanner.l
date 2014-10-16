@@ -1,7 +1,8 @@
 %{
 /**********************************************************************
  *
- * **YOUR GROUP INFO SHOULD GO HERE**
+ * Justin Canton, 1000017910
+ * Samprit
  *
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/
@@ -161,6 +162,9 @@ letter      [a-zA-Z]
 "rsq"       { yTRACE(RSQ);
               return RSQ;        }
 
+[ \t\r]            /* skip whitespace */
+[\n]                yyline++;
+
  /*********************************
  *Identifiers
  *********************************/
@@ -171,9 +175,9 @@ letter      [a-zA-Z]
 {digit}+             { yylval.num = atoi(yytext);
                        yTRACE(NUMBER);
                        return NUMBER;     }
-
-[ \t\r]            /* skip whitespace */
-[\n]                yyline++;
+{digit}*"."{digit}*    { yylval.fnum = atof(yytext);
+                       yTRACE(FLOATNUMBER);
+                       return FLOATNUMBER;     }
 
 .           { yERROR("Unknown token"); }
 

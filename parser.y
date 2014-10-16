@@ -1,6 +1,7 @@
 %{
 /***********************************************************************
- * --YOUR GROUP INFO SHOULD GO HERE--
+ * Justin Canton, 1000017910
+ * Samprit
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
@@ -57,9 +58,10 @@ extern int yyline;        /* variable holding current line number   */
 %union {
   int num;
   char *id;
+  float fnum;
 }
 // TODO:Replace myToken with your tokens, you can use these tokens in flex
-%token           myToken1 myToken2 PLUS MINUS TIMES SLASH EQUAL NOT POWER EQL NEQL LSS GTR LEQ GEQ ANDAND OROR LPAREN RPAREN LBRACKET RBRACKET SEMICOLON COMMA PERIOD TRUEBOOL FALSEBOOL BOOL BVEC2 BVEC3 BVEC4 INT IVEC2 IVEC3 IVEC4 FLOAT VEC2 VEC3 VEC4 CONST VOID IFSYM ELSESYM WHILESYM DP3 LIT RSQ IDENT NUMBER COMMENT
+%token           myToken1 myToken2 COMMENT PLUS MINUS TIMES SLASH EQUAL NOT POWER EQL NEQL LSS GTR LEQ GEQ ANDAND OROR LPAREN RPAREN LBRACKET RBRACKET SEMICOLON COMMA PERIOD TRUEBOOL FALSEBOOL BOOL BVEC2 BVEC3 BVEC4 INT IVEC2 IVEC3 IVEC4 FLOAT VEC2 VEC3 VEC4 CONST VOID IFSYM ELSESYM WHILESYM DP3 LIT RSQ IDENT NUMBER FLOATNUMBER
 
 %start    program
 

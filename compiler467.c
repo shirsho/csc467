@@ -1,5 +1,6 @@
 /***********************************************************************
- * **YOUR GROUP INFO SHOULD GO HERE**
+ * Justin Canton, 1000017910
+ * Samprit
  *
  * compiler467.c
  *

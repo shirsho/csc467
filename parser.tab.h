@@ -39,105 +39,107 @@
    enum yytokentype {
      myToken1 = 258,
      myToken2 = 259,
-     PLUS = 260,
-     MINUS = 261,
-     TIMES = 262,
-     SLASH = 263,
-     EQUAL = 264,
-     NOT = 265,
-     POWER = 266,
-     EQL = 267,
-     NEQL = 268,
-     LSS = 269,
-     GTR = 270,
-     LEQ = 271,
-     GEQ = 272,
-     ANDAND = 273,
-     OROR = 274,
-     LPAREN = 275,
-     RPAREN = 276,
-     LBRACKET = 277,
-     RBRACKET = 278,
-     SEMICOLON = 279,
-     COMMA = 280,
-     PERIOD = 281,
-     TRUEBOOL = 282,
-     FALSEBOOL = 283,
-     BOOL = 284,
-     BVEC2 = 285,
-     BVEC3 = 286,
-     BVEC4 = 287,
-     INT = 288,
-     IVEC2 = 289,
-     IVEC3 = 290,
-     IVEC4 = 291,
-     FLOAT = 292,
-     VEC2 = 293,
-     VEC3 = 294,
-     VEC4 = 295,
-     CONST = 296,
-     VOID = 297,
-     IFSYM = 298,
-     ELSESYM = 299,
-     WHILESYM = 300,
-     DP3 = 301,
-     LIT = 302,
-     RSQ = 303,
-     IDENT = 304,
-     NUMBER = 305,
-     COMMENT = 306
+     COMMENT = 260,
+     PLUS = 261,
+     MINUS = 262,
+     TIMES = 263,
+     SLASH = 264,
+     EQUAL = 265,
+     NOT = 266,
+     POWER = 267,
+     EQL = 268,
+     NEQL = 269,
+     LSS = 270,
+     GTR = 271,
+     LEQ = 272,
+     GEQ = 273,
+     ANDAND = 274,
+     OROR = 275,
+     LPAREN = 276,
+     RPAREN = 277,
+     LBRACKET = 278,
+     RBRACKET = 279,
+     SEMICOLON = 280,
+     COMMA = 281,
+     PERIOD = 282,
+     TRUEBOOL = 283,
+     FALSEBOOL = 284,
+     BOOL = 285,
+     BVEC2 = 286,
+     BVEC3 = 287,
+     BVEC4 = 288,
+     INT = 289,
+     IVEC2 = 290,
+     IVEC3 = 291,
+     IVEC4 = 292,
+     FLOAT = 293,
+     VEC2 = 294,
+     VEC3 = 295,
+     VEC4 = 296,
+     CONST = 297,
+     VOID = 298,
+     IFSYM = 299,
+     ELSESYM = 300,
+     WHILESYM = 301,
+     DP3 = 302,
+     LIT = 303,
+     RSQ = 304,
+     IDENT = 305,
+     NUMBER = 306,
+     FLOATNUMBER = 307
    };
 #endif
 /* Tokens.  */
 #define myToken1 258
 #define myToken2 259
-#define PLUS 260
-#define MINUS 261
-#define TIMES 262
-#define SLASH 263
-#define EQUAL 264
-#define NOT 265
-#define POWER 266
-#define EQL 267
-#define NEQL 268
-#define LSS 269
-#define GTR 270
-#define LEQ 271
-#define GEQ 272
-#define ANDAND 273
-#define OROR 274
-#define LPAREN 275
-#define RPAREN 276
-#define LBRACKET 277
-#define RBRACKET 278
-#define SEMICOLON 279
-#define COMMA 280
-#define PERIOD 281
-#define TRUEBOOL 282
-#define FALSEBOOL 283
-#define BOOL 284
-#define BVEC2 285
-#define BVEC3 286
-#define BVEC4 287
-#define INT 288
-#define IVEC2 289
-#define IVEC3 290
-#define IVEC4 291
-#define FLOAT 292
-#define VEC2 293
-#define VEC3 294
-#define VEC4 295
-#define CONST 296
-#define VOID 297
-#define IFSYM 298
-#define ELSESYM 299
-#define WHILESYM 300
-#define DP3 301
-#define LIT 302
-#define RSQ 303
-#define IDENT 304
-#define NUMBER 305
-#define COMMENT 306
+#define COMMENT 260
+#define PLUS 261
+#define MINUS 262
+#define TIMES 263
+#define SLASH 264
+#define EQUAL 265
+#define NOT 266
+#define POWER 267
+#define EQL 268
+#define NEQL 269
+#define LSS 270
+#define GTR 271
+#define LEQ 272
+#define GEQ 273
+#define ANDAND 274
+#define OROR 275
+#define LPAREN 276
+#define RPAREN 277
+#define LBRACKET 278
+#define RBRACKET 279
+#define SEMICOLON 280
+#define COMMA 281
+#define PERIOD 282
+#define TRUEBOOL 283
+#define FALSEBOOL 284
+#define BOOL 285
+#define BVEC2 286
+#define BVEC3 287
+#define BVEC4 288
+#define INT 289
+#define IVEC2 290
+#define IVEC3 291
+#define IVEC4 292
+#define FLOAT 293
+#define VEC2 294
+#define VEC3 295
+#define VEC4 296
+#define CONST 297
+#define VOID 298
+#define IFSYM 299
+#define ELSESYM 300
+#define WHILESYM 301
+#define DP3 302
+#define LIT 303
+#define RSQ 304
+#define IDENT 305
+#define NUMBER 306
+#define FLOATNUMBER 307
 
 
 
@@ -147,15 +149,16 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 57 "parser.y"
+#line 58 "parser.y"
 
   int num;
   char *id;
+  float fnum;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 159 "y.tab.h"
+#line 162 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
