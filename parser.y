@@ -1,7 +1,7 @@
 %{
 /***********************************************************************
  * Justin Canton, 1000017910
- * Samprit
+ * Samprit Raihan, 998138830
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
