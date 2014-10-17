@@ -24,7 +24,6 @@ Terminals unused in grammar
    RCURLYBRACE
    SEMICOLON
    COMMA
-   PERIOD
    TRUEBOOL
    FALSEBOOL
    BOOL
@@ -47,6 +46,19 @@ Terminals unused in grammar
    DP3
    LIT
    RSQ
+   GLCOLOR
+   GLDEPTH
+   GLCOORD
+   GLTEX
+   GLC
+   GLSEC
+   GLFOG
+   GLLHALF
+   GLLAMBIENT
+   GLMS
+   ENV1
+   ENV2
+   ENV3
    IDENT
    NUMBER
    FLOATNUMBER
@@ -95,43 +107,55 @@ LCURLYBRACE (280)
 RCURLYBRACE (281)
 SEMICOLON (282)
 COMMA (283)
-PERIOD (284)
-TRUEBOOL (285)
-FALSEBOOL (286)
-BOOL (287)
-BVEC2 (288)
-BVEC3 (289)
-BVEC4 (290)
-INT (291)
-IVEC2 (292)
-IVEC3 (293)
-IVEC4 (294)
-FLOAT (295)
-VEC2 (296)
-VEC3 (297)
-VEC4 (298)
-CONST (299)
-VOID (300)
-IFSYM (301)
-ELSESYM (302)
-WHILESYM (303)
-DP3 (304)
-LIT (305)
-RSQ (306)
-IDENT (307)
-NUMBER (308)
-FLOATNUMBER (309)
+TRUEBOOL (284)
+FALSEBOOL (285)
+BOOL (286)
+BVEC2 (287)
+BVEC3 (288)
+BVEC4 (289)
+INT (290)
+IVEC2 (291)
+IVEC3 (292)
+IVEC4 (293)
+FLOAT (294)
+VEC2 (295)
+VEC3 (296)
+VEC4 (297)
+CONST (298)
+VOID (299)
+IFSYM (300)
+ELSESYM (301)
+WHILESYM (302)
+DP3 (303)
+LIT (304)
+RSQ (305)
+GLCOLOR (306)
+GLDEPTH (307)
+GLCOORD (308)
+GLTEX (309)
+GLC (310)
+GLSEC (311)
+GLFOG (312)
+GLLHALF (313)
+GLLAMBIENT (314)
+GLMS (315)
+ENV1 (316)
+ENV2 (317)
+ENV3 (318)
+IDENT (319)
+NUMBER (320)
+FLOATNUMBER (321)
 
 
 Nonterminals, with rules where they appear
 
-$accept (55)
+$accept (67)
     on left: 0
-program (56)
+program (68)
     on left: 1, on right: 0
-tokens (57)
+tokens (69)
     on left: 2 3, on right: 1 2
-token (58)
+token (70)
     on left: 4 5, on right: 2
 
 

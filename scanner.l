@@ -99,8 +99,6 @@ letter      [a-zA-Z]
               return SEMICOLON;  }
 ","         { yTRACE(COMMA);
               return COMMA;      }
-"."         { yTRACE(PERIOD);
-              return PERIOD;     }
 "{"         { yTRACE(LCURLYBRACE);
               return LCURLYBRACE;}  
 "}"         { yTRACE(RCURLYBRACE);
@@ -158,12 +156,38 @@ letter      [a-zA-Z]
  /*********************************
  *Function Names
  *********************************/
-"dp3"       { yTRACE(DP3);
-              return DP3;        }
-"lit"       { yTRACE(LIT);
-              return LIT;        }
-"rsq"       { yTRACE(RSQ);
-              return RSQ;        }
+"dp3"                   { yTRACE(DP3);
+                         return DP3;        }
+"lit"                   { yTRACE(LIT);
+                         return LIT;        }
+"rsq"                   { yTRACE(RSQ);
+                         return RSQ;        }
+"gl_FragColor"          { yTRACE(GLCOLOR);
+                         return GLCOLOR;    }
+"gl_FragDepth"          { yTRACE(GLDEPTH);
+                         return GLDEPTH;    }
+"gl_FragCoord"          { yTRACE(GLCOORD);
+                         return GLCOORD;    }
+"gl_TexCoord"           { yTRACE(GLTEX);
+                         return GLTEX;      }
+"gl_Color"              { yTRACE(GLC);
+                         return GLC;        }
+"gl_Secondary"          { yTRACE(GLSEC);
+                         return GLSEC;      }
+"gl_FogFragCoord"       { yTRACE(GLFOG);
+                         return GLFOG;      }
+"gl_Light_Half"         { yTRACE(GLLHALF);
+                         return GLLHALF;    }
+"gl_Light_Ambient"      { yTRACE(GLLAMBIENT);
+                         return GLLAMBIENT; }
+"gl_Material_Shininess" { yTRACE(GLMS);
+                         return GLMS;       }
+"env1"                   { yTRACE(ENV1);
+                         return ENV1;       }
+"env2"                   { yTRACE(ENV2);
+                         return ENV2;       }
+"env3"                   { yTRACE(ENV3);
+                         return ENV3;       }
 
 [ \t\r]            /* skip whitespace */
 [\n]                yyline++;
@@ -171,14 +195,14 @@ letter      [a-zA-Z]
  /*********************************
  *Identifiers
  *********************************/
-{letter}({letter}|{digit})* {
+({letter}|_)({letter}|{digit}|_)* {
                        yylval.id = strdup(yytext);
                        yTRACE(IDENT);
                        return IDENT;      }
 {digit}+             { yylval.num = atoi(yytext);
                        yTRACE(NUMBER);
                        return NUMBER;     }
-{digit}*"."{digit}*    { yylval.fnum = atof(yytext);
+({digit}+"."{digit}*)|({digit}*"."{digit}+) { yylval.fnum = atof(yytext);
                        yTRACE(FLOATNUMBER);
                        return FLOATNUMBER;     }
 

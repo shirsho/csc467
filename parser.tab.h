@@ -63,32 +63,44 @@
      RCURLYBRACE = 281,
      SEMICOLON = 282,
      COMMA = 283,
-     PERIOD = 284,
-     TRUEBOOL = 285,
-     FALSEBOOL = 286,
-     BOOL = 287,
-     BVEC2 = 288,
-     BVEC3 = 289,
-     BVEC4 = 290,
-     INT = 291,
-     IVEC2 = 292,
-     IVEC3 = 293,
-     IVEC4 = 294,
-     FLOAT = 295,
-     VEC2 = 296,
-     VEC3 = 297,
-     VEC4 = 298,
-     CONST = 299,
-     VOID = 300,
-     IFSYM = 301,
-     ELSESYM = 302,
-     WHILESYM = 303,
-     DP3 = 304,
-     LIT = 305,
-     RSQ = 306,
-     IDENT = 307,
-     NUMBER = 308,
-     FLOATNUMBER = 309
+     TRUEBOOL = 284,
+     FALSEBOOL = 285,
+     BOOL = 286,
+     BVEC2 = 287,
+     BVEC3 = 288,
+     BVEC4 = 289,
+     INT = 290,
+     IVEC2 = 291,
+     IVEC3 = 292,
+     IVEC4 = 293,
+     FLOAT = 294,
+     VEC2 = 295,
+     VEC3 = 296,
+     VEC4 = 297,
+     CONST = 298,
+     VOID = 299,
+     IFSYM = 300,
+     ELSESYM = 301,
+     WHILESYM = 302,
+     DP3 = 303,
+     LIT = 304,
+     RSQ = 305,
+     GLCOLOR = 306,
+     GLDEPTH = 307,
+     GLCOORD = 308,
+     GLTEX = 309,
+     GLC = 310,
+     GLSEC = 311,
+     GLFOG = 312,
+     GLLHALF = 313,
+     GLLAMBIENT = 314,
+     GLMS = 315,
+     ENV1 = 316,
+     ENV2 = 317,
+     ENV3 = 318,
+     IDENT = 319,
+     NUMBER = 320,
+     FLOATNUMBER = 321
    };
 #endif
 /* Tokens.  */
@@ -118,32 +130,44 @@
 #define RCURLYBRACE 281
 #define SEMICOLON 282
 #define COMMA 283
-#define PERIOD 284
-#define TRUEBOOL 285
-#define FALSEBOOL 286
-#define BOOL 287
-#define BVEC2 288
-#define BVEC3 289
-#define BVEC4 290
-#define INT 291
-#define IVEC2 292
-#define IVEC3 293
-#define IVEC4 294
-#define FLOAT 295
-#define VEC2 296
-#define VEC3 297
-#define VEC4 298
-#define CONST 299
-#define VOID 300
-#define IFSYM 301
-#define ELSESYM 302
-#define WHILESYM 303
-#define DP3 304
-#define LIT 305
-#define RSQ 306
-#define IDENT 307
-#define NUMBER 308
-#define FLOATNUMBER 309
+#define TRUEBOOL 284
+#define FALSEBOOL 285
+#define BOOL 286
+#define BVEC2 287
+#define BVEC3 288
+#define BVEC4 289
+#define INT 290
+#define IVEC2 291
+#define IVEC3 292
+#define IVEC4 293
+#define FLOAT 294
+#define VEC2 295
+#define VEC3 296
+#define VEC4 297
+#define CONST 298
+#define VOID 299
+#define IFSYM 300
+#define ELSESYM 301
+#define WHILESYM 302
+#define DP3 303
+#define LIT 304
+#define RSQ 305
+#define GLCOLOR 306
+#define GLDEPTH 307
+#define GLCOORD 308
+#define GLTEX 309
+#define GLC 310
+#define GLSEC 311
+#define GLFOG 312
+#define GLLHALF 313
+#define GLLAMBIENT 314
+#define GLMS 315
+#define ENV1 316
+#define ENV2 317
+#define ENV3 318
+#define IDENT 319
+#define NUMBER 320
+#define FLOATNUMBER 321
 
 
 
@@ -162,7 +186,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 166 "y.tab.h"
+#line 190 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
