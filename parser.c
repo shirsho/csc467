@@ -70,7 +70,7 @@
 
 /***********************************************************************
  * Justin Canton, 1000017910
- * Samprit
+ * Samprit Raihan, 998138830
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
@@ -155,34 +155,36 @@ extern int yyline;        /* variable holding current line number   */
      RPAREN = 277,
      LBRACKET = 278,
      RBRACKET = 279,
-     SEMICOLON = 280,
-     COMMA = 281,
-     PERIOD = 282,
-     TRUEBOOL = 283,
-     FALSEBOOL = 284,
-     BOOL = 285,
-     BVEC2 = 286,
-     BVEC3 = 287,
-     BVEC4 = 288,
-     INT = 289,
-     IVEC2 = 290,
-     IVEC3 = 291,
-     IVEC4 = 292,
-     FLOAT = 293,
-     VEC2 = 294,
-     VEC3 = 295,
-     VEC4 = 296,
-     CONST = 297,
-     VOID = 298,
-     IFSYM = 299,
-     ELSESYM = 300,
-     WHILESYM = 301,
-     DP3 = 302,
-     LIT = 303,
-     RSQ = 304,
-     IDENT = 305,
-     NUMBER = 306,
-     FLOATNUMBER = 307
+     LCURLYBRACE = 280,
+     RCURLYBRACE = 281,
+     SEMICOLON = 282,
+     COMMA = 283,
+     PERIOD = 284,
+     TRUEBOOL = 285,
+     FALSEBOOL = 286,
+     BOOL = 287,
+     BVEC2 = 288,
+     BVEC3 = 289,
+     BVEC4 = 290,
+     INT = 291,
+     IVEC2 = 292,
+     IVEC3 = 293,
+     IVEC4 = 294,
+     FLOAT = 295,
+     VEC2 = 296,
+     VEC3 = 297,
+     VEC4 = 298,
+     CONST = 299,
+     VOID = 300,
+     IFSYM = 301,
+     ELSESYM = 302,
+     WHILESYM = 303,
+     DP3 = 304,
+     LIT = 305,
+     RSQ = 306,
+     IDENT = 307,
+     NUMBER = 308,
+     FLOATNUMBER = 309
    };
 #endif
 /* Tokens.  */
@@ -208,34 +210,36 @@ extern int yyline;        /* variable holding current line number   */
 #define RPAREN 277
 #define LBRACKET 278
 #define RBRACKET 279
-#define SEMICOLON 280
-#define COMMA 281
-#define PERIOD 282
-#define TRUEBOOL 283
-#define FALSEBOOL 284
-#define BOOL 285
-#define BVEC2 286
-#define BVEC3 287
-#define BVEC4 288
-#define INT 289
-#define IVEC2 290
-#define IVEC3 291
-#define IVEC4 292
-#define FLOAT 293
-#define VEC2 294
-#define VEC3 295
-#define VEC4 296
-#define CONST 297
-#define VOID 298
-#define IFSYM 299
-#define ELSESYM 300
-#define WHILESYM 301
-#define DP3 302
-#define LIT 303
-#define RSQ 304
-#define IDENT 305
-#define NUMBER 306
-#define FLOATNUMBER 307
+#define LCURLYBRACE 280
+#define RCURLYBRACE 281
+#define SEMICOLON 282
+#define COMMA 283
+#define PERIOD 284
+#define TRUEBOOL 285
+#define FALSEBOOL 286
+#define BOOL 287
+#define BVEC2 288
+#define BVEC3 289
+#define BVEC4 290
+#define INT 291
+#define IVEC2 292
+#define IVEC3 293
+#define IVEC4 294
+#define FLOAT 295
+#define VEC2 296
+#define VEC3 297
+#define VEC4 298
+#define CONST 299
+#define VOID 300
+#define IFSYM 301
+#define ELSESYM 302
+#define WHILESYM 303
+#define DP3 304
+#define LIT 305
+#define RSQ 306
+#define IDENT 307
+#define NUMBER 308
+#define FLOATNUMBER 309
 
 
 
@@ -254,7 +258,7 @@ typedef union YYSTYPE
 
 
 /* Line 293 of yacc.c  */
-#line 258 "y.tab.c"
+#line 262 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -266,7 +270,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 270 "y.tab.c"
+#line 274 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -488,7 +492,7 @@ union yyalloc
 #define YYLAST   2
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  53
+#define YYNTOKENS  55
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
@@ -498,7 +502,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   307
+#define YYMAXUTOK   309
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -536,7 +540,7 @@ static const yytype_uint8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52
+      45,    46,    47,    48,    49,    50,    51,    52,    53,    54
 };
 
 #if YYDEBUG
@@ -550,7 +554,7 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      54,     0,    -1,    55,    -1,    55,    56,    -1,    -1,     3,
+      56,     0,    -1,    57,    -1,    57,    58,    -1,    -1,     3,
       -1,     4,    -1
 };
 
@@ -569,11 +573,12 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "myToken1", "myToken2", "COMMENT",
   "PLUS", "MINUS", "TIMES", "SLASH", "EQUAL", "NOT", "POWER", "EQL",
   "NEQL", "LSS", "GTR", "LEQ", "GEQ", "ANDAND", "OROR", "LPAREN", "RPAREN",
-  "LBRACKET", "RBRACKET", "SEMICOLON", "COMMA", "PERIOD", "TRUEBOOL",
-  "FALSEBOOL", "BOOL", "BVEC2", "BVEC3", "BVEC4", "INT", "IVEC2", "IVEC3",
-  "IVEC4", "FLOAT", "VEC2", "VEC3", "VEC4", "CONST", "VOID", "IFSYM",
-  "ELSESYM", "WHILESYM", "DP3", "LIT", "RSQ", "IDENT", "NUMBER",
-  "FLOATNUMBER", "$accept", "program", "tokens", "token", 0
+  "LBRACKET", "RBRACKET", "LCURLYBRACE", "RCURLYBRACE", "SEMICOLON",
+  "COMMA", "PERIOD", "TRUEBOOL", "FALSEBOOL", "BOOL", "BVEC2", "BVEC3",
+  "BVEC4", "INT", "IVEC2", "IVEC3", "IVEC4", "FLOAT", "VEC2", "VEC3",
+  "VEC4", "CONST", "VOID", "IFSYM", "ELSESYM", "WHILESYM", "DP3", "LIT",
+  "RSQ", "IDENT", "NUMBER", "FLOATNUMBER", "$accept", "program", "tokens",
+  "token", 0
 };
 #endif
 
@@ -587,14 +592,14 @@ static const yytype_uint16 yytoknum[] =
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
-     305,   306,   307
+     305,   306,   307,   308,   309
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    53,    54,    55,    55,    56,    56
+       0,    55,    56,    57,    57,    58,    58
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -655,7 +660,7 @@ static const yytype_uint8 yycheck[] =
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    54,    55,     0,     3,     4,    56
+       0,    56,    57,     0,     3,     4,    58
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1492,7 +1497,7 @@ yyreduce:
       
 
 /* Line 1806 of yacc.c  */
-#line 1496 "y.tab.c"
+#line 1501 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

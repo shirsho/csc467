@@ -101,7 +101,10 @@ letter      [a-zA-Z]
               return COMMA;      }
 "."         { yTRACE(PERIOD);
               return PERIOD;     }
-
+"{"         { yTRACE(LCURLYBRACE);
+              return LCURLYBRACE;}  
+"}"         { yTRACE(RCURLYBRACE);
+              return RCURLYBRACE;}
  /*********************************
  *Boolean Variables
  *********************************/

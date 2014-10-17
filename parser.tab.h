@@ -59,34 +59,36 @@
      RPAREN = 277,
      LBRACKET = 278,
      RBRACKET = 279,
-     SEMICOLON = 280,
-     COMMA = 281,
-     PERIOD = 282,
-     TRUEBOOL = 283,
-     FALSEBOOL = 284,
-     BOOL = 285,
-     BVEC2 = 286,
-     BVEC3 = 287,
-     BVEC4 = 288,
-     INT = 289,
-     IVEC2 = 290,
-     IVEC3 = 291,
-     IVEC4 = 292,
-     FLOAT = 293,
-     VEC2 = 294,
-     VEC3 = 295,
-     VEC4 = 296,
-     CONST = 297,
-     VOID = 298,
-     IFSYM = 299,
-     ELSESYM = 300,
-     WHILESYM = 301,
-     DP3 = 302,
-     LIT = 303,
-     RSQ = 304,
-     IDENT = 305,
-     NUMBER = 306,
-     FLOATNUMBER = 307
+     LCURLYBRACE = 280,
+     RCURLYBRACE = 281,
+     SEMICOLON = 282,
+     COMMA = 283,
+     PERIOD = 284,
+     TRUEBOOL = 285,
+     FALSEBOOL = 286,
+     BOOL = 287,
+     BVEC2 = 288,
+     BVEC3 = 289,
+     BVEC4 = 290,
+     INT = 291,
+     IVEC2 = 292,
+     IVEC3 = 293,
+     IVEC4 = 294,
+     FLOAT = 295,
+     VEC2 = 296,
+     VEC3 = 297,
+     VEC4 = 298,
+     CONST = 299,
+     VOID = 300,
+     IFSYM = 301,
+     ELSESYM = 302,
+     WHILESYM = 303,
+     DP3 = 304,
+     LIT = 305,
+     RSQ = 306,
+     IDENT = 307,
+     NUMBER = 308,
+     FLOATNUMBER = 309
    };
 #endif
 /* Tokens.  */
@@ -112,34 +114,36 @@
 #define RPAREN 277
 #define LBRACKET 278
 #define RBRACKET 279
-#define SEMICOLON 280
-#define COMMA 281
-#define PERIOD 282
-#define TRUEBOOL 283
-#define FALSEBOOL 284
-#define BOOL 285
-#define BVEC2 286
-#define BVEC3 287
-#define BVEC4 288
-#define INT 289
-#define IVEC2 290
-#define IVEC3 291
-#define IVEC4 292
-#define FLOAT 293
-#define VEC2 294
-#define VEC3 295
-#define VEC4 296
-#define CONST 297
-#define VOID 298
-#define IFSYM 299
-#define ELSESYM 300
-#define WHILESYM 301
-#define DP3 302
-#define LIT 303
-#define RSQ 304
-#define IDENT 305
-#define NUMBER 306
-#define FLOATNUMBER 307
+#define LCURLYBRACE 280
+#define RCURLYBRACE 281
+#define SEMICOLON 282
+#define COMMA 283
+#define PERIOD 284
+#define TRUEBOOL 285
+#define FALSEBOOL 286
+#define BOOL 287
+#define BVEC2 288
+#define BVEC3 289
+#define BVEC4 290
+#define INT 291
+#define IVEC2 292
+#define IVEC3 293
+#define IVEC4 294
+#define FLOAT 295
+#define VEC2 296
+#define VEC3 297
+#define VEC4 298
+#define CONST 299
+#define VOID 300
+#define IFSYM 301
+#define ELSESYM 302
+#define WHILESYM 303
+#define DP3 304
+#define LIT 305
+#define RSQ 306
+#define IDENT 307
+#define NUMBER 308
+#define FLOATNUMBER 309
 
 
 
@@ -158,7 +162,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 162 "y.tab.h"
+#line 166 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
