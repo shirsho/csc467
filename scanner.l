@@ -206,7 +206,7 @@ letter      [a-zA-Z]
 {digit}+ { yylval.num = atoi(yytext);
            yTRACE(NUMBER);
            return NUMBER;     }
-
+{digit}*".""."+{digit}*			{ yERROR("Invalid Input");}
 ({digit}+"."{digit}*)|({digit}*"."{digit}+) { yylval.fnum = atof(yytext);
                                               yTRACE(FLOATNUMBER);
                                               return FLOATNUMBER;     }
