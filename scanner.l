@@ -25,7 +25,7 @@ int yyline = 1;
 %option noyywrap
 
 WS          [ \t]
-digit       [0-9]
+digit       [1-9]+([0-9])*|[0]
 letter      [a-zA-Z]
 
 %%
@@ -195,16 +195,23 @@ letter      [a-zA-Z]
  /*********************************
  *Identifiers
  *********************************/
-({letter}|_)({letter}|{digit}|_)* {
-                       yylval.id = strdup(yytext);
-                       yTRACE(IDENT);
-                       return IDENT;      }
-{digit}+             { yylval.num = atoi(yytext);
-                       yTRACE(NUMBER);
-                       return NUMBER;     }
+({letter}|_)({letter}|{digit}|_)* { yylval.id = strdup(yytext);
+                                    yTRACE(IDENT);
+                                    return IDENT; }
+
+([0])({digit})+      { yERROR("Invalid input");}
+
+([0-9])({letter}|_)({letter}|{digit}|_)*  { yERROR("Invalid Input");}
+
+{digit}+ { yylval.num = atoi(yytext);
+           yTRACE(NUMBER);
+           return NUMBER;     }
+
 ({digit}+"."{digit}*)|({digit}*"."{digit}+) { yylval.fnum = atof(yytext);
-                       yTRACE(FLOATNUMBER);
-                       return FLOATNUMBER;     }
+                                              yTRACE(FLOATNUMBER);
+                                              return FLOATNUMBER;     }
+
+({digit}+"."{digit}*)|({digit}*"."{digit}+)({letter}|_)({letter}|{digit}|_)* {yERROR("Invalid input");}
 
 .           { yERROR("Unknown token"); }
 
