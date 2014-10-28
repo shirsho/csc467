@@ -37,137 +37,55 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     myToken1 = 258,
-     myToken2 = 259,
-     COMMENT = 260,
-     PLUS = 261,
-     MINUS = 262,
-     TIMES = 263,
-     SLASH = 264,
-     EQUAL = 265,
-     NOT = 266,
-     POWER = 267,
-     EQL = 268,
-     NEQL = 269,
-     LSS = 270,
-     GTR = 271,
+     FLOAT_T = 258,
+     INT_T = 259,
+     BOOL_T = 260,
+     CONST = 261,
+     FALSE_C = 262,
+     TRUE_C = 263,
+     FUNC = 264,
+     IF = 265,
+     WHILE = 266,
+     ELSE = 267,
+     AND = 268,
+     OR = 269,
+     NEQ = 270,
+     EQ = 271,
      LEQ = 272,
      GEQ = 273,
-     ANDAND = 274,
-     OROR = 275,
-     LPAREN = 276,
-     RPAREN = 277,
-     LBRACKET = 278,
-     RBRACKET = 279,
-     LCURLYBRACE = 280,
-     RCURLYBRACE = 281,
-     SEMICOLON = 282,
-     COMMA = 283,
-     TRUEBOOL = 284,
-     FALSEBOOL = 285,
-     BOOL = 286,
-     BVEC2 = 287,
-     BVEC3 = 288,
-     BVEC4 = 289,
-     INT = 290,
-     IVEC2 = 291,
-     IVEC3 = 292,
-     IVEC4 = 293,
-     FLOAT = 294,
-     VEC2 = 295,
-     VEC3 = 296,
-     VEC4 = 297,
-     CONST = 298,
-     VOID = 299,
-     IFSYM = 300,
-     ELSESYM = 301,
-     WHILESYM = 302,
-     DP3 = 303,
-     LIT = 304,
-     RSQ = 305,
-     GLCOLOR = 306,
-     GLDEPTH = 307,
-     GLCOORD = 308,
-     GLTEX = 309,
-     GLC = 310,
-     GLSEC = 311,
-     GLFOG = 312,
-     GLLHALF = 313,
-     GLLAMBIENT = 314,
-     GLMS = 315,
-     ENV1 = 316,
-     ENV2 = 317,
-     ENV3 = 318,
-     IDENT = 319,
-     NUMBER = 320,
-     FLOATNUMBER = 321
+     VEC_T = 274,
+     BVEC_T = 275,
+     IVEC_T = 276,
+     FLOAT_C = 277,
+     INT_C = 278,
+     ID = 279,
+     UMINUS = 280
    };
 #endif
 /* Tokens.  */
-#define myToken1 258
-#define myToken2 259
-#define COMMENT 260
-#define PLUS 261
-#define MINUS 262
-#define TIMES 263
-#define SLASH 264
-#define EQUAL 265
-#define NOT 266
-#define POWER 267
-#define EQL 268
-#define NEQL 269
-#define LSS 270
-#define GTR 271
+#define FLOAT_T 258
+#define INT_T 259
+#define BOOL_T 260
+#define CONST 261
+#define FALSE_C 262
+#define TRUE_C 263
+#define FUNC 264
+#define IF 265
+#define WHILE 266
+#define ELSE 267
+#define AND 268
+#define OR 269
+#define NEQ 270
+#define EQ 271
 #define LEQ 272
 #define GEQ 273
-#define ANDAND 274
-#define OROR 275
-#define LPAREN 276
-#define RPAREN 277
-#define LBRACKET 278
-#define RBRACKET 279
-#define LCURLYBRACE 280
-#define RCURLYBRACE 281
-#define SEMICOLON 282
-#define COMMA 283
-#define TRUEBOOL 284
-#define FALSEBOOL 285
-#define BOOL 286
-#define BVEC2 287
-#define BVEC3 288
-#define BVEC4 289
-#define INT 290
-#define IVEC2 291
-#define IVEC3 292
-#define IVEC4 293
-#define FLOAT 294
-#define VEC2 295
-#define VEC3 296
-#define VEC4 297
-#define CONST 298
-#define VOID 299
-#define IFSYM 300
-#define ELSESYM 301
-#define WHILESYM 302
-#define DP3 303
-#define LIT 304
-#define RSQ 305
-#define GLCOLOR 306
-#define GLDEPTH 307
-#define GLCOORD 308
-#define GLTEX 309
-#define GLC 310
-#define GLSEC 311
-#define GLFOG 312
-#define GLLHALF 313
-#define GLLAMBIENT 314
-#define GLMS 315
-#define ENV1 316
-#define ENV2 317
-#define ENV3 318
-#define IDENT 319
-#define NUMBER 320
-#define FLOATNUMBER 321
+#define VEC_T 274
+#define BVEC_T 275
+#define IVEC_T 276
+#define FLOAT_C 277
+#define INT_C 278
+#define ID 279
+#define UMINUS 280
 
 
 
@@ -177,16 +95,18 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 58 "parser.y"
+#line 60 "parser.y"
 
-  int num;
-  char *id;
-  float fnum;
+  int as_int;
+  int as_vec;
+  float as_float;
+  char *as_str;
+  int as_func;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 190 "y.tab.h"
+#line 110 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
