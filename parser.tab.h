@@ -95,7 +95,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 60 "parser.y"
+#line 61 "parser.y"
 
   int as_int;
   int as_vec;

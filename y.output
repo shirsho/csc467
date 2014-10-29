@@ -1,28 +1,6 @@
-Nonterminals useless in grammar
-
-   binary_op
-
-
 Terminals unused in grammar
 
    UMINUS
-
-
-Rules useless in grammar
-
-   64 binary_op: AND
-   65          | OR
-   66          | EQ
-   67          | NEQ
-   68          | '<'
-   69          | LEQ
-   70          | '>'
-   71          | GEQ
-   72          | '+'
-   73          | '-'
-   74          | '*'
-   75          | '/'
-   76          | '^'
 
 
 Rules useless in parser due to conflicts

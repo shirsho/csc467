@@ -69,7 +69,8 @@
 #line 1 "parser.y"
 
 /***********************************************************************
- * --YOUR GROUP INFO SHOULD GO HERE--
+ * Justin Canton, 1000017910
+ * Samprit Raihan, 998138830
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
@@ -91,7 +92,7 @@
 //#include "symbol.h"
 //#include "semantic.h"
 #define YYERROR_VERBOSE
-#define yTRACE(x)    { if (traceParser) fprintf(traceFile, "%s\n\n", x); }
+#define yTRACE(x)    { if (traceParser) fprintf(traceFile, "%s\n\n", x); } /*Added an extra newline character for readability */
 
 void yyerror(const char* s);    /* what to do in case of error      */
 int yylex();              /* procedure for calling lexical analyzer */
@@ -105,13 +106,13 @@ enum {
 
 
 /* Line 268 of yacc.c  */
-#line 55 "parser.y"
+#line 56 "parser.y"
 
 #define YYDEBUG 1
 
 
 /* Line 268 of yacc.c  */
-#line 115 "y.tab.c"
+#line 116 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -196,7 +197,7 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 60 "parser.y"
+#line 61 "parser.y"
 
   int as_int;
   int as_vec;
@@ -207,7 +208,7 @@ typedef union YYSTYPE
 
 
 /* Line 293 of yacc.c  */
-#line 211 "y.tab.c"
+#line 212 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -219,7 +220,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 223 "y.tab.c"
+#line 224 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -530,15 +531,15 @@ static const yytype_int8 yyrhs[] =
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,   106,   106,   110,   114,   115,   119,   120,   124,   125,
-     126,   127,   131,   132,   133,   134,   135,   139,   140,   144,
-     145,   148,   149,   152,   153,   159,   160,   161,   162,   163,
-     164,   165,   166,   167,   168,   172,   173,   177,   178,   182,
-     183,   187,   188,   192,   193,   194,   195,   196,   197,   198,
-     202,   203,   204,   208,   209,   210,   214,   215,   235,   239,
-     243,   249,   250,   254,   255
+       0,   112,   112,   117,   122,   123,   128,   129,   134,   135,
+     136,   137,   142,   143,   144,   145,   146,   151,   152,   157,
+     158,   161,   162,   165,   166,   173,   174,   175,   176,   177,
+     178,   179,   180,   181,   182,   187,   188,   193,   194,   202,
+     203,   208,   209,   214,   215,   216,   217,   218,   219,   220,
+     225,   226,   227,   232,   233,   234,   239,   240,   249,   254,
+     259,   266,   267,   272,   273
 };
 #endif
 
@@ -1544,456 +1545,456 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 106 "parser.y"
+#line 112 "parser.y"
     {yTRACE("program -> scope");}
     break;
 
   case 3:
 
 /* Line 1806 of yacc.c  */
-#line 110 "parser.y"
+#line 117 "parser.y"
     {yTRACE("scope -> { declarations statements }");}
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 114 "parser.y"
+#line 122 "parser.y"
     {yTRACE("declarations -> declarations declaration");}
     break;
 
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 115 "parser.y"
+#line 123 "parser.y"
     {yTRACE("declarations -> ");}
     break;
 
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 119 "parser.y"
+#line 128 "parser.y"
     {yTRACE("statements -> statements statement");}
     break;
 
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 120 "parser.y"
+#line 129 "parser.y"
     {yTRACE("statements -> ");}
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 124 "parser.y"
+#line 134 "parser.y"
     {yTRACE("declaration -> type ID;");}
     break;
 
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 125 "parser.y"
+#line 135 "parser.y"
     {yTRACE("declaration -> type ID = expression;");}
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 126 "parser.y"
+#line 136 "parser.y"
     {yTRACE("declaration -> const type ID = expression;");}
     break;
 
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 127 "parser.y"
+#line 137 "parser.y"
     {yTRACE("declaration -> ");}
     break;
 
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 131 "parser.y"
+#line 142 "parser.y"
     {yTRACE("statement -> variable = expression;");}
     break;
 
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 132 "parser.y"
+#line 143 "parser.y"
     {yTRACE("statement -> if (expression) statement else_statement");}
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 133 "parser.y"
+#line 144 "parser.y"
     {yTRACE("statement -> while (expression) statement");}
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 134 "parser.y"
+#line 145 "parser.y"
     {yTRACE("statement -> scope");}
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 135 "parser.y"
+#line 146 "parser.y"
     {yTRACE("statement -> ;");}
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 139 "parser.y"
+#line 151 "parser.y"
     {yTRACE("else_statement -> else statement");}
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 140 "parser.y"
+#line 152 "parser.y"
     {yTRACE("else_statement -> ");}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 144 "parser.y"
+#line 157 "parser.y"
     {yTRACE("type -> int");}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 145 "parser.y"
+#line 158 "parser.y"
     {if(yylval.as_vec == 1) {yTRACE("type -> ivec2")} 
-                    else if(yylval.as_vec == 2) {yTRACE("type -> ivec3")}
-                    else {yTRACE("type -> ivec4")};}
+                                                       else if(yylval.as_vec == 2) {yTRACE("type -> ivec3")}
+                                                       else {yTRACE("type -> ivec4")};}
     break;
 
   case 21:
 
 /* Line 1806 of yacc.c  */
-#line 148 "parser.y"
+#line 161 "parser.y"
     {yTRACE("type -> bool");}
     break;
 
   case 22:
 
 /* Line 1806 of yacc.c  */
-#line 149 "parser.y"
+#line 162 "parser.y"
     {if(yylval.as_vec == 1) {yTRACE("type -> bvec2")} 
-                    else if(yylval.as_vec == 2) {yTRACE("type -> bvec3")}
-                    else {yTRACE("type -> bvec4")};}
+                                                       else if(yylval.as_vec == 2) {yTRACE("type -> bvec3")}
+                                                       else {yTRACE("type -> bvec4")};}
     break;
 
   case 23:
 
 /* Line 1806 of yacc.c  */
-#line 152 "parser.y"
+#line 165 "parser.y"
     {yTRACE("type -> float");}
     break;
 
   case 24:
 
 /* Line 1806 of yacc.c  */
-#line 153 "parser.y"
+#line 166 "parser.y"
     {if(yylval.as_vec == 1) {yTRACE("type -> vec2")} 
-                    else if(yylval.as_vec == 2) {yTRACE("type -> vec3")}
-                    else {yTRACE("type -> vec4")};}
+                                                       else if(yylval.as_vec == 2) {yTRACE("type -> vec3")}
+                                                       else {yTRACE("type -> vec4")};}
     break;
 
   case 25:
 
 /* Line 1806 of yacc.c  */
-#line 159 "parser.y"
+#line 173 "parser.y"
     {yTRACE("expression -> constructor");}
     break;
 
   case 26:
 
 /* Line 1806 of yacc.c  */
-#line 160 "parser.y"
+#line 174 "parser.y"
     {yTRACE("expression -> function");}
     break;
 
   case 27:
 
 /* Line 1806 of yacc.c  */
-#line 161 "parser.y"
+#line 175 "parser.y"
     {yTRACE("expression -> INT_C");}
     break;
 
   case 28:
 
 /* Line 1806 of yacc.c  */
-#line 162 "parser.y"
+#line 176 "parser.y"
     {yTRACE("expression -> FLOAT_C");}
     break;
 
   case 29:
 
 /* Line 1806 of yacc.c  */
-#line 163 "parser.y"
+#line 177 "parser.y"
     {yTRACE("expression -> variable");}
     break;
 
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 164 "parser.y"
+#line 178 "parser.y"
     {yTRACE("expression -> unary_op expression");}
     break;
 
   case 31:
 
 /* Line 1806 of yacc.c  */
-#line 165 "parser.y"
+#line 179 "parser.y"
     {yTRACE("expression -> expr1");}
     break;
 
   case 32:
 
 /* Line 1806 of yacc.c  */
-#line 166 "parser.y"
+#line 180 "parser.y"
     {yTRACE("expression -> true");}
     break;
 
   case 33:
 
 /* Line 1806 of yacc.c  */
-#line 167 "parser.y"
+#line 181 "parser.y"
     {yTRACE("expression -> false");}
     break;
 
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 168 "parser.y"
+#line 182 "parser.y"
     {yTRACE("expression -> (expression)");}
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 172 "parser.y"
+#line 187 "parser.y"
     {yTRACE("variable -> ID");}
     break;
 
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 173 "parser.y"
+#line 188 "parser.y"
     {yTRACE("variable -> ID [INT_C]");}
     break;
 
   case 37:
 
 /* Line 1806 of yacc.c  */
-#line 177 "parser.y"
+#line 193 "parser.y"
     {yTRACE("unary_op -> !");}
     break;
 
   case 38:
 
 /* Line 1806 of yacc.c  */
-#line 178 "parser.y"
+#line 194 "parser.y"
     {yTRACE("unary_op -> -");}
     break;
 
   case 39:
 
 /* Line 1806 of yacc.c  */
-#line 182 "parser.y"
+#line 202 "parser.y"
     {yTRACE("expr1 -> expr2 || expr2");}
     break;
 
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 183 "parser.y"
+#line 203 "parser.y"
     {yTRACE("expr1 -> expr2");}
     break;
 
   case 41:
 
 /* Line 1806 of yacc.c  */
-#line 187 "parser.y"
+#line 208 "parser.y"
     {yTRACE("expr2 -> expr3 && expr3");}
     break;
 
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 188 "parser.y"
+#line 209 "parser.y"
     {yTRACE("expr2 -> expr3");}
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 192 "parser.y"
+#line 214 "parser.y"
     {yTRACE("expr3 -> expr4 == expr4");}
     break;
 
   case 44:
 
 /* Line 1806 of yacc.c  */
-#line 193 "parser.y"
+#line 215 "parser.y"
     {yTRACE("expr3 -> expr4 <= expr4");}
     break;
 
   case 45:
 
 /* Line 1806 of yacc.c  */
-#line 194 "parser.y"
+#line 216 "parser.y"
     {yTRACE("expr3 -> expr4 < expr4");}
     break;
 
   case 46:
 
 /* Line 1806 of yacc.c  */
-#line 195 "parser.y"
+#line 217 "parser.y"
     {yTRACE("expr3 -> expr4 >= expr4");}
     break;
 
   case 47:
 
 /* Line 1806 of yacc.c  */
-#line 196 "parser.y"
+#line 218 "parser.y"
     {yTRACE("expr3 -> expr4 > expr4");}
     break;
 
   case 48:
 
 /* Line 1806 of yacc.c  */
-#line 197 "parser.y"
+#line 219 "parser.y"
     {yTRACE("expr3 -> expr4 != expr4");}
     break;
 
   case 49:
 
 /* Line 1806 of yacc.c  */
-#line 198 "parser.y"
+#line 220 "parser.y"
     {yTRACE("expr3 -> expr4");}
     break;
 
   case 50:
 
 /* Line 1806 of yacc.c  */
-#line 202 "parser.y"
+#line 225 "parser.y"
     {yTRACE("expr4 -> term + term");}
     break;
 
   case 51:
 
 /* Line 1806 of yacc.c  */
-#line 203 "parser.y"
+#line 226 "parser.y"
     {yTRACE("expr4 -> term - term");}
     break;
 
   case 52:
 
 /* Line 1806 of yacc.c  */
-#line 204 "parser.y"
+#line 227 "parser.y"
     {yTRACE("expr4 -> term");}
     break;
 
   case 53:
 
 /* Line 1806 of yacc.c  */
-#line 208 "parser.y"
+#line 232 "parser.y"
     {yTRACE("term -> factor * factor");}
     break;
 
   case 54:
 
 /* Line 1806 of yacc.c  */
-#line 209 "parser.y"
+#line 233 "parser.y"
     {yTRACE("term -> factor / factor");}
     break;
 
   case 55:
 
 /* Line 1806 of yacc.c  */
-#line 210 "parser.y"
+#line 234 "parser.y"
     {yTRACE("term -> factor");}
     break;
 
   case 56:
 
 /* Line 1806 of yacc.c  */
-#line 214 "parser.y"
+#line 239 "parser.y"
     {yTRACE("factor -> expression ^ expression");}
     break;
 
   case 57:
 
 /* Line 1806 of yacc.c  */
-#line 215 "parser.y"
+#line 240 "parser.y"
     {yTRACE("factor -> expression");}
     break;
 
   case 58:
 
 /* Line 1806 of yacc.c  */
-#line 235 "parser.y"
+#line 249 "parser.y"
     {yTRACE("constructor -> type(arguments)");}
     break;
 
   case 59:
 
 /* Line 1806 of yacc.c  */
-#line 239 "parser.y"
+#line 254 "parser.y"
     {yTRACE("function -> function_name(arguments_opt)");}
     break;
 
   case 60:
 
 /* Line 1806 of yacc.c  */
-#line 243 "parser.y"
+#line 259 "parser.y"
     {if(yylval.as_func == 0) {yTRACE("function_name -> dp3")}
-                else if(yylval.as_func == 1) {yTRACE("function_name -> lit")}
-                else {yTRACE("function_name -> rsq")};}
+                                                       else if(yylval.as_func == 1) {yTRACE("function_name -> lit")}
+                                                       else {yTRACE("function_name -> rsq")};}
     break;
 
   case 61:
 
 /* Line 1806 of yacc.c  */
-#line 249 "parser.y"
+#line 266 "parser.y"
     {yTRACE("arguments_opt -> arguments");}
     break;
 
   case 62:
 
 /* Line 1806 of yacc.c  */
-#line 250 "parser.y"
+#line 267 "parser.y"
     {yTRACE("arguments_opt -> ");}
     break;
 
   case 63:
 
 /* Line 1806 of yacc.c  */
-#line 254 "parser.y"
+#line 272 "parser.y"
     {yTRACE("arguments -> arguments,expression");}
     break;
 
   case 64:
 
 /* Line 1806 of yacc.c  */
-#line 255 "parser.y"
+#line 273 "parser.y"
     {yTRACE("arguments -> expression");}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1997 "y.tab.c"
+#line 1998 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2224,10 +2225,10 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 258 "parser.y"
+#line 276 "parser.y"
 
 
-/***********************************************************************ol
+/************************************************************************
  * Extra C code.
  *
  * The given yyerror function should not be touched. You may add helper
@@ -2252,5 +2253,3 @@ void yyerror(const char* s) {
     fprintf(errorFile, ": Reading token %s\n", yytname[YYTRANSLATE(yychar)]);
   }
 }
-
-
