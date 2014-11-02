@@ -236,8 +236,15 @@ term
 
 /*  Lastly, there is the power operator, this having the highest precedence other than the unary_op's */
 factor
-  : expression '^' expression                       {yTRACE("factor -> expression ^ expression");}
-  | expression                                      {yTRACE("factor -> expression");}
+  : expr5 '^' expr5                                 {yTRACE("factor -> expr5 ^ expr5");}
+  | expr5                                           {yTRACE("factor -> expr5");}
+  ;
+
+expr5
+  : INT_C                                           {yTRACE("expr5 -> INT_C");}
+  | FLOAT_C                                         {yTRACE("expr5 -> FLOAT_C");}
+  | TRUE_C                                          {yTRACE("expr5 -> TRUE_C");}
+  | FALSE_C                                         {yTRACE("expr5 -> FALSE_C");}
   ;
 
 /*************************************************************************
@@ -269,8 +276,8 @@ arguments_opt
 
 /*  The arguments for a function or constructor   */
 arguments
-  : arguments ',' expression                        {yTRACE("arguments -> arguments,expression");}
-  | expression                                      {yTRACE("arguments -> expression");}
+  : arguments ',' expr5                             {yTRACE("arguments -> arguments, expr5");}
+  | expr5                                           {yTRACE("arguments -> expr5");}
   ;
 
 %%

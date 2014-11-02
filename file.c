@@ -1,4 +1,3 @@
 {
-	int hi;
-	hi = 1 * 2 + 4 ^ 2;
+	vec2 myVec = vec2(1.0,5.0);
 }
