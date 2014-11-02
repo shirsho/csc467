@@ -246,6 +246,7 @@ expr5
   | TRUE_C                                          {yTRACE("expr5 -> true");}
   | FALSE_C                                         {yTRACE("expr5 -> false");}
   | function                                        {yTRACE("expr5 -> function");}
+  | variable                                        {yTRACE("expr5 -> variable");}
   ;
 
 /*************************************************************************
