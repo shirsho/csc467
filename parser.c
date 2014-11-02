@@ -1962,14 +1962,14 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 246 "parser.y"
-    {yTRACE("expr5 -> TRUE_C");}
+    {yTRACE("expr5 -> true");}
     break;
 
   case 61:
 
 /* Line 1806 of yacc.c  */
 #line 247 "parser.y"
-    {yTRACE("expr5 -> FALSE_C");}
+    {yTRACE("expr5 -> false");}
     break;
 
   case 62:

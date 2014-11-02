@@ -243,8 +243,8 @@ factor
 expr5
   : INT_C                                           {yTRACE("expr5 -> INT_C");}
   | FLOAT_C                                         {yTRACE("expr5 -> FLOAT_C");}
-  | TRUE_C                                          {yTRACE("expr5 -> TRUE_C");}
-  | FALSE_C                                         {yTRACE("expr5 -> FALSE_C");}
+  | TRUE_C                                          {yTRACE("expr5 -> true");}
+  | FALSE_C                                         {yTRACE("expr5 -> false");}
   ;
 
 /*************************************************************************
