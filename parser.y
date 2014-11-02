@@ -202,13 +202,13 @@ expr1
   : expr2 OR expr2                                  {yTRACE("expr1 -> expr2 || expr2");}
   | expr2                                           {yTRACE("expr1 -> expr2");}
   ;
-
+  
 /*  The second lowest operator in order of precedence is AND */
 expr2
   : expr3 AND expr3                                 {yTRACE("expr2 -> expr3 && expr3");}
   | expr3                                           {yTRACE("expr2 -> expr3");}
   ;
-
+  
 /*  The third lowest operator in order of precedence are the comparison operators */
 expr3
   : expr4 EQ expr4                                  {yTRACE("expr3 -> expr4 == expr4");}
@@ -219,34 +219,36 @@ expr3
   | expr4 NEQ expr4                                 {yTRACE("expr3 -> expr4 != expr4");}
   | expr4                                           {yTRACE("expr3 -> expr4");}
   ;
-
+  
 /*  Next we have the addition and subtraction operators   */
 expr4
   : term '+' term                                   {yTRACE("expr4 -> term + term");}
   | term '-' term                                   {yTRACE("expr4 -> term - term");}
   | term                                            {yTRACE("expr4 -> term");}
   ;
-
+  
 /*  Then we have the multiplication and division operators  */
 term
   : factor '*' factor                               {yTRACE("term -> factor * factor");}
   | factor '/' factor                               {yTRACE("term -> factor / factor");}
   | factor                                          {yTRACE("term -> factor");}
   ;
-
+  
 /*  Lastly, there is the power operator, this having the highest precedence other than the unary_op's */
 factor
   : expr5 '^' expr5                                 {yTRACE("factor -> expr5 ^ expr5");}
   | expr5                                           {yTRACE("factor -> expr5");}
   ;
-
+  
 expr5
   : INT_C                                           {yTRACE("expr5 -> INT_C");}
   | FLOAT_C                                         {yTRACE("expr5 -> FLOAT_C");}
   | TRUE_C                                          {yTRACE("expr5 -> true");}
   | FALSE_C                                         {yTRACE("expr5 -> false");}
+  | expr1                                           {yTRACE("expr5 -> expr1");}
   | function                                        {yTRACE("expr5 -> function");}
   | variable                                        {yTRACE("expr5 -> variable");}
+  | constructor                                     {yTRACE("expr5 -> constructor");}
   ;
 
 /*************************************************************************
@@ -278,8 +280,8 @@ arguments_opt
 
 /*  The arguments for a function or constructor   */
 arguments
-  : arguments ',' expr5                             {yTRACE("arguments -> arguments, expr5");}
-  | expr5                                           {yTRACE("arguments -> expr5");}
+  : arguments ',' expression                             {yTRACE("arguments -> arguments, expr5");}
+  | expression                                           {yTRACE("arguments -> expr5");}
   ;
 
 %%
