@@ -1,0 +1,16 @@
+{
+	/*int num;
+	int hi = 1 * 2 + 4 ^ 2;
+  num = 20;
+  num = 5;*/
+  /*Precedence check*/
+  /*int x = -1 + rs1(1.2) *  4 ^ 2 / 9;*/
+
+
+
+
+  vec3 x = vec3(1.0,5.0,4.0,6.1,4.5);
+  vec3 y = vec3(1.0,2.0);
+
+  float f = 1.0 + dp3(x, y); 
+}

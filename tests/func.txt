@@ -1,0 +1,9 @@
+{
+  /*  This is valid program, because you can call
+      float dp3(vec3,vec3);
+      as a term inside an expression, as done in line 8
+  */
+  float x = 1.0; 
+  float y = 2.0;
+  float f = 1.0 + dp3(x, y); 
+}

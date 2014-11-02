@@ -170,13 +170,13 @@ type
 
 /*  The different types of expressions allowed in MiniGLSL   */
 expression
-  : constructor                                     {yTRACE("expression -> constructor");}
+  : expr1                                           {yTRACE("expression -> expr1");}
+  | constructor                                     {yTRACE("expression -> constructor");}
   | function                                        {yTRACE("expression -> function");}
   | INT_C                                           {yTRACE("expression -> INT_C");}
   | FLOAT_C                                         {yTRACE("expression -> FLOAT_C");}
   | variable                                        {yTRACE("expression -> variable");}
   | unary_op expression                             {yTRACE("expression -> unary_op expression");}
-  | expr1                                           {yTRACE("expression -> expr1");}
   | TRUE_C                                          {yTRACE("expression -> true");}
   | FALSE_C                                         {yTRACE("expression -> false");}
   | '('expression')'                                {yTRACE("expression -> (expression)");}
@@ -245,6 +245,7 @@ expr5
   | FLOAT_C                                         {yTRACE("expr5 -> FLOAT_C");}
   | TRUE_C                                          {yTRACE("expr5 -> true");}
   | FALSE_C                                         {yTRACE("expr5 -> false");}
+  | function                                        {yTRACE("expr5 -> function");}
   ;
 
 /*************************************************************************
@@ -265,7 +266,7 @@ function
 function_name
   : FUNC                                            {if(yylval.as_func == 0) {yTRACE("function_name -> dp3")}
                                                        else if(yylval.as_func == 1) {yTRACE("function_name -> lit")}
-                                                       else {yTRACE("function_name -> rsq")};}
+                                                       else if(yylval.as_func == 2){yTRACE("function_name -> rsq")};}
   ;
 
 /*  The arguments for a function  */
