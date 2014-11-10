@@ -2,7 +2,6 @@
  * Justin Canton, 1000017910
  * Samprit Raihan, 998138830
  *
- *
  * compiler467.c
  *
  * This is the main driver program for the CSC467F course project
@@ -25,7 +24,7 @@
 #include "common.h"
 
 /* Phases 3,4: Uncomment following includes as needed */
-//#include "ast.h"
+#include "ast.h"
 //#include "codegen.h"
 
 /***********************************************************************
@@ -85,24 +84,26 @@ int main (int argc, char *argv[]) {
 
 /* Phase 2: Parser -- should allocate an AST, storing the reference in the
  * global variable "ast", and build the AST there. */
-  yyparse();
+  if(1 == yyparse()) {
+    return 0; // parse failed
+  }
 
 /* Phase 3: Call the AST dumping routine if requested */
- // if (dumpAST)
- //   printAST(ast);
+  if (dumpAST)
+    ast_print(ast);
 /* Phase 4: Add code to call the code generation routine */
 /* TODO: call your code generation routine here */
-//  if (errorOccurred)
-//    fprintf(outputFile,"Failed to compile\n");
-//  else 
-//    genCode(ast);
-
+  if (errorOccurred)
+    fprintf(outputFile,"Failed to compile\n");
+  else 
+   // genCode(ast);
+    ;
 /***********************************************************************
  * Post Compilation Cleanup
  **********************************************************************/
 
 /* Make calls to any cleanup or finalization routines here. */
-//	freeAST(ast);
+  ast_free(ast);
 
   /* Clean up files if necessary */
   if (inputFile != DEFAULT_INPUT_FILE)
@@ -186,11 +187,14 @@ void getOpts (int numargs, char **argstr) {
           }
           break;
         case 'O': /* Alternative output file */
+          printf("Blaaaaa\n");
           if (optarg[2] == 0) {
             i += 1;
             outputFile = fileOpen (argstr[i], "w", DEFAULT_OUTPUT_FILE);
+          printf("%s\n",argstr[i]);
           } else
             outputFile = fileOpen (&optarg[2], "w", DEFAULT_OUTPUT_FILE);
+          printf("%s\n",&optarg[2]);
           break;
         case 'E': /* Alternative error message file */
           if (optarg[2] == 0) {

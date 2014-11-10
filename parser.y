@@ -18,14 +18,16 @@
  ***********************************************************************/
 
 #include <string.h>
-#include "common.h"
-//#include "ast.h"
-//#include "symbol.h"
-//#include "semantic.h"
-#define YYERROR_VERBOSE
-#define yTRACE(x)    { if (traceParser) fprintf(traceFile, "%s\n\n", x); } /*Added an extra newline character for readability */
 
-void yyerror(const char* s);    /* what to do in case of error      */
+#include "common.h"
+#include "ast.h"
+#include "symbol.h"
+#include "semantic.h"
+
+#define YYERROR_VERBOSE
+#define yTRACE(x)    { if (traceParser) fprintf(traceFile, "%s\n", x); }
+
+void yyerror(const char* s);    /* what to do in case of error            */
 int yylex();              /* procedure for calling lexical analyzer */
 extern int yyline;        /* variable holding current line number   */
 
@@ -64,6 +66,7 @@ enum {
   float as_float;
   char *as_str;
   int as_func;
+  node *as_ast;
 }
 
 %token          FLOAT_T
@@ -72,7 +75,7 @@ enum {
 %token          CONST
 %token          FALSE_C TRUE_C
 %token          FUNC
-%token          IF WHILE ELSE
+%token          IF ELSE
 %token          AND OR NEQ EQ LEQ GEQ
 
 // links specific values of tokens to yyval
@@ -83,13 +86,37 @@ enum {
 %token <as_int>   INT_C
 %token <as_str>   ID
 
-%left     OR
-%left     AND
-%left     EQ NEQ '<' LEQ '>' GEQ
-%left     '+' '-'
-%left     '*' '/'
-%right    '^'
-%left     '!' UMINUS
+// operator precedence
+%left     OR                        // 7
+%left     AND                       // 6
+%left     EQ NEQ '<' LEQ '>' GEQ    // 5
+%left     '+' '-'                   // 4
+%left     '*' '/'                   // 3
+%right    '^'                       // 2
+%right    '!' UMINUS                // 1
+%left     '(' '['                   // 0
+
+// resolve dangling else shift/reduce conflict with associativity
+%left     WITHOUT_ELSE
+%left     WITH_ELSE
+
+// type declarations
+// TODO: fill this out
+%type <as_ast> expression
+%type <as_ast> program
+%type <as_ast> scope
+%type <as_ast> declaration
+%type <as_ast> statement
+%type <as_ast> declarations
+%type <as_ast> statements
+%type <as_ast> type
+%type <as_ast> variable
+%type <as_ast> arguments
+%type <as_ast> arguments_opt
+
+// expect one shift/reduce conflict, where Bison chooses to shift
+// the ELSE.
+%expect 1
 
 %start    program
 
@@ -102,191 +129,175 @@ enum {
  *       language grammar
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
-
-/**********************************************************************************
- *  These are the rules provided to us by the lab outline, with a few modifications
- *********************************************************************************/
-
-/*  The overall program   */
 program
-  : scope                                           {yTRACE("program -> scope");}
+  : scope 
+      { ast = $1;
+        yTRACE("program -> scope\n");
+        ast_print(ast); } 
   ;
 
-/*  The scope of the main function  */
 scope
-  : '{'declarations statements '}'                  {yTRACE("scope -> { declarations statements }");}
+  : '{' declarations statements '}'
+      { $$ = ast_allocate(SCOPE_NODE, $2, $3);
+        yTRACE("scope -> { declarations statements }\n") }
   ;
 
-/*  Allows for multiple declarations  */
 declarations
-  : declarations declaration                        {yTRACE("declarations -> declarations declaration");}
-  |                                                 {yTRACE("declarations -> ");}
+  : declarations declaration
+      { yTRACE("declarations -> declarations declaration\n") }
+  | 
+      { yTRACE("declarations -> \n") }
   ;
 
-/*  Allows for multiple statements  */
 statements
-  : statements statement                            {yTRACE("statements -> statements statement");}
-  |                                                 {yTRACE("statements -> ");}
+  : statements statement
+      { yTRACE("statements -> statements statement\n") }
+  | 
+      { yTRACE("statements -> \n") }
   ;
 
-/*  The declarations that you are able to have of different variables   */
 declaration
-  : type ID';'                                      {yTRACE("declaration -> type ID;");}
-  | type ID '=' expression ';'                      {yTRACE("declaration -> type ID = expression;");}
-  | CONST type ID '=' expression ';'                {yTRACE("declaration -> const type ID = expression;");}
-  |                                                 {yTRACE("declaration -> ");}
+  : type ID ';' 
+      { $$ = ast_allocate(DECLARATION_NODE, $1, $2, 'null', -1);
+        yTRACE("declaration -> type ID ;\n") }
+  | type ID '=' expression ';'
+      { $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1);
+        yTRACE("declaration -> type ID = expression ;\n") }
+  | CONST type ID '=' expression ';'
+      { $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST);
+        yTRACE("declaration -> CONST type ID = expression ;\n") }
   ;
 
-/*  The different types of statments which are allowed in MiniGLSL   */
 statement
-  : variable '=' expression ';'                     {yTRACE("statement -> variable = expression;");}
-  | IF '(' expression ')' statement else_statement  {yTRACE("statement -> if (expression) statement else_statement");}
-  | WHILE '(' expression ')' statement              {yTRACE("statement -> while (expression) statement");}
-  | scope                                           {yTRACE("statement -> scope");}
-  | ';'                                             {yTRACE("statement -> ;");}
+  : variable '=' expression ';'
+      { yTRACE("statement -> variable = expression ;\n") }
+  | IF '(' expression ')' statement ELSE statement %prec WITH_ELSE
+      { yTRACE("statement -> IF ( expression ) statement ELSE statement \n") }
+  | IF '(' expression ')' statement %prec WITHOUT_ELSE
+      { yTRACE("statement -> IF ( expression ) statement \n") }
+  | scope 
+      { yTRACE("statement -> scope \n") }
+  | ';'
+      { yTRACE("statement -> ; \n") }
   ;
 
-/*  The optional else statement that isn't required with the if statement  */
-else_statement
-  : ELSE statement                                  {yTRACE("else_statement -> else statement");}
-  |                                                 {yTRACE("else_statement -> ");}
+type
+  : INT_T
+      { yTRACE("type -> INT_T \n") }
+  | IVEC_T
+      { yTRACE("type -> IVEC_T \n") }
+  | BOOL_T
+      { yTRACE("type -> BOOL_T \n") }
+  | BVEC_T
+      { yTRACE("type -> BVEC_T \n") }
+  | FLOAT_T
+      { yTRACE("type -> FLOAT_T \n") }
+  | VEC_T
+      { yTRACE("type -> VEC_T \n") }
   ;
 
-/*  The different types of variables allowed in MiniGLSL, this shows which vec was called. Either 2, 3, or 4   */
-type 
-  : INT_T                                           {yTRACE("type -> int");}
-  | IVEC_T                                          {if(yylval.as_vec == 1) {yTRACE("type -> ivec2")} 
-                                                       else if(yylval.as_vec == 2) {yTRACE("type -> ivec3")}
-                                                       else {yTRACE("type -> ivec4")};}
-  | BOOL_T                                          {yTRACE("type -> bool");}
-  | BVEC_T                                          {if(yylval.as_vec == 1) {yTRACE("type -> bvec2")} 
-                                                       else if(yylval.as_vec == 2) {yTRACE("type -> bvec3")}
-                                                       else {yTRACE("type -> bvec4")};}
-  | FLOAT_T                                         {yTRACE("type -> float");}
-  | VEC_T                                           {if(yylval.as_vec == 1) {yTRACE("type -> vec2")} 
-                                                       else if(yylval.as_vec == 2) {yTRACE("type -> vec3")}
-                                                       else {yTRACE("type -> vec4")};}
-  ;
-
-/*  The different types of expressions allowed in MiniGLSL   */
 expression
-  : expr1                                           {yTRACE("expression -> expr1");}
-  | constructor                                     {yTRACE("expression -> constructor");}
-  | function                                        {yTRACE("expression -> function");}
-  | INT_C                                           {yTRACE("expression -> INT_C");}
-  | FLOAT_C                                         {yTRACE("expression -> FLOAT_C");}
-  | variable                                        {yTRACE("expression -> variable");}
-  | unary_op expression                             {yTRACE("expression -> unary_op expression");}
-  | TRUE_C                                          {yTRACE("expression -> true");}
-  | FALSE_C                                         {yTRACE("expression -> false");}
-  | '('expression')'                                {yTRACE("expression -> (expression)");}
+
+  /* function-like operators */
+  : type '(' arguments_opt ')' %prec '('
+      { yTRACE("expression -> type ( arguments_opt ) \n") }
+  | FUNC '(' arguments_opt ')' %prec '('
+      { yTRACE("expression -> FUNC ( arguments_opt ) \n") }
+
+  /* unary opterators */
+  | '-' expression %prec UMINUS
+      { $$ = ast_allocate(UNARY_EXPRESSION_NODE, UMINUS, $2);
+        yTRACE("expression -> - expression \n") }
+  | '!' expression %prec '!'
+      { $$ = ast_allocate(UNARY_EXPRESSION_NODE, '!', $2);
+        yTRACE("expression -> ! expression \n") }
+
+  /* binary operators */
+  | expression AND expression %prec AND
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, AND, $1, $3);
+        yTRACE("expression -> expression AND expression \n") }
+  | expression OR expression %prec OR
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, OR, $1, $3);
+        yTRACE("expression -> expression OR expression \n") }
+  | expression EQ expression %prec EQ
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, EQ, $1, $3);
+        yTRACE("expression -> expression EQ expression \n") }
+  | expression NEQ expression %prec NEQ
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, NEQ, $1, $3);
+        yTRACE("expression -> expression NEQ expression \n") }
+  | expression '<' expression %prec '<'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '<', $1, $3);
+        yTRACE("expression -> expression < expression \n") }
+  | expression LEQ expression %prec LEQ
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, LEQ, $1, $3);
+        yTRACE("expression -> expression LEQ expression \n") }
+  | expression '>' expression %prec '>'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '>', $1, $3);
+        yTRACE("expression -> expression > expression \n") }
+  | expression GEQ expression %prec GEQ
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, GEQ, $1, $3);
+        yTRACE("expression -> expression GEQ expression \n") }
+  | expression '+' expression %prec '+'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '+', $1, $3);
+        yTRACE("expression -> expression + expression \n") }
+  | expression '-' expression %prec '-'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '-', $1, $3);
+        yTRACE("expression -> expression - expression \n") }
+  | expression '*' expression %prec '*'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '*', $1, $3);
+        yTRACE("expression -> expression * expression \n") }
+  | expression '/' expression %prec '/'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '/', $1, $3);
+        yTRACE("expression -> expression / expression \n") }
+  | expression '^' expression %prec '^'
+      { $$ = ast_allocate(BINARY_EXPRESSION_NODE, '^', $1, $3);
+        yTRACE("expression -> expression ^ expression \n") }
+
+  /* literals */
+  | TRUE_C
+      { yTRACE("expression -> TRUE_C \n") }
+  | FALSE_C
+      { yTRACE("expression -> FALSE_C \n") }
+  | INT_C
+      { $$ = ast_allocate(INT_NODE, $1);
+        yTRACE("expression -> INT_C \n") }
+  | FLOAT_C
+      { $$ = ast_allocate(FLOAT_NODE, $1);
+        yTRACE("expression -> FLOAT_C \n") }
+
+  /* misc */
+  | '(' expression ')'
+      { yTRACE("expression -> ( expression ) \n") }
+  | variable 
+    { yTRACE("expression -> variable \n") }
   ;
 
-/*  A variable can either be just an identifier, or an identifier with access to a certain element  */
 variable
-  : ID                                              {yTRACE("variable -> ID");}
-  | ID '['INT_C']'                                  {yTRACE("variable -> ID [INT_C]");}
+  : ID
+      { $$ = ast_allocate(VAR_NODE, $1, -1);
+        yTRACE("variable -> ID \n") }
+  | ID '[' INT_C ']' %prec '['
+      { $$ = ast_allocate(VAR_NODE, $1, $3);
+        yTRACE("variable -> ID [ INT_C ] \n") }
   ;
 
-/*  The unary operations with high precedence   */
-unary_op
-  : '!'                                             {yTRACE("unary_op -> !");}
-  | '-'                                             {yTRACE("unary_op -> -");}
-  ;
-
-/**************************************************************************************************
- *  This is where we changed the grammar. For readability, as well as to make it easier to follow,
- *  we put the operators in order of precedence. The lowest precedence operator is OR
- *************************************************************************************************/
-expr1
-  : expr2 OR expr2                                  {yTRACE("expr1 -> expr2 || expr2");}
-  | expr2                                           {yTRACE("expr1 -> expr2");}
-  ;
-  
-/*  The second lowest operator in order of precedence is AND */
-expr2
-  : expr3 AND expr3                                 {yTRACE("expr2 -> expr3 && expr3");}
-  | expr3                                           {yTRACE("expr2 -> expr3");}
-  ;
-  
-/*  The third lowest operator in order of precedence are the comparison operators */
-expr3
-  : expr4 EQ expr4                                  {yTRACE("expr3 -> expr4 == expr4");}
-  | expr4 LEQ expr4                                 {yTRACE("expr3 -> expr4 <= expr4");}
-  | expr4 '<' expr4                                 {yTRACE("expr3 -> expr4 < expr4");}
-  | expr4 GEQ expr4                                 {yTRACE("expr3 -> expr4 >= expr4");}
-  | expr4 '>' expr4                                 {yTRACE("expr3 -> expr4 > expr4");}
-  | expr4 NEQ expr4                                 {yTRACE("expr3 -> expr4 != expr4");}
-  | expr4                                           {yTRACE("expr3 -> expr4");}
-  ;
-  
-/*  Next we have the addition and subtraction operators   */
-expr4
-  : term '+' term                                   {yTRACE("expr4 -> term + term");}
-  | term '-' term                                   {yTRACE("expr4 -> term - term");}
-  | term                                            {yTRACE("expr4 -> term");}
-  ;
-  
-/*  Then we have the multiplication and division operators  */
-term
-  : factor '*' factor                               {yTRACE("term -> factor * factor");}
-  | factor '/' factor                               {yTRACE("term -> factor / factor");}
-  | factor                                          {yTRACE("term -> factor");}
-  ;
-  
-/*  Lastly, there is the power operator, this having the highest precedence other than the unary_op's */
-factor
-  : expr5 '^' expr5                                 {yTRACE("factor -> expr5 ^ expr5");}
-  | expr5                                           {yTRACE("factor -> expr5");}
-  ;
-  
-expr5
-  : INT_C                                           {yTRACE("expr5 -> INT_C");}
-  | FLOAT_C                                         {yTRACE("expr5 -> FLOAT_C");}
-  | TRUE_C                                          {yTRACE("expr5 -> true");}
-  | FALSE_C                                         {yTRACE("expr5 -> false");}
-  | expr1                                           {yTRACE("expr5 -> expr1");}
-  | function                                        {yTRACE("expr5 -> function");}
-  | variable                                        {yTRACE("expr5 -> variable");}
-  | constructor                                     {yTRACE("expr5 -> constructor");}
-  ;
-
-/*************************************************************************
- *  From here on, we are again back to the given definition of the grammar
- ************************************************************************/
-
-/*  The constructor for vecs  */
-constructor
-  : type '(' arguments ')'                          {yTRACE("constructor -> type(arguments)");}
-  ;
-
-/*  The constructor for functions   */
-function
-  : function_name '(' arguments_opt ')'             {yTRACE("function -> function_name(arguments_opt)");}
-  ;
-
-/*  The name of the function being called, this shows which function was called   */
-function_name
-  : FUNC                                            {if(yylval.as_func == 0) {yTRACE("function_name -> dp3")}
-                                                       else if(yylval.as_func == 1) {yTRACE("function_name -> lit")}
-                                                       else if(yylval.as_func == 2){yTRACE("function_name -> rsq")};}
-  ;
-
-/*  The arguments for a function  */
-arguments_opt
-  : arguments                                       {yTRACE("arguments_opt -> arguments");}
-  |                                                 {yTRACE("arguments_opt -> ");}
-  ;
-
-/*  The arguments for a function or constructor   */
 arguments
-  : arguments ',' expression                             {yTRACE("arguments -> arguments, expr5");}
-  | expression                                           {yTRACE("arguments -> expr5");}
+  : arguments ',' expression
+      { yTRACE("arguments -> arguments , expression \n") }
+  | expression
+      { yTRACE("arguments -> expression \n") }
+  ;
+
+arguments_opt
+  : arguments
+      { yTRACE("arguments_opt -> arguments \n") }
+  |
+      { yTRACE("arguments_opt -> \n") }
   ;
 
 %%
 
-/************************************************************************
+/***********************************************************************ol
  * Extra C code.
  *
  * The given yyerror function should not be touched. You may add helper
@@ -311,3 +322,4 @@ void yyerror(const char* s) {
     fprintf(errorFile, ": Reading token %s\n", yytname[YYTRANSLATE(yychar)]);
   }
 }
+

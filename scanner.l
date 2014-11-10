@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "common.h"
+#include "ast.h"
 #include "parser.tab.h"
 
 #define YY_USER_INIT { yyin = inputFile; }
@@ -41,9 +42,10 @@ int yyline = 1;
 <<EOF>>                       { yyterminate(); }
 
 [+\-*/\^]                     { yOUT(yytext[0]); }
-[()[\]{},]                     { yOUT(yytext[0]); }
+[()[\]{}]                     { yOUT(yytext[0]); }
 [<>=!]                        { yOUT(yytext[0]); }
 ";"                           { yOUT(yytext[0]); }
+","                           { yOUT(yytext[0]); }
 "&&"                          { yOUT(AND); }
 "||"                          { yOUT(OR); }
 "!="                          { yOUT(NEQ); }
@@ -61,7 +63,6 @@ bvec(2|3|4)                   { yylval.as_vec = yytext[4] - '1'; yOUT(BVEC_T); }
 
 if                            { yOUT(IF); }
 else                          { yOUT(ELSE); }
-while                         { yOUT(WHILE); }
 
 dp3                           { yylval.as_func = 0; yOUT(FUNC); }
 rsq                           { yylval.as_func = 2; yOUT(FUNC); }
