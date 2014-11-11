@@ -132,8 +132,7 @@ enum {
 program
   : scope 
       { ast = $1;
-        yTRACE("program -> scope\n");
-        ast_print(ast); } 
+        yTRACE("program -> scope\n"); } 
   ;
 
 scope
