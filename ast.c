@@ -256,5 +256,146 @@ void ast_free(node *ast) {
 }
 
 void ast_print(node * ast) {
+  //print dat shet
 
+  // do inorder traversal
+  if(ast == NULL) return;
+  switch(ast->kind) {
+    
+    case SCOPE_NODE:
+      // visit left node
+      ast_print(ast->scope_expr.left);
+      // print the current node
+      fprintf(dumpFile, "SCOPE_NODE:\n");
+      // visit right node
+      ast_print(ast->scope_expr.right);
+      break;
+
+    case BINARY_EXPRESSION_NODE:
+      ast_print(ast->binary_expr.left);
+      
+      fprintf(dumpFile, "BINARY_EXPRESSION_NODE\n");
+      fprintf(dumpFile, "op: %d\n", ast->binary_expr.op);
+              
+      ast_print(ast->binary_expr.right);
+      break;
+
+    case UNARY_EXPRESSION_NODE:
+      // print the current node  
+      
+      fprintf(dumpFile, "UNARY_EXPRESSION_NODE\n");
+      fprintf(dumpFile, "op: %d\n", ast->unary_expr.op);
+      
+      ast_print(ast->unary_expr.right);
+      break;
+
+    case INT_NODE:
+      // print the current node
+      fprintf(dumpFile, "INT_NODE\n");
+      fprintf(dumpFile, "val: %d\n", ast->int_expr.val);        
+      break;
+
+    case BOOL_NODE:
+      // print the current node
+      fprintf(dumpFile, "BOOL_NODE\n");
+      fprintf(dumpFile, "val: %d\n", ast->bool_expr.val);              
+      break;
+
+    case FLOAT_NODE:
+      // print the current node
+      fprintf(dumpFile, "FLOAT_NODE\n");
+      fprintf(dumpFile, "val: %f\n", ast->float_expr.val);              
+      break;
+
+    case IDENT_NODE:
+      // print the current node
+      fprintf(dumpFile, "IDENT_NODE\n");
+      fprintf(dumpFile, "id: %d\n", ast->id_expr.type);              
+      break;
+
+    case VAR_NODE:
+      // print the current node
+      fprintf(dumpFile, "VAR_NODE\n");
+      fprintf(dumpFile, "id: %s\n", ast->var_expr.id);              
+      break;
+
+    case DECLARATION_NODE:
+      // print the current node
+      ast_print(ast->declaration_expr.type);
+      fprintf(dumpFile, "DECLARATION_NODE\n");
+      fprintf(dumpFile, "id: %s\n", ast->declaration_expr.id);
+      
+      if(ast->declaration_expr.constant != -1)              
+        fprintf(dumpFile, "constant: %d\n", ast->declaration_expr.constant);
+      
+      ast_print(ast->declaration_expr.right);
+      
+      break;
+
+    case IF_STATEMENT_NODE:
+      ast_print(ast->if_expr.if_comparison);
+      fprintf(dumpFile, "IF_STATEMENT_NODE: if_comparison\n");
+      
+      ast_print(ast->if_expr.if_statement);
+      fprintf(dumpFile, "IF_STATEMENT_NODE: if_statement\n");
+      
+      ast_print(ast->if_expr.else_statement);
+      fprintf(dumpFile, "IF_STATEMENT_NODE: else_statement\n");
+
+      break;
+
+    case STATEMENT_NODE:
+      ast_print(ast->statement_expr.left);
+      fprintf(dumpFile, "STATEMENT_NODE\n");
+      ast_print(ast->statement_expr.right);
+      break;
+
+    case ASSIGNMENT_NODE:
+      ast_print(ast->assign_expr.left);
+      fprintf(dumpFile, "STATEMENT_NODE\n");
+      ast_print(ast->assign_expr.right);
+      break;
+
+    case FUNCTION_NODE:
+      ast_print(ast->func_expr.arguments);      
+      fprintf(dumpFile, "STATEMENT_NODE\n");
+      fprintf(dumpFile, "func: %s\n", ast->func_expr.func);              
+      break;
+
+    case CONSTRUCTOR_NODE:
+      ast_print(ast->construt_expr.left);
+      fprintf(dumpFile, "CONSTRUCTOR_NODE\n");
+      ast_print(ast->construt_expr.right);
+      break;
+
+    case NESTED_SCOPE_NODE:
+      ast_print(ast->nest_scope_expr.scope);
+      fprintf(dumpFile, "NESTED_SCOPE_NODE\n");
+      break;
+
+    case DECLARATIONS_NODE:
+      ast_print(ast->declarations_expr.left);
+      fprintf(dumpFile, "DECLARATIONS_NODE\n");      
+      ast_print(ast->declarations_expr.right);
+      break;
+
+    case ARGUMENTS_NODE:
+      ast_print(ast->arguments_expr.left);
+      fprintf(dumpFile, "ARGUMENTS_NODE\n");      
+      ast_print(ast->arguments_expr.right);
+      break;
+
+    case ARGUMENTS_OPT_NODE:
+      ast_print(ast->arguments_opt_expr.argum);
+      fprintf(dumpFile, "ARGUMENTS_OPT_NODE\n");      
+      break;
+
+    case EXPRESSION_NODE:
+      ast_print(ast->expression_expr.expr);
+      fprintf(dumpFile, "EXPRESSION_NODE\n");      
+      break;
+      
+    default: break;
+  }
+  return;
 }

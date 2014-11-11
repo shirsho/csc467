@@ -1,0 +1,18 @@
+Justin Canton, 1000017910
+Samprit Raihan, 998138830
+
+Compilers and Interpreters CSC467 Lab 2 Parser Documentation
+
+In order to code the parser, we broke the work up into two parts and worked on each part individually. 
+
+The first part was the coding of the language and grammar, as well as implementing the yTRACE function. 
+This was done as a team, with one person reading the grammar and the other writing the grammar into the parser.y file. 
+We then added the tracing functionality for each production rule, which displays what rule was invoked when running through the code that was input. 
+Lastly we added comments to the code for readability and ease of understanding.
+
+The second part that we worked on was the test cases for our parser. In order to verify that our parser was working as it was supposed to, we created multiple test cases that would test all different cases of our compiler. In order to verify that our parser worked correctly, we checked the output of the parser to see if it matched with the way the code should have been parser.
+
+The challenges that we faced included understanding how the parser put each arithmetic operator's precedence, since it was not immediately obvious in the grammar that was given to us. In order to help us, and others who may read our code understand this, we changed the grammar to reflect each layer of precedence. 
+Based on what was shown to us in class, we created a term identifier, which was at a lower precedence than the factor identifier, and so on. 
+Through this we were able to create a more reader friendly parser, which also helped us test if the parser was picking up operations according to precedence rules.
+
