@@ -124,8 +124,112 @@ node *ast_allocate(node_kind kind, ...) {
 
 void ast_free(node *ast) {
 
+  switch(ast->kind) {
+  
+  case SCOPE_NODE:
+    ast_free(ast->scope_expr.left);
+    ast_free(ast->scope_expr.right);
+    free(ast);
+    break;
+
+  case BINARY_EXPRESSION_NODE:
+    ast_free(ast->binary_expr.left);
+    ast_free(ast->binary_expr.right);
+    free(ast);
+    break;
+
+  case UNARY_EXPRESSION_NODE:
+    ast_free(ast->unary_expr.right);
+    free(ast);
+    break;
+
+  case INT_NODE:
+    free(ast);
+    break;
+
+  case FLOAT_NODE:
+    free(ast);
+    break;
+
+  case BOOL_NODE:
+    free(ast);
+    break;
+
+  case IDENT_NODE:
+    free(ast);
+    break;
+
+  case VAR_NODE:
+    free(ast);
+    break;
+
+  case DECLARATION_NODE:
+    ast_free(ast->declaration_expr.type);
+    ast_free(ast->declaration_expr.right);
+    free(ast);
+    break;
+
+  case IF_STATEMENT_NODE:
+    ast_free(ast->if_expr.if_comparison);
+    ast_free(ast->if_expr.if_statement);
+    ast_free(ast->if_expr.else_statement);
+    free(ast);
+    break;
+
+  case STATEMENT_NODE:
+    ast_free(ast->statement_expr.left);
+    ast_free(ast->statement_expr.right);
+    free(ast);
+    break;
+
+  case ASSIGNMENT_NODE:
+    ast_free(ast->assign_expr.left);
+    ast_free(ast->assign_expr.right);
+    free(ast);
+    break;
+
+  case FUNCTION_NODE:
+    ast_free(ast->func_expr.arguments);
+    free(ast);
+    break;
+
+  case CONSTRUCTOR_NODE:
+    ast_free(ast->construt_expr.left);
+    ast_free(ast->construt_expr.right);
+    free(ast);
+    break;
+
+  case NESTED_SCOPE_NODE:
+    ast_free(ast->nest_scope_expr.scope);
+    free(ast);
+    break;
+
+  case DECLARATIONS_NODE:
+    ast_free(ast->declarations_expr.left);
+    ast_free(ast->declarations_expr.right);
+    free(ast);
+    break;
+
+  case ARGUMENTS_NODE:
+    ast_free(ast->arguments_expr.left);
+    ast_free(ast->arguments_expr.right);
+    free(ast);
+    break;
+
+  case ARGUMENTS_OPT_NODE:
+    ast_free(ast->arguments_opt_expr.argum);
+    free(ast);
+    break;
+
+  case EXPRESSION_NODE:
+    ast_free(ast->expression_expr.expr);
+    free(ast);
+    break;
+
+  default: break;
+  }
 }
 
 void ast_print(node * ast) {
-  
+
 }
