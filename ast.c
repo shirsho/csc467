@@ -83,7 +83,7 @@ node *ast_allocate(node_kind kind, ...) {
       break;
 
     case FUNCTION_NODE:
-      ast->func_expr.func = va_arg(args, char*);
+      ast->func_expr.func = va_arg(args, int);
       ast->func_expr.arguments = va_arg(args, node *);
       break;
 
@@ -352,14 +352,14 @@ void ast_print(node * ast) {
 
     case ASSIGNMENT_NODE:
       ast_print(ast->assign_expr.left);
-      fprintf(dumpFile, "STATEMENT_NODE\n");
+      fprintf(dumpFile, "ASSIGNMENT_NODE\n");
       ast_print(ast->assign_expr.right);
       break;
 
     case FUNCTION_NODE:
       ast_print(ast->func_expr.arguments);      
-      fprintf(dumpFile, "STATEMENT_NODE\n");
-      fprintf(dumpFile, "func: %s\n", ast->func_expr.func);              
+      fprintf(dumpFile, "FUNCTION_NODE\n");
+      fprintf(dumpFile, "func: %d\n", ast->func_expr.func);              
       break;
 
     case CONSTRUCTOR_NODE:

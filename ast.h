@@ -112,7 +112,7 @@ struct node_ {
     } assign_expr;
 
     struct {
-      char* func;   //function
+      int func;   //function
       node *arguments;   //arguments
     } func_expr;
 
