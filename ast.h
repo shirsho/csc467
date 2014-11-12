@@ -69,10 +69,6 @@ struct node_ {
     } binary_expr;
 
     struct {
-      int type;   //the type
-    } id_expr;
-
-    struct {
       double val;    //float value
     } float_expr;
 
@@ -90,7 +86,7 @@ struct node_ {
 
     struct {
       int constant;   //constant?
-      node *type;     //type
+      int type;     //type
       char* id;     //identifier
       node *right;    //expression?
     } declaration_expr;
@@ -117,7 +113,7 @@ struct node_ {
     } func_expr;
 
     struct {
-      node *left;  //type
+      int type;  //type
       node *right;   //arguments
     } construt_expr;
 

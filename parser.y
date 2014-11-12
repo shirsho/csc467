@@ -109,7 +109,7 @@ enum {
 %type <as_ast> statement
 %type <as_ast> declarations
 %type <as_ast> statements
-%type <as_ast> type
+%type <as_int> type
 %type <as_ast> variable
 %type <as_ast> arguments
 %type <as_ast> arguments_opt
@@ -132,12 +132,13 @@ enum {
 program
   : scope 
       { ast = $1;
-        yTRACE("program -> scope\n"); } 
+        yTRACE("program -> scope\n");
+        debug_printSymbolTable(); } 
   ;
 
 scope
-  : '{' declarations statements '}'
-      { $$ = ast_allocate(SCOPE_NODE, $2, $3);
+  : '{' {newScope();} declarations statements '}'
+      { $$ = ast_allocate(SCOPE_NODE, $3, $4);
         yTRACE("scope -> { declarations statements }\n") }
   ;
 
@@ -161,13 +162,16 @@ statements
 
 declaration
   : type ID ';' 
-      { $$ = ast_allocate(DECLARATION_NODE, $1, $2, NULL, -1);
+      { pushVar($2, $1);
+        $$ = ast_allocate(DECLARATION_NODE, $1, $2, NULL, -1);
         yTRACE("declaration -> type ID ;\n") }
   | type ID '=' expression ';'
-      { $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1);
+      { pushVar($2, $1);
+        $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1);
         yTRACE("declaration -> type ID = expression ;\n") }
   | CONST type ID '=' expression ';'
-      { $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST);
+      { pushVar($3, $2);
+        $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST);
         yTRACE("declaration -> CONST type ID = expression ;\n") }
   ;
 
@@ -182,7 +186,8 @@ statement
       { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, NULL);
         yTRACE("statement -> IF ( expression ) statement \n") }
   | scope 
-      { $$ = ast_allocate(NESTED_SCOPE_NODE, $1);
+      { resetScope();
+        $$ = ast_allocate(NESTED_SCOPE_NODE, $1);
 	      yTRACE("statement -> scope \n") }
   | ';'
       { yTRACE("statement -> ; \n") }
@@ -190,22 +195,22 @@ statement
 
 type
   : INT_T
-      { $$ = ast_allocate(IDENT_NODE, INT_T);
+      { $$ = 1;
         yTRACE("type -> INT_T \n") }
   | IVEC_T
-      { $$ = ast_allocate(IDENT_NODE, IVEC_T);
+      { $$ = 10 + yyval.as_vec;
         yTRACE("type -> IVEC_T \n") }
   | BOOL_T
-      { $$ = ast_allocate(IDENT_NODE, BOOL_T);
+      { $$ = 2;
         yTRACE("type -> BOOL_T \n") }
   | BVEC_T
-      { $$ = ast_allocate(IDENT_NODE, BVEC_T);
+      { $$ = 20 + yyval.as_vec;
         yTRACE("type -> BVEC_T \n") }
   | FLOAT_T
-      { $$ = ast_allocate(IDENT_NODE, FLOAT_T);
+      { $$ = 3;
         yTRACE("type -> FLOAT_T \n") }
   | VEC_T
-      { $$ = ast_allocate(IDENT_NODE, VEC_T);
+      { $$ = 30 + yyval.as_vec;
         yTRACE("type -> VEC_T \n") }
   ;
 

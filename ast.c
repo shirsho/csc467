@@ -51,16 +51,12 @@ node *ast_allocate(node_kind kind, ...) {
       ast->bool_expr.val = va_arg(args, int);
       break;
 
-    case IDENT_NODE:
-      ast->id_expr.type = va_arg(args, int);
-      break;
-
     case VAR_NODE:
       ast->var_expr.id = va_arg(args, char*);
       break;
 
     case DECLARATION_NODE:
-      ast->declaration_expr.type = va_arg(args, node *);
+      ast->declaration_expr.type = va_arg(args, int);
       ast->declaration_expr.id = va_arg(args, char*);
       ast->declaration_expr.right = va_arg(args, node *);
       ast->declaration_expr.constant = va_arg(args, int);
@@ -88,7 +84,7 @@ node *ast_allocate(node_kind kind, ...) {
       break;
 
     case CONSTRUCTOR_NODE:
-      ast->construt_expr.left = va_arg(args, node *);
+      ast->construt_expr.type = va_arg(args, int);
       ast->construt_expr.right = va_arg(args, node *);
       break;
 
@@ -160,17 +156,11 @@ void ast_free(node *ast) {
       free(ast);
       break;
 
-    case IDENT_NODE:
-      free(ast);
-      break;
-
     case VAR_NODE:
       free(ast);
       break;
 
     case DECLARATION_NODE:
-      if(ast->declaration_expr.type != NULL)
-        ast_free(ast->declaration_expr.type);
       if(ast->declaration_expr.right != NULL)
         ast_free(ast->declaration_expr.right);
       free(ast->declaration_expr.id);
@@ -210,8 +200,6 @@ void ast_free(node *ast) {
       break;
 
     case CONSTRUCTOR_NODE:
-      if(ast->construt_expr.left != NULL)
-        ast_free(ast->construt_expr.left);
       if(ast->construt_expr.right != NULL)
         ast_free(ast->construt_expr.right);
       free(ast);
@@ -307,12 +295,6 @@ void ast_print(node * ast) {
       fprintf(dumpFile, "val: %f\n", ast->float_expr.val);              
       break;
 
-    case IDENT_NODE:
-      // print the current node
-      fprintf(dumpFile, "IDENT_NODE\n");
-      fprintf(dumpFile, "type: %d\n", ast->id_expr.type);              
-      break;
-
     case VAR_NODE:
       // print the current node
       fprintf(dumpFile, "VAR_NODE\n");
@@ -321,7 +303,7 @@ void ast_print(node * ast) {
 
     case DECLARATION_NODE:
       // print the current node
-      ast_print(ast->declaration_expr.type);
+      fprintf(dumpFile, "id: %d\n", ast->declaration_expr.type);
       fprintf(dumpFile, "DECLARATION_NODE\n");
       fprintf(dumpFile, "id: %s\n", ast->declaration_expr.id);
       
@@ -363,7 +345,8 @@ void ast_print(node * ast) {
       break;
 
     case CONSTRUCTOR_NODE:
-      ast_print(ast->construt_expr.left);
+      /*ast_print(ast->construt_expr.left);*/
+      fprintf(dumpFile, "type: %d\n", ast->construt_expr.type); 
       fprintf(dumpFile, "CONSTRUCTOR_NODE\n");
       ast_print(ast->construt_expr.right);
       break;
