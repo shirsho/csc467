@@ -14,7 +14,7 @@ typedef union{
 
 typedef struct symbol {
     char const *name;
-    int type;
+    char const *type;
     variable var;
     function func;
     struct symbol *next;

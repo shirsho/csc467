@@ -18,7 +18,45 @@ void pushVar(char const *name, int type) {
     s = (struct symbol*)malloc(sizeof(struct symbol));
     s->name = (char *) malloc (strlen (name) + 1);
     s->name = name;
-    s->type = type;
+    switch(type){
+    	case 1: 
+    		s->type = "int";
+    		break;
+    	case 2: 
+    		s->type = "bool";
+    		break;
+    	case 3: 
+    		s->type = "float";
+    		break;
+    	case 11: 
+    		s->type = "ivec2";
+    		break;
+    	case 12: 
+    		s->type = "ivec3";
+    		break;
+    	case 13: 
+    		s->type = "ivec4";
+    		break;
+    	case 21: 
+    		s->type = "bvec2";
+    		break;
+    	case 22: 
+    		s->type = "bvec3";
+    		break;
+    	case 23: 
+    		s->type = "bvec4";
+    		break;
+    	case 31: 
+    		s->type = "vec2";
+    		break;
+    	case 32: 
+    		s->type = "vec3";
+    		break;
+    	case 33: 
+    		s->type = "vec4";
+    		break;
+    }
+
     if(currentScope != NULL){
         s->var.scope = currentScope;
         printf("identified a variable \"%s\" in the scope of function \"%d\"\n",s->name,s->var.scope->scope);
@@ -55,26 +93,8 @@ void pushVar(char const *name, int type) {
     }
 }
 
-/*void pushFunc(int type, char const *name){
-	struct symbol *s = NULL;
-	s = (struct symbol*)malloc(sizeof(struct symbol));
-	s->name = (char *) malloc (strlen (name) + 1);
-	s->name = name;
-	s->type = type;
-	printf("identified function %s of type %d\n",s->name,s->type);
-
-	if(!exists_Sym_glob(name)){
-        LL_APPEND(symtable,s);
-        printf("appending function %s to global table \n",name);
-        printf("-----------------------------------------------------------------\n");
-	}
-
-	currentScope = s;
-	printf("set current scope to %s\n",currentScope->name);
-	printf("-----------------------------------------------------------------\n");
-}*/
-
 void resetScope(){
+    debug_printSymbolTable();
     currentScope=NULL;
     printf("reset scope to global\n");
     printf("-----------------------------------------------------------------\n");
@@ -88,7 +108,6 @@ int exists_Sym_glob(char const *name){
         return 0;
     }
 
-    //LL_FOREACH(symtable,s){
     for(s = symtable; s != NULL; s = s->next){  
         if (! strcmp(name, s->name)){
         	printf("ERROR   --      multiple declaration of variable \"%s\"\n", name);
@@ -108,7 +127,6 @@ int exists_Sym_loc(char const *name){
         return 0;
     }
 
-    //LL_FOREACH(currentScope,s){
     if(currentScope != NULL){
 	    for(s = currentScope->next; s != NULL; s = s->next){
 	        if (!strcmp(name, s->name)){
@@ -124,7 +142,6 @@ int exists_Sym_loc(char const *name){
 
 struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
-    //LL_FOREACH(symtable,s)
     for(s = symtable; s != NULL; s = s->next){  
 	    if (! strcmp(name, s->name)){
 	        printf("\n found symbol %s",name);
@@ -141,14 +158,13 @@ void debug_printSymbolTable(){
     printf("     global \t\t|     local\n");
     printf("-----------------------------------------------------------------\n");
 
-    //LL_FOREACH(symtable,s)
     for(s = symtable; s != NULL; s = s->next){
-        printf("|type:%d name:%s| \n",s->type,s->name);
+        printf("|type:%s name:%s| \n",s->type,s->name);
     }
-    //LL_FOREACH(currentScope,s)
+
     if(currentScope != NULL){
 	    for(s = currentScope->next; s != NULL; s = s->next){
-	    	printf("\t\t\t|type:%d name:%s| \n",s->type,s->name);
+	    	printf("\t\t\t|type:%s name:%s| \n",s->type,s->name);
 	    }
 	}
 }
