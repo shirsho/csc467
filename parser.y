@@ -133,7 +133,7 @@ program
   : scope 
       { ast = $1;
         yTRACE("program -> scope\n");
-        debug_printSymbolTable(); } 
+        debug_printSymbolTable();}
   ;
 
 scope

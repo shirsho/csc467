@@ -1561,7 +1561,7 @@ yyreduce:
 #line 134 "parser.y"
     { ast = (yyvsp[(1) - (1)].as_ast);
         yTRACE("program -> scope\n");
-        debug_printSymbolTable(); }
+        debug_printSymbolTable();}
     break;
 
   case 3:

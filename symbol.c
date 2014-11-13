@@ -8,15 +8,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-symbol *symtable = NULL;
+symbol *head = NULL;
 symbol *currentScope = NULL;
 int ScopeCount = 0;
 
 
-void pushVar(char const *name, int type) {
+void pushVar(char *name, int type) {
     struct symbol *s = NULL;
     s = (struct symbol*)malloc(sizeof(struct symbol));
-    s->name = (char *) malloc (strlen (name) + 1);
     s->name = name;
     switch(type){
     	case 1: 
@@ -57,7 +56,7 @@ void pushVar(char const *name, int type) {
     		break;
     }
 
-    if(currentScope != NULL){
+    if(ScopeCount != 1){
         s->var.scope = currentScope;
         printf("identified a variable \"%s\" in the scope of function \"%d\"\n",s->name,s->var.scope->scope);
     }else printf("identified a global variable \"%s\"\n",s->name);
@@ -67,9 +66,9 @@ void pushVar(char const *name, int type) {
             printf("appending symbol \"%s\" to global symboltable \n",name);
             printf("-----------------------------------------------------------------\n");
             s->next = NULL;
-            symbol *tmp = symtable;
+            symbol *tmp = currentScope->symtable;
             if(tmp == NULL){
-            	symtable = s;
+            	currentScope->symtable = s;
             }else{
             	while(tmp->next != NULL){
             		tmp = tmp->next;
@@ -81,9 +80,9 @@ void pushVar(char const *name, int type) {
         printf("appending symbol \"%s\" to local table \"%d\" \n",name, currentScope->scope);
         printf("-----------------------------------------------------------------\n");
         s->next = NULL;
-        symbol *tmp = currentScope;
+        symbol *tmp = currentScope->symtable;
         if(tmp == NULL){
-        	currentScope = s;
+        	currentScope->symtable = s;
         }else{
         	while(tmp->next != NULL){
         		tmp = tmp->next;
@@ -95,20 +94,36 @@ void pushVar(char const *name, int type) {
 
 void resetScope(){
     debug_printSymbolTable();
-    currentScope=NULL;
-    printf("reset scope to global\n");
+    symbol *s = head;
+    symbol *t = NULL;
+    symbol *u = NULL;
+    if(currentScope != head){
+        while(s->next != currentScope)
+            s = s->next;
+    }
+    t = currentScope->symtable;
+    while(t != NULL){
+        u = t;
+        t = t->next;
+        free(u);
+    }
+    free(currentScope);
+    currentScope = s;
+    currentScope->next = NULL;
+    ScopeCount--;
+    printf("reset scope to %d\n", currentScope->scope);
     printf("-----------------------------------------------------------------\n");
 }
 
 int exists_Sym_glob(char const *name){
     symbol *s = NULL;
     printf("searching for symbol \"%s\" in global table\n",name);
-    if(symtable == NULL){
+    if(currentScope->symtable == NULL){
         printf("global symboltable is empty\n");
         return 0;
     }
 
-    for(s = symtable; s != NULL; s = s->next){  
+    for(s = currentScope->symtable; s != NULL; s = s->next){  
         if (! strcmp(name, s->name)){
         	printf("ERROR   --      multiple declaration of variable \"%s\"\n", name);
             return 1;
@@ -122,13 +137,13 @@ int exists_Sym_glob(char const *name){
 int exists_Sym_loc(char const *name){
     symbol *s = NULL;
     printf("searching for symbol \"%s\" in table \"%d\"\n",name,currentScope->scope);
-    if(currentScope->next == NULL){
+    if(currentScope->symtable == NULL){
         printf("local table \"%d\" is empty\n", currentScope->scope);
         return 0;
     }
 
-    if(currentScope != NULL){
-	    for(s = currentScope->next; s != NULL; s = s->next){
+    if(currentScope->symtable != NULL){
+	    for(s = currentScope->symtable; s != NULL; s = s->next){
 	        if (!strcmp(name, s->name)){
 		        printf("ERROR   --      multiple declaration of variable \"%s\n", name);
 	            return 1;
@@ -142,7 +157,7 @@ int exists_Sym_loc(char const *name){
 
 struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
-    for(s = symtable; s != NULL; s = s->next){  
+    for(s = currentScope->symtable; s != NULL; s = s->next){  
 	    if (! strcmp(name, s->name)){
 	        printf("\n found symbol %s",name);
 	        return s;
@@ -152,21 +167,24 @@ struct symbol* find_Sym(char const *name){
 
 void debug_printSymbolTable(){
     symbol *s = NULL;
+    symbol *t = NULL;
 
     printf("\n\n\t\t - DEBUG ___ SYMBOL _ TABLE ___ DEBUG - \n\n");
     printf("-----------------------------------------------------------------\n");
     printf("     global \t\t|     local\n");
     printf("-----------------------------------------------------------------\n");
 
-    for(s = symtable; s != NULL; s = s->next){
-        printf("|type:%s name:%s| \n",s->type,s->name);
+    for(t = head; t != NULL; t = t->next){
+        for(s = t->symtable; s != NULL; s = s->next){
+            if(t->next != NULL){
+                printf("|type:%s name:%s| \n",s->type,s->name);
+            }else if(t->scope == 1){
+                printf("|type:%s name:%s| \n",s->type,s->name);
+            }else{
+                printf("\t\t\t|type:%s name:%s| \n",s->type,s->name);
+            }
+        }
     }
-
-    if(currentScope != NULL){
-	    for(s = currentScope->next; s != NULL; s = s->next){
-	    	printf("\t\t\t|type:%s name:%s| \n",s->type,s->name);
-	    }
-	}
 }
 
 void newScope(){
@@ -174,7 +192,15 @@ void newScope(){
 	struct symbol *s = NULL;
     s = (struct symbol*)malloc(sizeof(struct symbol));
     s->scope = ScopeCount;
+    s->symtable = NULL;
     printf("making new scope %d\n", s->scope);
     printf("-----------------------------------------------------------------\n");
-    currentScope = s;
+    if(head == NULL)
+        head = s;
+    if(currentScope == NULL){
+        currentScope = s;
+    }else{
+        currentScope->next = s;
+        currentScope = currentScope->next;
+    }
 }

@@ -13,16 +13,17 @@ typedef union{
 }function;
 
 typedef struct symbol {
-    char const *name;
-    char const *type;
+    char *name;
+    char *type;
     variable var;
     function func;
+    struct symbol *symtable;
     struct symbol *next;
     int scope;
 } symbol;
 
 
-void pushVar(char const *name, int type);
+void pushVar(char *name, int type);
 
 void pushFunc(int type, char const *name);
 
