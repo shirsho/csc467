@@ -82,6 +82,7 @@ struct node_ {
 
     struct {
       char* id;   //identifier
+      int arr;    //array index
     } var_expr;
 
     struct {
@@ -89,12 +90,14 @@ struct node_ {
       int type;     //type
       char* id;     //identifier
       node *right;    //expression?
+      int line;     //line number
     } declaration_expr;
   
     struct {
       node *if_comparison;	//if comparison
       node *if_statement;	//if statement
       node *else_statement;	//else statement
+      int line;     //line number
     } if_expr;
 
     struct {
@@ -105,6 +108,7 @@ struct node_ {
     struct {
       node *left;  //variable
       node *right;   //value
+      int line;   //line number
     } assign_expr;
 
     struct {

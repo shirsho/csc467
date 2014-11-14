@@ -53,6 +53,7 @@ node *ast_allocate(node_kind kind, ...) {
 
     case VAR_NODE:
       ast->var_expr.id = va_arg(args, char*);
+      ast->var_expr.arr = va_arg(args, int);
       break;
 
     case DECLARATION_NODE:
@@ -60,12 +61,14 @@ node *ast_allocate(node_kind kind, ...) {
       ast->declaration_expr.id = va_arg(args, char*);
       ast->declaration_expr.right = va_arg(args, node *);
       ast->declaration_expr.constant = va_arg(args, int);
+      ast->declaration_expr.line = va_arg(args, int);
       break;
 
     case IF_STATEMENT_NODE:
       ast->if_expr.if_comparison = va_arg(args, node *);
       ast->if_expr.if_statement = va_arg(args, node *);
       ast->if_expr.else_statement = va_arg(args, node *);
+      ast->if_expr.line = va_arg(args, int);
       break;
 
     case STATEMENT_NODE:
@@ -76,6 +79,7 @@ node *ast_allocate(node_kind kind, ...) {
     case ASSIGNMENT_NODE:
       ast->assign_expr.left = va_arg(args, node *);
       ast->assign_expr.right = va_arg(args, node *);
+      ast->assign_expr.line = va_arg(args, int);
       break;
 
     case FUNCTION_NODE:
@@ -298,7 +302,8 @@ void ast_print(node * ast) {
     case VAR_NODE:
       // print the current node
       fprintf(dumpFile, "VAR_NODE\n");
-      fprintf(dumpFile, "id: %s\n", ast->var_expr.id);              
+      fprintf(dumpFile, "id: %s\n", ast->var_expr.id); 
+      fprintf(dumpFile, "index: %d\n", ast->var_expr.arr); 
       break;
 
     case DECLARATION_NODE:

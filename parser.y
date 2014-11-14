@@ -74,7 +74,7 @@ enum {
 %token          BOOL_T
 %token          CONST
 %token          FALSE_C TRUE_C
-%token          FUNC
+%token          FUNC1 FUNC2 FUNC3
 %token          IF ELSE
 %token          AND OR NEQ EQ LEQ GEQ
 
@@ -133,7 +133,8 @@ program
   : scope 
       { ast = $1;
         yTRACE("program -> scope\n");
-        debug_printSymbolTable();}
+        debug_printSymbolTable();
+        semantic_check(ast);}
   ;
 
 scope
@@ -163,27 +164,27 @@ statements
 declaration
   : type ID ';' 
       { pushVar($2, $1);
-        $$ = ast_allocate(DECLARATION_NODE, $1, $2, NULL, -1);
+        $$ = ast_allocate(DECLARATION_NODE, $1, $2, NULL, -1, yyline);
         yTRACE("declaration -> type ID ;\n") }
   | type ID '=' expression ';'
       { pushVar($2, $1);
-        $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1);
+        $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
   | CONST type ID '=' expression ';'
       { pushVar($3, $2);
-        $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST);
+        $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST, yyline);
         yTRACE("declaration -> CONST type ID = expression ;\n") }
   ;
 
 statement
   : variable '=' expression ';'
-      { $$ = ast_allocate(ASSIGNMENT_NODE, $1, $3);
+      { $$ = ast_allocate(ASSIGNMENT_NODE, $1, $3, yyline);
         yTRACE("statement -> variable = expression ;\n") }
   | IF '(' expression ')' statement ELSE statement %prec WITH_ELSE
-      { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, $7);
+      { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, $7, yyline);
         yTRACE("statement -> IF ( expression ) statement ELSE statement \n") }
   | IF '(' expression ')' statement %prec WITHOUT_ELSE
-      { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, NULL);
+      { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, NULL, yyline);
         yTRACE("statement -> IF ( expression ) statement \n") }
   | scope 
       { resetScope();
@@ -220,8 +221,14 @@ expression
   : type '(' arguments_opt ')' %prec '('
       { $$ = ast_allocate(CONSTRUCTOR_NODE, $1, $3);
         yTRACE("expression -> type ( arguments_opt ) \n") }
-  | FUNC '(' arguments_opt ')' %prec '('
-      { $$ = ast_allocate(FUNCTION_NODE, FUNC, $3);
+  | FUNC1 '(' arguments_opt ')' %prec '('
+      { $$ = ast_allocate(FUNCTION_NODE, FUNC1, $3);
+        yTRACE("expression -> FUNC ( arguments_opt ) \n") }
+  | FUNC2 '(' arguments_opt ')' %prec '('
+      { $$ = ast_allocate(FUNCTION_NODE, FUNC2, $3);
+        yTRACE("expression -> FUNC ( arguments_opt ) \n") }
+  | FUNC3 '(' arguments_opt ')' %prec '('
+      { $$ = ast_allocate(FUNCTION_NODE, FUNC3, $3);
         yTRACE("expression -> FUNC ( arguments_opt ) \n") }
 
   /* unary opterators */
@@ -298,10 +305,10 @@ expression
 
 variable
   : ID
-      { $$ = ast_allocate(VAR_NODE, $1);
+      { $$ = ast_allocate(VAR_NODE, $1, -1);
         yTRACE("variable -> ID \n") }
   | ID '[' INT_C ']' %prec '['
-      { $$ = ast_allocate(VAR_NODE, $1[$3]);
+      { $$ = ast_allocate(VAR_NODE, $1, $3);
         yTRACE("variable -> ID [ INT_C ] \n") }
   ;
 

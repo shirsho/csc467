@@ -17,42 +17,43 @@ void pushVar(char *name, int type) {
     struct symbol *s = NULL;
     s = (struct symbol*)malloc(sizeof(struct symbol));
     s->name = name;
+    s->var.type = type;
     switch(type){
     	case 1: 
-    		s->type = "int";
+    		s->type = (char *)"int";
     		break;
     	case 2: 
-    		s->type = "bool";
+    		s->type = (char *)"bool";
     		break;
     	case 3: 
-    		s->type = "float";
+    		s->type = (char *)"float";
     		break;
     	case 11: 
-    		s->type = "ivec2";
+    		s->type = (char *)"ivec2";
     		break;
     	case 12: 
-    		s->type = "ivec3";
+    		s->type = (char *)"ivec3";
     		break;
     	case 13: 
-    		s->type = "ivec4";
+    		s->type = (char *)"ivec4";
     		break;
     	case 21: 
-    		s->type = "bvec2";
+    		s->type = (char *)"bvec2";
     		break;
     	case 22: 
-    		s->type = "bvec3";
+    		s->type = (char *)"bvec3";
     		break;
     	case 23: 
-    		s->type = "bvec4";
+    		s->type = (char *)"bvec4";
     		break;
     	case 31: 
-    		s->type = "vec2";
+    		s->type = (char *)"vec2";
     		break;
     	case 32: 
-    		s->type = "vec3";
+    		s->type = (char *)"vec3";
     		break;
     	case 33: 
-    		s->type = "vec4";
+    		s->type = (char *)"vec4";
     		break;
     }
 
@@ -159,10 +160,11 @@ struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
     for(s = currentScope->symtable; s != NULL; s = s->next){  
 	    if (! strcmp(name, s->name)){
-	        printf("\n found symbol %s",name);
+	        printf("\nfound symbol %s\n",name);
 	        return s;
 	    }
 	}
+    return NULL;
 }
 
 void debug_printSymbolTable(){

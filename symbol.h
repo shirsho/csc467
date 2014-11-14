@@ -5,18 +5,14 @@
 
 typedef union{
         int value;
+        int type;
         struct symbol *scope;
 }variable;
-
-typedef union{
-        int returntype;
-}function;
 
 typedef struct symbol {
     char *name;
     char *type;
     variable var;
-    function func;
     struct symbol *symtable;
     struct symbol *next;
     int scope;

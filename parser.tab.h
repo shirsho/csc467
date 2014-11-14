@@ -43,24 +43,26 @@
      CONST = 261,
      FALSE_C = 262,
      TRUE_C = 263,
-     FUNC = 264,
-     IF = 265,
-     ELSE = 266,
-     AND = 267,
-     OR = 268,
-     NEQ = 269,
-     EQ = 270,
-     LEQ = 271,
-     GEQ = 272,
-     VEC_T = 273,
-     BVEC_T = 274,
-     IVEC_T = 275,
-     FLOAT_C = 276,
-     INT_C = 277,
-     ID = 278,
-     UMINUS = 279,
-     WITHOUT_ELSE = 280,
-     WITH_ELSE = 281
+     FUNC1 = 264,
+     FUNC2 = 265,
+     FUNC3 = 266,
+     IF = 267,
+     ELSE = 268,
+     AND = 269,
+     OR = 270,
+     NEQ = 271,
+     EQ = 272,
+     LEQ = 273,
+     GEQ = 274,
+     VEC_T = 275,
+     BVEC_T = 276,
+     IVEC_T = 277,
+     FLOAT_C = 278,
+     INT_C = 279,
+     ID = 280,
+     UMINUS = 281,
+     WITHOUT_ELSE = 282,
+     WITH_ELSE = 283
    };
 #endif
 /* Tokens.  */
@@ -70,24 +72,26 @@
 #define CONST 261
 #define FALSE_C 262
 #define TRUE_C 263
-#define FUNC 264
-#define IF 265
-#define ELSE 266
-#define AND 267
-#define OR 268
-#define NEQ 269
-#define EQ 270
-#define LEQ 271
-#define GEQ 272
-#define VEC_T 273
-#define BVEC_T 274
-#define IVEC_T 275
-#define FLOAT_C 276
-#define INT_C 277
-#define ID 278
-#define UMINUS 279
-#define WITHOUT_ELSE 280
-#define WITH_ELSE 281
+#define FUNC1 264
+#define FUNC2 265
+#define FUNC3 266
+#define IF 267
+#define ELSE 268
+#define AND 269
+#define OR 270
+#define NEQ 271
+#define EQ 272
+#define LEQ 273
+#define GEQ 274
+#define VEC_T 275
+#define BVEC_T 276
+#define IVEC_T 277
+#define FLOAT_C 278
+#define INT_C 279
+#define ID 280
+#define UMINUS 281
+#define WITHOUT_ELSE 282
+#define WITH_ELSE 283
 
 
 
@@ -109,7 +113,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 113 "y.tab.h"
+#line 117 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
