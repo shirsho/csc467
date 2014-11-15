@@ -3,6 +3,7 @@
 #define AST_H_ 1
 
 #include <stdarg.h>
+#include "symbol.h"
 
 // Dummy node just so everything compiles, create your own node/nodes
 //
@@ -123,6 +124,7 @@ struct node_ {
 
     struct {
       node *scope;   //scope
+      symbol *variables;  //the variables of that scope
     } nest_scope_expr;
 
     struct {

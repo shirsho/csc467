@@ -187,8 +187,7 @@ statement
       { $$ = ast_allocate(IF_STATEMENT_NODE, $3, $5, NULL, yyline);
         yTRACE("statement -> IF ( expression ) statement \n") }
   | scope 
-      { resetScope();
-        $$ = ast_allocate(NESTED_SCOPE_NODE, $1);
+      { $$ = ast_allocate(NESTED_SCOPE_NODE, $1, resetScope());
 	      yTRACE("statement -> scope \n") }
   | ';'
       { yTRACE("statement -> ; \n") }

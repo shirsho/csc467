@@ -95,7 +95,7 @@ void pushVar(char *name, int type, int constant) {
     }
 }
 
-void resetScope(){
+struct symbol* resetScope(){
     debug_printSymbolTable();
     symbol *s = head;
     symbol *t = NULL;
@@ -104,18 +104,20 @@ void resetScope(){
         while(s->next != currentScope)
             s = s->next;
     }
-    t = currentScope->symtable;
+    /*t = currentScope->symtable;
     while(t != NULL){
         u = t;
         t = t->next;
         free(u);
     }
-    free(currentScope);
+    free(currentScope);*/
     currentScope = s;
+    t = currentScope->next;
     currentScope->next = NULL;
     ScopeCount--;
     printf("reset scope to %d\n", currentScope->scope);
     printf("-----------------------------------------------------------------\n");
+    return t;
 }
 
 int exists_Sym_glob(char const *name){

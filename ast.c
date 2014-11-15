@@ -94,6 +94,7 @@ node *ast_allocate(node_kind kind, ...) {
 
     case NESTED_SCOPE_NODE:
       ast->nest_scope_expr.scope = va_arg(args, node *);
+      ast->nest_scope_expr.variables = va_arg(args, symbol *);
       break;
 
     case DECLARATIONS_NODE:

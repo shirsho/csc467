@@ -30,7 +30,7 @@ int exists_Sym_glob(char const *name);
 
 int exists_Sym_loc(char const *name);
 
-void resetScope();
+struct symbol* resetScope();
 
 void debug_printSymbolTable();
 

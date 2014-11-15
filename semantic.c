@@ -412,6 +412,7 @@ int semantic_check(node *ast, int assign) {
 	    case VAR_NODE:
 	    	printf("\nVariable Semantics\n");
 	      	s = find_Sym(ast->var_expr.id);
+	      	
 	      	if(s->var.constant == 1 && assign == 1){
 	      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
       			errorOccurred = 1;
