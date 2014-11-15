@@ -6,6 +6,7 @@
 typedef union{
         int value;
         int type;
+        int constant;
         struct symbol *scope;
 }variable;
 
@@ -19,7 +20,7 @@ typedef struct symbol {
 } symbol;
 
 
-void pushVar(char *name, int type);
+void pushVar(char *name, int type, int constant);
 
 void pushFunc(int type, char const *name);
 

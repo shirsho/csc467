@@ -1,4 +1,4 @@
 {
-	int a = 1.2;
-	a = true;
+	const int a = 1;
+	int b = a;
 }

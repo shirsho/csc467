@@ -35,8 +35,9 @@
 #define IVEC42 23
 #define VEC32 24
 #define VEC42 25
-#define VALID 30
+#define CONSTANT 26
+#define VALID 27
 
-int semantic_check(node *ast);
+int semantic_check(node *ast, int assign);
 
 #endif

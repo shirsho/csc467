@@ -1572,7 +1572,7 @@ yyreduce:
     { ast = (yyvsp[(1) - (1)].as_ast);
         yTRACE("program -> scope\n");
         debug_printSymbolTable();
-        semantic_check(ast);}
+        semantic_check(ast, 0);}
     break;
 
   case 3:
@@ -1626,7 +1626,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 166 "parser.y"
-    { pushVar((yyvsp[(2) - (3)].as_str), (yyvsp[(1) - (3)].as_int));
+    { pushVar((yyvsp[(2) - (3)].as_str), (yyvsp[(1) - (3)].as_int), 0);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (3)].as_int), (yyvsp[(2) - (3)].as_str), NULL, -1, yyline);
         yTRACE("declaration -> type ID ;\n") }
     break;
@@ -1635,7 +1635,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 170 "parser.y"
-    { pushVar((yyvsp[(2) - (5)].as_str), (yyvsp[(1) - (5)].as_int));
+    { pushVar((yyvsp[(2) - (5)].as_str), (yyvsp[(1) - (5)].as_int), 0);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (5)].as_int), (yyvsp[(2) - (5)].as_str), (yyvsp[(4) - (5)].as_ast), -1, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
     break;
@@ -1644,7 +1644,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 174 "parser.y"
-    { pushVar((yyvsp[(3) - (6)].as_str), (yyvsp[(2) - (6)].as_int));
+    { pushVar((yyvsp[(3) - (6)].as_str), (yyvsp[(2) - (6)].as_int), 1);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(2) - (6)].as_int), (yyvsp[(3) - (6)].as_str), (yyvsp[(5) - (6)].as_ast), CONST, yyline);
         yTRACE("declaration -> CONST type ID = expression ;\n") }
     break;

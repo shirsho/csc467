@@ -1,7 +1,7 @@
 
 #include "semantic.h"
 
-int semantic_check(node *ast) {
+int semantic_check(node *ast, int assign) {
 	int expr_left;
     int expr_right;
     int expr_middle;
@@ -13,15 +13,15 @@ int semantic_check(node *ast) {
 		case SCOPE_NODE:
 			printf("\nScope semantics\n");
 			if(ast->scope_expr.left != NULL)
-				semantic_check(ast->scope_expr.left);
+				semantic_check(ast->scope_expr.left, 0);
 			if(ast->scope_expr.right != NULL)
-				semantic_check(ast->scope_expr.right);
+				semantic_check(ast->scope_expr.right, 0);
 			break;
 
 		case BINARY_EXPRESSION_NODE:
 			printf("\nBinary semantics\n");
-      		expr_left = semantic_check(ast->binary_expr.left);
-      		expr_right = semantic_check(ast->binary_expr.right);
+      		expr_left = semantic_check(ast->binary_expr.left, 0);
+      		expr_right = semantic_check(ast->binary_expr.right, 0);
       		op = ast->binary_expr.op;
 			switch(expr_left){
 				case INT:
@@ -317,7 +317,7 @@ int semantic_check(node *ast) {
 
 	    case UNARY_EXPRESSION_NODE:
 	    	printf("\nUnary semantics\n");
-	      	expr_right = semantic_check(ast->unary_expr.right);
+	      	expr_right = semantic_check(ast->unary_expr.right, 0);
 			switch(expr_right){
 				case INT:
 					type1 = (char *)"int";
@@ -412,8 +412,13 @@ int semantic_check(node *ast) {
 	    case VAR_NODE:
 	    	printf("\nVariable Semantics\n");
 	      	s = find_Sym(ast->var_expr.id);
+	      	if(s->var.constant == 1 && assign == 1){
+	      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
+      			errorOccurred = 1;
+      			return CONSTANT;
+	      	}
 	      	switch(s->var.type){
-				case 1:
+				case 1:					
 					if(ast->var_expr.arr != -1){
 						fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
       					errorOccurred = 1;
@@ -544,117 +549,120 @@ int semantic_check(node *ast) {
 
 	    case DECLARATION_NODE:
 	    	printf("\nDeclaration semantics\n");
-	    	if(ast->declaration_expr.right != NULL)
-	    		expr_right = semantic_check(ast->declaration_expr.right);
-	      	switch(ast->declaration_expr.type){
-	      		case 1:
-	      			if(expr_right == INT){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type int on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 11:
-	      			if(expr_right == IVEC2){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec2 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 12:
-	      			if(expr_right == IVEC3){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec3 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 13:
-	      			if(expr_right == IVEC4){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec4 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 2:
-	      			if(expr_right == BOOL){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bool on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 21:
-	      			if(expr_right == BVEC2){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec2 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 22:
-	      			if(expr_right == BVEC3){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec3 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 23:
-	      			if(expr_right == BVEC4){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec4 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 3:
-	      			if(expr_right == FLOAT){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type float on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 31:
-	      			if(expr_right == VEC2){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec2 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 32:
-	      			if(expr_right == VEC3){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec3 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
-				case 33:
-	      			if(expr_right == VEC4){
-	      				return VALID;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec4 on line %d\n", ast->declaration_expr.line);
-      					errorOccurred = 1;
-      					return 0;
-					}
+	    	if(ast->declaration_expr.right != NULL){
+	    		expr_right = semantic_check(ast->declaration_expr.right, 0);
+		      	switch(ast->declaration_expr.type){
+		      		case 1:
+		      			if(expr_right == INT){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type int on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 11:
+		      			if(expr_right == IVEC2){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type ivec2 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 12:
+		      			if(expr_right == IVEC3){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type ivec3 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 13:
+		      			if(expr_right == IVEC4){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type ivec4 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 2:
+		      			if(expr_right == BOOL){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type bool on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 21:
+		      			if(expr_right == BVEC2){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type bvec2 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 22:
+		      			if(expr_right == BVEC3){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type bvec3 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 23:
+		      			if(expr_right == BVEC4){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type bvec4 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 3:
+		      			if(expr_right == FLOAT){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type float on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 31:
+		      			if(expr_right == VEC2){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type vec2 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 32:
+		      			if(expr_right == VEC3){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type vec3 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
+					case 33:
+		      			if(expr_right == VEC4){
+		      				return VALID;
+		      			}else{
+		      				fprintf(errorFile, "Invalid declaration with type vec4 on line %d\n", ast->declaration_expr.line);
+		  					errorOccurred = 1;
+		  					return 0;
+						}
 
+	      		}
+	      	}else{
+	      		return VALID;
 	      	}
 	      	break;
 
 	    case IF_STATEMENT_NODE:
 	    	printf("\nIf Statement semantics\n");
 	      	if(ast->if_expr.if_comparison != NULL)
-	      		expr_left = semantic_check(ast->if_expr.if_comparison);
+	      		expr_left = semantic_check(ast->if_expr.if_comparison, 0);
 	      	if(ast->if_expr.if_statement != NULL)
-	      		expr_middle = semantic_check(ast->if_expr.if_statement);
+	      		expr_middle = semantic_check(ast->if_expr.if_statement, 0);
 	      	if(ast->if_expr.else_statement != NULL)
-	      		expr_right = semantic_check(ast->if_expr.else_statement);
+	      		expr_right = semantic_check(ast->if_expr.else_statement, 0);
 	      	if(expr_left != BOOL){
 	      		fprintf(errorFile, "Invalid expression in if statement on line %d\n", ast->if_expr.line);
       			errorOccurred = 1;
@@ -667,17 +675,17 @@ int semantic_check(node *ast) {
 	    case STATEMENT_NODE:
 	    	printf("\nStatement semantics\n");
 	      	if(ast->statement_expr.left != NULL)
-	      		expr_left = semantic_check(ast->statement_expr.left);
+	      		expr_left = semantic_check(ast->statement_expr.left, 0);
 	      	if(ast->statement_expr.right != NULL)
-	      		expr_right = semantic_check(ast->statement_expr.right);
+	      		expr_right = semantic_check(ast->statement_expr.right, 0);
 	      	break;
 
 	    case ASSIGNMENT_NODE:
 	    	printf("\nAssignment semantics\n");
 	      	if(ast->assign_expr.left != NULL)
-	      		expr_left = semantic_check(ast->assign_expr.left);
+	      		expr_left = semantic_check(ast->assign_expr.left, 1);
 	      	if(ast->assign_expr.right != NULL)
-	      		expr_right = semantic_check(ast->assign_expr.right);
+	      		expr_right = semantic_check(ast->assign_expr.right, 0);
 			
 			switch(expr_left){
 				case INT:
@@ -781,6 +789,10 @@ int semantic_check(node *ast) {
 				return VALID;
 			}else if(expr_left == BVEC4 && expr_right == BVEC4){
 				return VALID;
+			}else if(expr_left == CONSTANT){
+				fprintf(errorFile, "Invalid assignment to constant variable on line %d\n", ast->assign_expr.line);
+				errorOccurred = 1;
+				return 0;
 			}else{
 				fprintf(errorFile, "Invalid assignment between type %s and type %s on line %d\n", type1, type2, ast->assign_expr.line);
 				errorOccurred = 1;
@@ -791,7 +803,7 @@ int semantic_check(node *ast) {
 	    case FUNCTION_NODE:
 	    	printf("\nFunction semantics\n");
 	    	if(ast->func_expr.arguments != NULL)
-	    		expr_right = semantic_check(ast->func_expr.arguments);
+	    		expr_right = semantic_check(ast->func_expr.arguments, 0);
 	      	switch(ast->func_expr.func){
 	      		case FUNC1:
 	      			if(expr_right == IVEC32){
@@ -838,7 +850,7 @@ int semantic_check(node *ast) {
 	    case CONSTRUCTOR_NODE:
 	      	printf("\nConstructor semantics\n");
 	    	if(ast->construt_expr.right != NULL)
-	    		expr_right = semantic_check(ast->construt_expr.right);
+	    		expr_right = semantic_check(ast->construt_expr.right, 0);
 	    	
 	      	switch(ast->construt_expr.type){
 				case 11:
@@ -929,27 +941,27 @@ int semantic_check(node *ast) {
 	    case NESTED_SCOPE_NODE:
 	    	printf("\nNested Scope semantics\n");
 	      	if(ast->nest_scope_expr.scope != NULL)
-	      		semantic_check(ast->nest_scope_expr.scope);
+	      		semantic_check(ast->nest_scope_expr.scope, 0);
 	      	break;
 		
 	    case DECLARATIONS_NODE:
 	    	printf("\nDeclarations semantics\n");
 	      	if(ast->declarations_expr.left != NULL)
-	      		semantic_check(ast->declarations_expr.left);
+	      		semantic_check(ast->declarations_expr.left, 0);
 	      	if(ast->declarations_expr.right != NULL)
-	      		semantic_check(ast->declarations_expr.right);
+	      		semantic_check(ast->declarations_expr.right, 0);
 	      	break;
 
 	    case ARGUMENTS_NODE:
 	    	printf("\nArguments semantics\n");
 	      	if(ast->arguments_expr.left != NULL){
-	      		expr_left = semantic_check(ast->arguments_expr.left);
+	      		expr_left = semantic_check(ast->arguments_expr.left, 0);
 	      	}else{
 	      		expr_left = 0;
 	      	}
 
 	      	if(ast->arguments_expr.right != NULL){
-	      		expr_right = semantic_check(ast->arguments_expr.right);
+	      		expr_right = semantic_check(ast->arguments_expr.right, 0);
 			}		
 	      	
 	      	switch(expr_left){
@@ -1115,14 +1127,14 @@ int semantic_check(node *ast) {
 	    case ARGUMENTS_OPT_NODE:
 	    	printf("\nArguments opt semantics\n");
 	    	if(ast->arguments_opt_expr.argum != NULL){
-	      		return semantic_check(ast->arguments_opt_expr.argum);
+	      		return semantic_check(ast->arguments_opt_expr.argum, 0);
 	      	}
 	      	break;
 
 	    case EXPRESSION_NODE:
 	    	printf("\nExpression semantics\n");
 	      	if(ast->expression_expr.expr != NULL);
-	      		return semantic_check(ast->expression_expr.expr);
+	      		return semantic_check(ast->expression_expr.expr, 0);
 	      	break;
 
 	    default: break;

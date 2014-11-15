@@ -134,7 +134,7 @@ program
       { ast = $1;
         yTRACE("program -> scope\n");
         debug_printSymbolTable();
-        semantic_check(ast);}
+        semantic_check(ast, 0);}
   ;
 
 scope
@@ -163,15 +163,15 @@ statements
 
 declaration
   : type ID ';' 
-      { pushVar($2, $1);
+      { pushVar($2, $1, 0);
         $$ = ast_allocate(DECLARATION_NODE, $1, $2, NULL, -1, yyline);
         yTRACE("declaration -> type ID ;\n") }
   | type ID '=' expression ';'
-      { pushVar($2, $1);
+      { pushVar($2, $1, 0);
         $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
   | CONST type ID '=' expression ';'
-      { pushVar($3, $2);
+      { pushVar($3, $2, 1);
         $$ = ast_allocate(DECLARATION_NODE, $2, $3, $5, CONST, yyline);
         yTRACE("declaration -> CONST type ID = expression ;\n") }
   ;
