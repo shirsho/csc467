@@ -1,11 +1,16 @@
 
 #include "semantic.h"
 
+int scope = -1;
+symbol *a[20];
+
 int semantic_check(node *ast, int assign) {
 	int expr_left;
     int expr_right;
     int expr_middle;
     int op;
+    int b;
+    int found = 0;
     char *type1;
 	char *type2;
 	symbol *s;
@@ -411,14 +416,34 @@ int semantic_check(node *ast, int assign) {
 
 	    case VAR_NODE:
 	    	printf("\nVariable Semantics\n");
-	      	s = find_Sym(ast->var_expr.id);
-	      	
-	      	if(s->var.constant == 1 && assign == 1){
+    		for(b = scope; b >= 0; b--){
+	    		for(s = a[b]->symtable; s != NULL; s = s->next){
+    	    		if (!strcmp(ast->var_expr.id, s->name)){
+    	    			found = 1;
+    	       			printf("\nfound symbol %s\n", ast->var_expr.id);
+    	        		break;
+    	    		}
+    			}
+    			if(found == 1)
+    				break;
+    		}
+    		if(found == 0)
+    			s = find_Sym(ast->var_expr.id);
+
+    		found = 0;
+
+	      	if(s == NULL){
+	      		fprintf(errorFile, "Unable to find variable %s\n", ast->var_expr.id);
+      			errorOccurred = 1;
+      			return 0;
+	      	}
+
+	      	if(s->constant == 1 && assign == 1){
 	      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
       			errorOccurred = 1;
       			return CONSTANT;
 	      	}
-	      	switch(s->var.type){
+	      	switch(s->type_int){
 				case 1:					
 					if(ast->var_expr.arr != -1){
 						fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
@@ -725,6 +750,9 @@ int semantic_check(node *ast, int assign) {
 				case BVEC4:
 					type1 = (char *)"bvec4";
 					break;
+				default:
+					type1 = (char *)"unknown";
+					break;
 			}
 
 			switch(expr_right){
@@ -763,6 +791,9 @@ int semantic_check(node *ast, int assign) {
 					break;
 				case BVEC4:
 					type2 = (char *)"bvec4";
+					break;
+				default:
+					type2 = (char *)"unknown";
 					break;
 			}
 
@@ -941,8 +972,11 @@ int semantic_check(node *ast, int assign) {
 
 	    case NESTED_SCOPE_NODE:
 	    	printf("\nNested Scope semantics\n");
+	      	scope++;
+	      	a[scope] = ast->nest_scope_expr.variables;
 	      	if(ast->nest_scope_expr.scope != NULL)
 	      		semantic_check(ast->nest_scope_expr.scope, 0);
+	      	scope--;
 	      	break;
 		
 	    case DECLARATIONS_NODE:

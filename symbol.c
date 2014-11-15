@@ -18,8 +18,8 @@ void pushVar(char *name, int type, int constant) {
     struct symbol *s = NULL;
     s = (struct symbol*)malloc(sizeof(struct symbol));
     s->name = name;
-    s->var.type = type;
-    s->var.constant = constant;
+    s->type_int = type;
+    s->constant = constant;
     switch(type){
     	case 1: 
     		s->type = (char *)"int";
@@ -99,18 +99,10 @@ struct symbol* resetScope(){
     debug_printSymbolTable();
     symbol *s = head;
     symbol *t = NULL;
-    symbol *u = NULL;
     if(currentScope != head){
         while(s->next != currentScope)
             s = s->next;
     }
-    /*t = currentScope->symtable;
-    while(t != NULL){
-        u = t;
-        t = t->next;
-        free(u);
-    }
-    free(currentScope);*/
     currentScope = s;
     t = currentScope->next;
     currentScope->next = NULL;
@@ -162,22 +154,7 @@ int exists_Sym_loc(char const *name){
 
 struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
-    symbol *t = currentScope;
-    symbol *u = head;
-    while(u != t){
-        for(s = t->symtable; s != NULL; s = s->next){
-    	    if (!strcmp(name, s->name)){
-    	        printf("\nfound symbol %s\n",name);
-    	        return s;
-    	    }
-    	}
-        while(u->next != t){
-            u = u->next;
-        }
-        t = u;
-        u = head;
-    }
-    for(s = u->symtable; s != NULL; s = s->next){ 
+    for(s = currentScope->symtable; s != NULL; s = s->next){ 
         if (!strcmp(name, s->name)){
             printf("\nfound symbol %s\n",name);
             return s;

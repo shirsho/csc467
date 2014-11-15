@@ -5,8 +5,6 @@
 
 typedef union{
         int value;
-        int type;
-        int constant;
         struct symbol *scope;
 }variable;
 
@@ -14,6 +12,8 @@ typedef struct symbol {
     char *name;
     char *type;
     variable var;
+    int type_int;
+    int constant;
     struct symbol *symtable;
     struct symbol *next;
     int scope;

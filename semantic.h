@@ -38,6 +38,9 @@
 #define CONSTANT 26
 #define VALID 27
 
+extern int scope;
+extern symbol *a[20];
+
 int semantic_check(node *ast, int assign);
 
 #endif
