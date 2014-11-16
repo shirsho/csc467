@@ -1,5 +1,38 @@
 {
+	vec4 v4 = vec4(1.0, 2.0, 3.0, 4.0);
+  	vec4 myVec4 = lit(v4);
+  	vec4 myNewVec4 = lit(v4) + myVec4;
+	/*
+	vec4 myNewVec4 = lit(v4) + myVec4;
+	vec4 myVec4 = lit(v4);
+	float f1 = 10.1;
+	float f2 = rsq(f1);
+	vec4 v4 = vec4(1.0, 2.0, 3.0, 4.0);
+  	vec4 myVec4 = lit(v4);
+	
+	vec4 x = vec4(1.0, 1.1, 1.0, 2.0);
+  	vec4 y = vec4(2.0, 2.5, 1.0, 3.0);
+  	ivec4 myVec1 = ivec4(0,1,2,3);
+  	ivec4 myVec2 = ivec4(0,1,2,3);
+	int f = 1 + dp3(myVec1, myVec2); 
+	
 
+
+
+	// INDEX TODO
+	
+
+
+
+
+	ivec4 myVec = ivec4(0,1,2,3);
+	int num = myVec[2];
+
+
+
+	float num = 1.0 + myVec[1];
+  	int y = 1 + 2 * 3 / 4;
+	vec2 myVec = vec2(1.0,5.0);
 
 	float f = 2.0000;
 
@@ -15,13 +48,6 @@
 		f = f + 2.0;
 	}
 
-	
-	/*
-	ivec4 myVec = ivec4(0,1,2,3);
-	float num = 1.0 + myVec[1];
-  	int y = 1 + 2 * 3 / 4;
-	vec2 myVec = vec2(1.0,5.0);
-
 	int a = 1;
 	int c;
 	c = a;
@@ -31,8 +57,7 @@
   
 	int x = -(a + y + 1000 * bla);
 	
-	int num = myVec[2];
-
+	
 	int z = a + y + 23 - 3 / 4 * bla;
 	int x = 2 + 2 * 2;
 

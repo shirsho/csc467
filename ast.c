@@ -299,7 +299,16 @@ char* getType(int type)
           break;
         case 261:
           typeString = "const";
-          break;   
+          break;
+        case 264:
+          typeString = "dp3";
+          break;
+        case 266:
+          typeString = "rsq";
+          break;
+        case 265:
+          typeString = "lit";
+          break;
   }
   return typeString;
 }
@@ -347,6 +356,11 @@ int burrow(node * ast)
         typeVal = sym->type_int;
       else
         typeVal = -1;
+      // if variable is of type vec3 or vec4, return type is float
+      if(strcmp(sym->type, "vec3") == 0 || strcmp(sym->type, "vec4") == 0 )
+        typeVal = 3; // to match with getType()
+      if(strcmp(sym->type, "ivec3") == 0 || strcmp(sym->type, "ivec4") == 0 )
+        typeVal = 1; // to match with getType()
       //printf("\nVAR_NODE typeVal ----->%d \n", typeVal);
       
       break;
@@ -372,6 +386,37 @@ int burrow(node * ast)
       //printf("BOOL_NODE in burrow\n");
       typeVal = 2; // to match with getType()
       break;
+    case FUNCTION_NODE:
+      //type = getType(ast->func_expr.func);
+      //printf("FUNCTION_NODE in burrow\n");
+      //sym = find_Symbol_External(ast->var_expr.id);
+      /*
+      if(sym)
+        typeVal = sym->type_int;
+      else
+        typeVal = -1;
+      */
+      //fprintf(dumpFile, "(CALL %s ", type);
+      //ast_print(ast->func_expr.arguments);
+      //fprintf(dumpFile, "\n");
+      typeVal = burrow(ast->func_expr.arguments);
+      //fprintf(dumpFile, "<--FUNCTION_NODE\n");      
+      break;
+
+
+    case ARGUMENTS_NODE:
+      //fprintf(dumpFile, "ARGUMENTS_NODE in burrow\n");
+      //typeVal = burrow(ast->arguments_expr.left);
+      typeVal = burrow(ast->arguments_expr.right);
+      //fprintf(dumpFile, ", ");
+      
+      break;
+
+    case ARGUMENTS_OPT_NODE:
+      //fprintf(dumpFile, "ARGUMENTS_OPT_NODE in burrow\n");
+      typeVal = burrow(ast->arguments_opt_expr.argum);
+      break; 
+
     default:
       typeVal = -1;
       break;
@@ -666,8 +711,9 @@ void ast_print(node * ast) {
       //ast_print(ast->construt_expr.left);
       type = getType(ast->construt_expr.type);
       //fprintf(dumpFile, "type: %d\n", ast->construt_expr.type);
-      // dont need to print this
       //fprintf(dumpFile, "CONSTRUCTOR_NODE\n");
+      fprintf(dumpFile, "(CALL %s", type);
+      
       ast_print(ast->construt_expr.right); // get the arguments
       break;
 
@@ -706,10 +752,7 @@ void ast_print(node * ast) {
       ast_print(ast->assign_expr.right);
       break; 
     case IF_STATEMENT_NODE:
-      //ast_print(ast->if_expr.if_comparison);
       //fprintf(dumpFile, "IF_STATEMENT_NODE\n");
-      //ast_print(ast->if_expr.if_statement);
-      //fprintf(dumpFile, "IF_STATEMENT_NODE: if_statement\n");
       if(ast->if_expr.if_comparison && ast->if_expr.if_statement){
         if(ast->if_expr.else_statement){
           fprintf(dumpFile, "(IF ");
@@ -727,15 +770,20 @@ void ast_print(node * ast) {
 
       break;
 
-    /*    
+        
     case FUNCTION_NODE:
+      type = getType(ast->func_expr.func);
+      fprintf(dumpFile, "(CALL %s ", type);
       ast_print(ast->func_expr.arguments);
-      fprintf(dumpFile, "FUNCTION_NODE\n");
-      fprintf(dumpFile, "func: %d\n", ast->func_expr.func);
+      fprintf(dumpFile, "\n");
+      //fprintf(dumpFile, "<--FUNCTION_NODE\n");
+      
       break;
-    */
-   
-    default: break;
+    
+    default: 
+      fprintf(dumpFile, "DEFAULT\n");
+      
+      break;
   }
   return;
 }
