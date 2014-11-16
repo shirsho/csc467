@@ -1,25 +1,12 @@
 {
+	ivec4 myVec = ivec4(0,1,2,3);
+	
 
 
-	float f = 2.0000;
-
-	float f2;
-
-	f2 = f2 + f + 3.000;
+	/*int y = 1 + 2 * 3 / 4;*/
+	
 
 	/*
-	ivec4 myVec = ivec4(0,1,2,3);
-	float num = 1.0 + myVec[1];
-  	int y = 1 + 2 * 3 / 4;
-	vec2 myVec = vec2(1.0,5.0);
-
-	int a = 1;
-	int c;
-	c = a;
-	c = 2;
-	c = 3 + c;
-
-  
 	int x = -(a + y + 1000 * bla);
 	
 	int num = myVec[2];

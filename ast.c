@@ -426,7 +426,7 @@ void ast_print(node * ast) {
     
     case INT_NODE:
       //printf("INT_NODE --->\n");
-      fprintf(dumpFile, "%d", ast->int_expr.val);
+      fprintf(dumpFile, "%d ", ast->int_expr.val);
       break;
 
     case BOOL_NODE:
@@ -685,14 +685,29 @@ void ast_print(node * ast) {
       ast_print(ast->arguments_opt_expr.argum);
       fprintf(dumpFile, ")");
       fprintf(dumpFile, ")");
-      break;  
-    /*  
-    
+      break; 
+
     case STATEMENT_NODE:
-      fprintf(dumpFile, "STATEMENTS\t(STATEMENTS...)\n");
+      fprintf(dumpFile, "(STATEMENTS\n");
       ast_print(ast->statement_expr.left);
       ast_print(ast->statement_expr.right);
+      fprintf(dumpFile, ")\n");
       break;
+
+    case ASSIGNMENT_NODE:
+      //ast_print(ast->assign_expr.left);
+      unaryTypeVal = burrow(ast->assign_expr.left);
+      type = getType(unaryTypeVal);
+      //printf("type: %s\n", type);
+      //printf("ast->assign_expr.left->var_expr.id: %s\n", ast->assign_expr.left->var_expr.id);
+      //printf("ast->assign_expr.left->expression_expr.expr: %s\n", ast->assign_expr.left->expression_expr.expr);
+      fprintf(dumpFile, "(ASSIGN %s %s ", type, ast->assign_expr.left->var_expr.id);
+      //ast_print(ast->assign_expr.left->expression_expr.expr);
+      ast_print(ast->assign_expr.right);
+      break; 
+    /*  
+    
+    
     
     */
     /*    
@@ -712,13 +727,7 @@ void ast_print(node * ast) {
       break;
     
 
-    case ASSIGNMENT_NODE:
-
-      //ast_print(ast->assign_expr.left);
-      // TODO: Need to print <type>
-      fprintf(dumpFile, "ASSIGN\t(ASSIGN <type> %s %s\n", ast->assign_expr.left->var_expr.id, ast->assign_expr.left->expression_expr.expr);
-      //ast_print(ast->assign_expr.right);
-      break;
+    
 
     case FUNCTION_NODE:
       ast_print(ast->func_expr.arguments);
