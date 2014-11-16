@@ -1,13 +1,20 @@
 {
 	/*int x; int y = 6;*/	
-	int a = -1;
+	int foo = 1 - 2;
+	/*int y = 1 + 2 * 3 / 4;*/
+	
 
 	/*
+
+	int a = -1;
+	float b = -1.0000;
+	int x = -a;
+
 	bool x = !true;
 	int b = -a;
 	int c = 9;
 	int d = 2;
-	int x = a + b * c / d;
+	int y = a + b * c / d;
 
 
 	int x = a - b;

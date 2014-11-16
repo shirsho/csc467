@@ -6,7 +6,7 @@
 #include "ast.h"
 #include "common.h"
 #include "parser.tab.h"
-
+#include "symbol.h"
 #define DEBUG_PRINT_TREE 0
 
 node *ast = NULL;
@@ -252,6 +252,12 @@ char* getType(int type)
 {
   char * typeString = NULL;
   switch(type){
+        case INT_NODE:
+          typeString = "int";
+          break;
+        case FLOAT_NODE:
+          typeString = "float";
+          break;       
         case 1: 
           typeString = "int";
           break;
@@ -304,13 +310,40 @@ int burrow(node * ast)
   int typeVal = -1; // default return for error check
   if (ast == NULL)
     return typeVal;
-
+  
   switch(ast->kind){
     case DECLARATION_NODE:
+      printf("DEC\n");
       typeVal = ast->declaration_expr.type;
       break;
     case CONSTRUCTOR_NODE:
+      printf("CONS\n");
+ 
       typeVal = ast->declaration_expr.type;
+      break;
+    case INT_NODE:
+      printf("INT\n");
+      printf("typeval int ---->%d\n", INT_NODE);
+      typeVal = INT_NODE;
+      break;
+    case FLOAT_NODE:
+      printf("FLOAT\n");
+      typeVal = FLOAT_NODE;
+      break;
+    case VAR_NODE:
+      printf("VAR\n");
+      typeVal = VAR_NODE;
+      //typeVal = burrow(ast->var_expr);
+      printf("\ntypeVal ----->%d \n", typeVal);
+      
+      break;
+    case EXPRESSION_NODE:
+
+      typeVal = burrow(ast->expression_expr.expr);
+      printf("\ntypeVal ----->%d \n", typeVal);
+      break;
+    default:
+      typeVal = -1;
       break;
   }
   return typeVal;
@@ -319,7 +352,10 @@ int burrow(node * ast)
 void ast_print(node * ast) {
   //print dat shet
   char * type = NULL;
-  int typeVal;
+  int unaryTypeVal;
+  int leftBinTypeVal;
+  int rightBinTypeVal;
+  
   if(ast == NULL) return;
   switch(ast->kind) {
     // Working
@@ -376,7 +412,7 @@ void ast_print(node * ast) {
 
     case VAR_NODE:
       fprintf(dumpFile, "%s ", ast->var_expr.id);
-      //printf("<---VAR_NODE\t");
+      printf("<---VAR_NODE\t");
 
       break;
     
@@ -391,10 +427,10 @@ void ast_print(node * ast) {
       if(ast->unary_expr.op == UMINUS) // op is unary minus
       {
         // get the int associated type using burrow
-        typeVal = burrow(ast->unary_expr.right);
-        //printf("typeVal is:%d\n", typeVal);
+        unaryTypeVal = burrow(ast->unary_expr.right);
+        printf("typeVal is:%d\n", unaryTypeVal);
         // then get the string for the type
-        type = getType(typeVal);
+        type = getType(unaryTypeVal);
         fprintf(dumpFile, "(UNARY %s - ", type);
         ast_print(ast->unary_expr.right);
       }
@@ -410,28 +446,64 @@ void ast_print(node * ast) {
       //printf("binary op:%d\n", ast->binary_expr.op);
       if(ast->binary_expr.op == 43) // for +
       {
-        fprintf(dumpFile, "(BINARY <type> + ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY %s + ", type);
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID + ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ")");
       }
       else if(ast->binary_expr.op == 45) // for -
       {  
-        fprintf(dumpFile, "(BINARY <type> - ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY %s - ", type);
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID - ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ")");
       }
       else if(ast->binary_expr.op == 42) // for *
       {  
-        fprintf(dumpFile, "(BINARY <type> * ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY %s * ", type);
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID * ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ")");
       }
       else if(ast->binary_expr.op == 47) // for /
       {  
-        fprintf(dumpFile, "(BINARY <type> / ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY %s / ", type);
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID / ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ")");
