@@ -294,10 +294,32 @@ char* getType(int type)
   }
   return typeString;
 }
+// burrows down the ast and returns the type field of the node
+// which is later converted into a string representing the actual type (e.g int, float)
+int burrow(node * ast)
+{
+  // What nodes have type field?
+  // 1. declaration_expr.type
+  // 2. construt_exp.type
+  int typeVal = -1; // default return for error check
+  if (ast == NULL)
+    return typeVal;
+
+  switch(ast->kind){
+    case DECLARATION_NODE:
+      typeVal = ast->declaration_expr.type;
+      break;
+    case CONSTRUCTOR_NODE:
+      typeVal = ast->declaration_expr.type;
+      break;
+  }
+  return typeVal;
+}
 
 void ast_print(node * ast) {
   //print dat shet
   char * type = NULL;
+  int typeVal;
   if(ast == NULL) return;
   switch(ast->kind) {
     // Working
@@ -337,6 +359,7 @@ void ast_print(node * ast) {
       break;
     
     case INT_NODE:
+      //printf("INT_NODE --->\n");
       fprintf(dumpFile, "%d ", ast->int_expr.val);
       break;
 
@@ -353,19 +376,26 @@ void ast_print(node * ast) {
 
     case VAR_NODE:
       fprintf(dumpFile, "%s ", ast->var_expr.id);
+      //printf("<---VAR_NODE\t");
+
       break;
     
     case EXPRESSION_NODE:
       ast_print(ast->expression_expr.expr);
-      //fprintf(dumpFile, "EXPRESSION_NODE\n");
+      //fprintf(dumpFile, "<---EXPRESSION_NODE\n");
       break;
     
     case UNARY_EXPRESSION_NODE:
       // TODO This makes no sense
       //fprintf(dumpFile, "op: %d\n", ast->unary_expr.op);
-      if(ast->unary_expr.op == 281) // op is unary minus
+      if(ast->unary_expr.op == UMINUS) // op is unary minus
       {
-        fprintf(dumpFile, "(UNARY <type> - ");
+        // get the int associated type using burrow
+        typeVal = burrow(ast->unary_expr.right);
+        //printf("typeVal is:%d\n", typeVal);
+        // then get the string for the type
+        type = getType(typeVal);
+        fprintf(dumpFile, "(UNARY %s - ", type);
         ast_print(ast->unary_expr.right);
       }
       else if(ast->unary_expr.op == 33) // op is unary !
@@ -406,12 +436,48 @@ void ast_print(node * ast) {
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ")");
       }
-      else if(ast->binary_expr.op == AND);
-      else if(ast->binary_expr.op == OR);
-      else if(ast->binary_expr.op == NEQ); 
-      else if(ast->binary_expr.op == EQ);
-      else if(ast->binary_expr.op == LEQ);       
-      else if(ast->binary_expr.op == GEQ);
+      else if(ast->binary_expr.op == AND)
+      {  
+        fprintf(dumpFile, "(BINARY <type> AND ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == OR)
+      {  
+        fprintf(dumpFile, "(BINARY <type> OR ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == NEQ)
+      {  
+        fprintf(dumpFile, "(BINARY <type> NEQ ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == EQ)
+      {  
+        fprintf(dumpFile, "(BINARY <type> EQ ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == LEQ)   
+      {  
+        fprintf(dumpFile, "(BINARY <type> LEQ ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == GEQ)
+      {  
+        fprintf(dumpFile, "(BINARY <type> GEQ ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
       
 
 
@@ -420,7 +486,12 @@ void ast_print(node * ast) {
 
       //ast_print(ast->binary_expr.right);
       break;
- 
+    
+    case NESTED_SCOPE_NODE:
+      fprintf(dumpFile, "(NESTED SCOPE\n");
+      ast_print(ast->nest_scope_expr.scope);
+      fprintf(dumpFile, ") <--NESTED SCOPE END\n");      
+      break;
 
     /*  
     
@@ -476,10 +547,7 @@ void ast_print(node * ast) {
       ast_print(ast->construt_expr.right);
       break;
 
-    case NESTED_SCOPE_NODE:
-      ast_print(ast->nest_scope_expr.scope);
-      fprintf(dumpFile, "NESTED_SCOPE_NODE\n");
-      break;
+    
 
     case ARGUMENTS_NODE:
       ast_print(ast->arguments_expr.left);

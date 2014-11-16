@@ -1,15 +1,15 @@
 {
 	/*int x; int y = 6;*/	
 	int a = -1;
+
+	/*
+	bool x = !true;
 	int b = -a;
 	int c = 9;
 	int d = 2;
 	int x = a + b * c / d;
-	
 
-	/*
-	bool x = !true;
-		
+
 	int x = a - b;
 	int y = a * b;
 	int z = a / b;
