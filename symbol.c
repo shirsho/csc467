@@ -100,7 +100,7 @@ void pushVar(char *name, int type, int constant) {
 }
 
 struct symbol* resetScope(){
-    debug_printSymbolTable();
+    //debug_printSymbolTable();
     symbol *s = head;
     symbol *t = NULL;
     if(currentScope != head){
@@ -126,7 +126,8 @@ int exists_Sym_glob(char const *name){
 
     for(s = currentScope->symtable; s != NULL; s = s->next){  
         if (! strcmp(name, s->name)){
-        	//printf("ERROR   --      multiple declaration of variable \"%s\"\n", name);
+        	fprintf(errorFile, "ERROR   --      multiple declaration of variable \"%s\"\n", name);
+            errorOccurred = 1;
             return 1;
      	}
     }
@@ -146,7 +147,8 @@ int exists_Sym_loc(char const *name){
     if(currentScope->symtable != NULL){
 	    for(s = currentScope->symtable; s != NULL; s = s->next){
 	        if (!strcmp(name, s->name)){
-		        //printf("ERROR   --      multiple declaration of variable \"%s\n", name);
+		        fprintf(errorFile, "ERROR   --      multiple declaration of variable \"%s\n", name);
+                errorOccurred = 1;
 	            return 1;
 	        }
 	    }
@@ -160,7 +162,7 @@ struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
     for(s = currentScope->symtable; s != NULL; s = s->next){ 
         if (!strcmp(name, s->name)){
-            //printf("\nfound symbol %s\n",name);
+            printf("\nfound symbol %s\n",name);
             return s;
         }
     }
@@ -171,6 +173,7 @@ struct symbol* find_Sym_External(char const *name){
     symbol *s = NULL;
     for(s = currentScope->symtable; s != NULL; s = s->next){ 
         if (!strcmp(name, s->name)){
+            printf("\nfound symbol %s\n",name);
             return s;
         }
     }

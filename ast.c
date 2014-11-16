@@ -254,60 +254,60 @@ char* getType(int type)
   char * typeString = NULL;
   switch(type){
         case -1:
-          typeString = "invalid";
+          typeString = (char *)"invalid";
         case INT_NODE:
-          typeString = "int";
+          typeString = (char *)"int";
           break;
         case FLOAT_NODE:
-          typeString = "float";
+          typeString = (char *)"float";
           break;       
         case 1: 
-          typeString = "int";
+          typeString = (char *)"int";
           break;
         case 2: 
-          typeString = "bool";
+          typeString = (char *)"bool";
           break;
         case 3: 
-          typeString = "float";
+          typeString = (char *)"float";
           break;
         case 11: 
-          typeString = "ivec2";
+          typeString = (char *)"ivec2";
           break;
         case 12: 
-          typeString = "ivec3";
+          typeString = (char *)"ivec3";
           break;
         case 13: 
-          typeString = "ivec4";
+          typeString = (char *)"ivec4";
           break;
         case 21: 
-          typeString = "bvec2";
+          typeString = (char *)"bvec2";
           break;
         case 22: 
-          typeString = "bvec3";
+          typeString = (char *)"bvec3";
           break;
         case 23: 
-          typeString = "bvec4";
+          typeString = (char *)"bvec4";
           break;
         case 31: 
-          typeString = "vec2";
+          typeString = (char *)"vec2";
           break;
         case 32: 
-          typeString = "vec3";
+          typeString = (char *)"vec3";
           break;    
         case 33: 
-          typeString = "vec4";
+          typeString = (char *)"vec4";
           break;
         case 261:
-          typeString = "const";
+          typeString = (char *)"const";
           break;
         case 264:
-          typeString = "dp3";
+          typeString = (char *)"dp3";
           break;
         case 266:
-          typeString = "rsq";
+          typeString = (char *)"rsq";
           break;
         case 265:
-          typeString = "lit";
+          typeString = (char *)"lit";
           break;
   }
   return typeString;
@@ -435,7 +435,7 @@ void ast_print(node * ast) {
   switch(ast->kind) {
     // Working
     case SCOPE_NODE:
-      fprintf(dumpFile, "(SCOPE \n");
+      fprintf(dumpFile, "\n(SCOPE \n");
       // call to get (DECLARATIONS...)  (STATEMENTS...));
       ast_print(ast->scope_expr.left);  // go to declarations
       ast_print(ast->scope_expr.right); // go to statements

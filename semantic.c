@@ -7,7 +7,6 @@ symbol *a[20];
 int semantic_check(node *ast, int assign) {
 	int expr_left;
       int expr_right;
-      int expr_middle;
       int op;
       char *type1;
 	char *type2;
@@ -243,8 +242,8 @@ int semantic_check(node *ast, int assign) {
       		}
       		break;
 
-	    case UNARY_EXPRESSION_NODE:
-	    	//printf("\nUnary semantics\n");
+	      case UNARY_EXPRESSION_NODE:
+	    	      //printf("\nUnary semantics\n");
 	      	expr_right = semantic_check(ast->unary_expr.right, 0);
 			type1 = get_Type(expr_right);
 
@@ -288,166 +287,166 @@ int semantic_check(node *ast, int assign) {
 			}
 	      	break;
 
-	    case INT_NODE:
+	      case INT_NODE:
 	      	return INT;
 	      	break;
 
-	    case FLOAT_NODE:
+	      case FLOAT_NODE:
 	      	return FLOAT;
 	      	break;
 
-	    case BOOL_NODE:
+	      case BOOL_NODE:
 	      	return BOOL;
-	     	break;
+	     	     break;
 
-	    case VAR_NODE:
-	    	printf("\nVariable Semantics\n");
-    		
-            s = find_Symbol(ast->var_expr.id);
+	      case VAR_NODE:
+      	    	printf("\nVariable Semantics\n");
+          		
+                  s = find_Symbol_External(ast->var_expr.id);
 
-            if(s == NULL)
-                  break;
+                  if(s == NULL)
+                        break;
 
-      	if(s->constant == 1 && assign == 1){
-      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
-			errorOccurred = 1;
-			return CONSTANT;
-      	}
+            	if(s->constant == 1 && assign == 1){
+            		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
+      			errorOccurred = 1;
+      			return CONSTANT;
+            	}
 
-      	switch(s->type_int){
-			case 1:					
-				if(ast->var_expr.arr != -1){
-					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-					errorOccurred = 1;
-					return 0;
-				}else{
-					return INT;
-				}
-				break;
-			case 3:
-				if(ast->var_expr.arr != -1){
-					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-					errorOccurred = 1;
-					return 0;
-				}else{
-					return FLOAT;
-				}
-				break;
-			case 2:
-				if(ast->var_expr.arr != -1){
-					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-					errorOccurred = 1;
-					return 0;
-				}else{
-					return BOOL;
-				}
-				break;
-			case 11:
-				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of ivec2 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return IVEC2;
-				}else{
-					return INT;
-				}
-				break;
-			case 12:
-				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of ivec3 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return IVEC3;
-				}else{
-					return INT;
-				}
-				break;
-			case 13:
-				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of ivec4 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return IVEC4;
-				}else{
-					return INT;
-				}
-				break;
-			case 31:
-				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of vec2 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return VEC2;
-				}else{
-					return FLOAT;
-				}
-				break;
-			case 32:
-				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of vec3 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return VEC3;
-				}else{
-					return FLOAT;
-				}
-				break;
-			case 33:
-				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of vec4 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return VEC4;
-				}else{
-					return FLOAT;
-				}
-				break;
-			case 21:
-				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of bvec2 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return BVEC2;
-				}else{
-					return BOOL;
-				}
-				break;
-			case 22:
-				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of bvec3 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return BVEC3;
-				}else{
-					return BOOL;
-				}
-				break;
-			case 23:
-				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-					fprintf(errorFile, "Invalid syntax, %d is out of bvec4 array addressable range\n", ast->var_expr.arr);
-					errorOccurred = 1;
-					return 0;
-				}else if(ast->var_expr.arr == -1){
-					return BVEC4;
-				}else{
-					return BOOL;
-				}
-				break;
-		}
-      	break;
+            	switch(s->type_int){
+      			case 1:					
+      				if(ast->var_expr.arr != -1){
+      					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+      					errorOccurred = 1;
+      					return 0;
+      				}else{
+      					return INT;
+      				}
+      				break;
+      			case 3:
+      				if(ast->var_expr.arr != -1){
+      					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+      					errorOccurred = 1;
+      					return 0;
+      				}else{
+      					return FLOAT;
+      				}
+      				break;
+      			case 2:
+      				if(ast->var_expr.arr != -1){
+      					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+      					errorOccurred = 1;
+      					return 0;
+      				}else{
+      					return BOOL;
+      				}
+      				break;
+      			case 11:
+      				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of ivec2 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return IVEC2;
+      				}else{
+      					return INT;
+      				}
+      				break;
+      			case 12:
+      				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of ivec3 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return IVEC3;
+      				}else{
+      					return INT;
+      				}
+      				break;
+      			case 13:
+      				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of ivec4 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return IVEC4;
+      				}else{
+      					return INT;
+      				}
+      				break;
+      			case 31:
+      				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of vec2 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return VEC2;
+      				}else{
+      					return FLOAT;
+      				}
+      				break;
+      			case 32:
+      				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of vec3 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return VEC3;
+      				}else{
+      					return FLOAT;
+      				}
+      				break;
+      			case 33:
+      				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of vec4 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return VEC4;
+      				}else{
+      					return FLOAT;
+      				}
+      				break;
+      			case 21:
+      				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of bvec2 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return BVEC2;
+      				}else{
+      					return BOOL;
+      				}
+      				break;
+      			case 22:
+      				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of bvec3 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return BVEC3;
+      				}else{
+      					return BOOL;
+      				}
+      				break;
+      			case 23:
+      				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+      					fprintf(errorFile, "Invalid syntax, %d is out of bvec4 array addressable range\n", ast->var_expr.arr);
+      					errorOccurred = 1;
+      					return 0;
+      				}else if(ast->var_expr.arr == -1){
+      					return BVEC4;
+      				}else{
+      					return BOOL;
+      				}
+      				break;
+      		}
+            	break;
 
-	    case DECLARATION_NODE:
-	    	printf("\nDeclaration semantics\n");
-	    	if(ast->declaration_expr.right != NULL){
-	    		expr_right = semantic_check(ast->declaration_expr.right, 0);
+	      case DECLARATION_NODE:
+	    	      //printf("\nDeclaration semantics\n");
+	    	      if(ast->declaration_expr.right != NULL){
+	    		     expr_right = semantic_check(ast->declaration_expr.right, 0);
 		      	switch(ast->declaration_expr.type){
 		      		case 1:
 		      			if(expr_right == INT){
@@ -552,12 +551,12 @@ int semantic_check(node *ast, int assign) {
 	      	}
 	      	break;
 
-	    case IF_STATEMENT_NODE:
-	    	printf("\nIf Statement semantics\n");
+	      case IF_STATEMENT_NODE:
+	    	      //printf("\nIf Statement semantics\n");
 	      	if(ast->if_expr.if_comparison != NULL)
 	      		expr_left = semantic_check(ast->if_expr.if_comparison, 0);
 	      	if(ast->if_expr.if_statement != NULL)
-	      		expr_middle = semantic_check(ast->if_expr.if_statement, 0);
+	      		semantic_check(ast->if_expr.if_statement, 0);
 	      	if(ast->if_expr.else_statement != NULL)
 	      		expr_right = semantic_check(ast->if_expr.else_statement, 0);
 	      	if(expr_left != BOOL){
@@ -569,216 +568,217 @@ int semantic_check(node *ast, int assign) {
 	      	}
 	      	break;
 
-	    case STATEMENT_NODE:
-	    	printf("\nStatement semantics\n");
+	      case STATEMENT_NODE:
+	    	      //printf("\nStatement semantics\n");
 	      	if(ast->statement_expr.left != NULL)
 	      		expr_left = semantic_check(ast->statement_expr.left, 0);
 	      	if(ast->statement_expr.right != NULL)
 	      		expr_right = semantic_check(ast->statement_expr.right, 0);
 	      	break;
 
-	    case ASSIGNMENT_NODE:
-	    	printf("\nAssignment semantics\n");
-	      	if(ast->assign_expr.left != NULL)
-	      		expr_left = semantic_check(ast->assign_expr.left, 1);
-	      	if(ast->assign_expr.right != NULL)
-	      		expr_right = semantic_check(ast->assign_expr.right, 0);
-			
+	      case ASSIGNMENT_NODE:
+	    	      //printf("\nAssignment semantics\n");
+            	if(ast->assign_expr.left != NULL)
+            		expr_left = semantic_check(ast->assign_expr.left, 1);
+            	if(ast->assign_expr.right != NULL)
+            		expr_right = semantic_check(ast->assign_expr.right, 0);
+      		
                   type1 = get_Type(expr_left);
                   type2 = get_Type(expr_right);
 
-			if(expr_left == INT && expr_right == INT){
-				return VALID;
-			}else if(expr_left == FLOAT && expr_right == FLOAT){
-				return VALID;
-			} else if(expr_left == IVEC2 && expr_right == IVEC2){
-				return VALID;
-			}else if (expr_left == IVEC3 && expr_right == IVEC3){
-				return VALID;
-			}else if (expr_left == IVEC4 && expr_right == IVEC4){
-				return VALID;
-			}else if(expr_left == VEC2 && expr_right == VEC2){
-				return VALID;
-			}else if(expr_left == VEC3 && expr_right == VEC3){
-				return VALID;
-			}else if(expr_left == VEC4 && expr_right == VEC4){
-				return VALID;
-			}else if(expr_left == BOOL && expr_right == BOOL){
-				return VALID;
-			}else if(expr_left == BVEC2 && expr_right == BVEC2){
-				return VALID;
-			}else if(expr_left == BVEC3 && expr_right == BVEC3){
-				return VALID;
-			}else if(expr_left == BVEC4 && expr_right == BVEC4){
-				return VALID;
-			}else if(expr_left == CONSTANT){
-				fprintf(errorFile, "Invalid assignment to constant variable on line %d\n", ast->assign_expr.line);
-				errorOccurred = 1;
-				return 0;
-			}else{
-				fprintf(errorFile, "Invalid assignment between type %s and type %s on line %d\n", type1, type2, ast->assign_expr.line);
-				errorOccurred = 1;
-				return 0;
-			}
-	      	break;
+      		if(expr_left == INT && expr_right == INT){
+      			return VALID;
+      		}else if(expr_left == FLOAT && expr_right == FLOAT){
+      			return VALID;
+      		} else if(expr_left == IVEC2 && expr_right == IVEC2){
+      			return VALID;
+      		}else if (expr_left == IVEC3 && expr_right == IVEC3){
+      			return VALID;
+      		}else if (expr_left == IVEC4 && expr_right == IVEC4){
+      			return VALID;
+      		}else if(expr_left == VEC2 && expr_right == VEC2){
+      			return VALID;
+      		}else if(expr_left == VEC3 && expr_right == VEC3){
+      			return VALID;
+      		}else if(expr_left == VEC4 && expr_right == VEC4){
+      			return VALID;
+      		}else if(expr_left == BOOL && expr_right == BOOL){
+      			return VALID;
+      		}else if(expr_left == BVEC2 && expr_right == BVEC2){
+      			return VALID;
+      		}else if(expr_left == BVEC3 && expr_right == BVEC3){
+      			return VALID;
+      		}else if(expr_left == BVEC4 && expr_right == BVEC4){
+      			return VALID;
+      		}else if(expr_left == CONSTANT){
+      			fprintf(errorFile, "Invalid assignment to constant variable on line %d\n", ast->assign_expr.line);
+      			errorOccurred = 1;
+      			return 0;
+      		}else{
+      			fprintf(errorFile, "Invalid assignment between type %s and type %s on line %d\n", type1, type2, ast->assign_expr.line);
+      			errorOccurred = 1;
+      			return 0;
+      		}
+            	break;
 
-	    case FUNCTION_NODE:
-	    	printf("\nFunction semantics\n");
-	    	if(ast->func_expr.arguments != NULL)
-	    		expr_right = semantic_check(ast->func_expr.arguments, 0);
-	      	switch(ast->func_expr.func){
-	      		case FUNC1:
-	      			if(expr_right == IVEC32){
-	      				return INT;
-	      			}else if(expr_right == IVEC42){
-	      				return INT;
-	      			}else if(expr_right == VEC32){
-	      				return FLOAT;
-	      			}else if(expr_right == VEC42){
-	      				return FLOAT;
-	      			}else{
-	      				fprintf(errorFile, "Invalid arguments for dp3\n");
-      					errorOccurred = 1;
-      					return 0;
-	      			}
-	      			break;
-	      		case FUNC2:
-	      			if(expr_right == VEC4){
-	      				return VEC4;
-	      			}else{
-	      				fprintf(errorFile, "Invalid arguments for lit\n");
-      					errorOccurred = 1;
-      					return 0;
-	      			}
-	      			break;
-	      		case FUNC3:
-	      			if(expr_right == FLOAT){
-	      				return FLOAT;
-	      			}else if(expr_right == INT){
-	      				return FLOAT;
-	      			}else{
-	      				fprintf(errorFile, "Invalid arguments for rsq\n");
-      					errorOccurred = 1;
-      					return 0;
-	      			}
-	      			break;
-				default: 
-					printf("Wrong function value\n");
-					return 0;
-					break;
-	      	}
-	      	break;
+	      case FUNCTION_NODE:
+	    	      //printf("\nFunction semantics\n");
+      	    	if(ast->func_expr.arguments != NULL)
+      	    		expr_right = semantic_check(ast->func_expr.arguments, 0);
+      	      	switch(ast->func_expr.func){
+      	      		case FUNC1:
+      	      			if(expr_right == IVEC32){
+      	      				return INT;
+      	      			}else if(expr_right == IVEC42){
+      	      				return INT;
+      	      			}else if(expr_right == VEC32){
+      	      				return FLOAT;
+      	      			}else if(expr_right == VEC42){
+      	      				return FLOAT;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid arguments for dp3\n");
+            					errorOccurred = 1;
+            					return 0;
+      	      			}
+      	      			break;
+      	      		case FUNC2:
+      	      			if(expr_right == VEC4){
+      	      				return VEC4;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid arguments for lit\n");
+            					errorOccurred = 1;
+            					return 0;
+      	      			}
+      	      			break;
+      	      		case FUNC3:
+      	      			if(expr_right == FLOAT){
+      	      				return FLOAT;
+      	      			}else if(expr_right == INT){
+      	      				return FLOAT;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid arguments for rsq\n");
+            					errorOccurred = 1;
+            					return 0;
+      	      			}
+      	      			break;
+      				default: 
+      					fprintf(errorFile, "Invalid function\n");
+                                    errorOccurred = 1;
+                                    return 0;
+      					break;
+      	      	}
+      	      	break;
 
-	    case CONSTRUCTOR_NODE:
-	      	printf("\nConstructor semantics\n");
-	    	if(ast->construt_expr.right != NULL)
-	    		expr_right = semantic_check(ast->construt_expr.right, 0);
-	    	
-	      	switch(ast->construt_expr.type){
-				case 11:
-	      			if(expr_right == ITWO){
-	      				return IVEC2;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec2\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 12:
-	      			if(expr_right == ITHREE){
-	      				return IVEC3;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec3\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 13:
-	      			if(expr_right == IFOUR){
-	      				return IVEC4;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type ivec4\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 21:
-	      			if(expr_right == BTWO){
-	      				return BVEC2;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec2\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 22:
-	      			if(expr_right == BTHREE){
-	      				return BVEC3;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec3\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 23:
-	      			if(expr_right == BFOUR){
-	      				return BVEC4;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type bvec4\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 31:
-	      			if(expr_right == FTWO){
-	      				return VEC2;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec2\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 32:
-	      			if(expr_right == FTHREE){
-	      				return VEC3;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec3\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-				case 33:
-	      			if(expr_right == FFOUR){
-	      				return VEC4;
-	      			}else{
-	      				fprintf(errorFile, "Invalid declaration with type vec4\n");
-      					errorOccurred = 1;
-      					return 0;
-					}
-					break;
-			}
-	      	break;
+	      case CONSTRUCTOR_NODE:
+      	      //printf("\nConstructor semantics\n");
+      	    	if(ast->construt_expr.right != NULL)
+      	    		expr_right = semantic_check(ast->construt_expr.right, 0);
+      	    	
+      	      	switch(ast->construt_expr.type){
+      				case 11:
+      	      			if(expr_right == ITWO){
+      	      				return IVEC2;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type ivec2\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 12:
+      	      			if(expr_right == ITHREE){
+      	      				return IVEC3;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type ivec3\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 13:
+      	      			if(expr_right == IFOUR){
+      	      				return IVEC4;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type ivec4\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 21:
+      	      			if(expr_right == BTWO){
+      	      				return BVEC2;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type bvec2\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 22:
+      	      			if(expr_right == BTHREE){
+      	      				return BVEC3;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type bvec3\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 23:
+      	      			if(expr_right == BFOUR){
+      	      				return BVEC4;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type bvec4\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 31:
+      	      			if(expr_right == FTWO){
+      	      				return VEC2;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type vec2\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 32:
+      	      			if(expr_right == FTHREE){
+      	      				return VEC3;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type vec3\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      				case 33:
+      	      			if(expr_right == FFOUR){
+      	      				return VEC4;
+      	      			}else{
+      	      				fprintf(errorFile, "Invalid declaration with type vec4\n");
+            					errorOccurred = 1;
+            					return 0;
+      					}
+      					break;
+      			}
+      	      	break;
 
 
-	    case NESTED_SCOPE_NODE:
-	    	printf("\nNested Scope semantics\n");
-	      	scope++;
-	      	a[scope] = ast->nest_scope_expr.variables;
-	      	if(ast->nest_scope_expr.scope != NULL)
-	      		semantic_check(ast->nest_scope_expr.scope, 0);
-	      	scope--;
-	      	break;
+	      case NESTED_SCOPE_NODE:
+      	    	printf("\nNested Scope semantics\n");
+            	scope = scope + 1;
+            	a[scope] = ast->nest_scope_expr.variables;
+            	if(ast->nest_scope_expr.scope != NULL)
+            		semantic_check(ast->nest_scope_expr.scope, 0);
+            	scope = scope - 1;
+            	break;
 		
-	    case DECLARATIONS_NODE:
-	    	printf("\nDeclarations semantics\n");
-	      	if(ast->declarations_expr.left != NULL)
-	      		semantic_check(ast->declarations_expr.left, 0);
-	      	if(ast->declarations_expr.right != NULL)
-	      		semantic_check(ast->declarations_expr.right, 0);
-	      	break;
+	      case DECLARATIONS_NODE:
+      	    	//printf("\nDeclarations semantics\n");
+            	if(ast->declarations_expr.left != NULL)
+            		semantic_check(ast->declarations_expr.left, 0);
+            	if(ast->declarations_expr.right != NULL)
+            		semantic_check(ast->declarations_expr.right, 0);
+            	break;
 
-	    case ARGUMENTS_NODE:
-	    	printf("\nArguments semantics\n");
+	      case ARGUMENTS_NODE:
+	    	      //printf("\nArguments semantics\n");
 	      	if(ast->arguments_expr.left != NULL){
 	      		expr_left = semantic_check(ast->arguments_expr.left, 0);
 	      	}else{
@@ -949,20 +949,20 @@ int semantic_check(node *ast, int assign) {
 	      	}
 	      	break;
 
-	    case ARGUMENTS_OPT_NODE:
-	    	printf("\nArguments opt semantics\n");
-	    	if(ast->arguments_opt_expr.argum != NULL){
-	      		return semantic_check(ast->arguments_opt_expr.argum, 0);
-	      	}
-	      	break;
+	      case ARGUMENTS_OPT_NODE:
+      	    	//printf("\nArguments opt semantics\n");
+      	    	if(ast->arguments_opt_expr.argum != NULL){
+      	      		return semantic_check(ast->arguments_opt_expr.argum, 0);
+      	      	}
+      	      break;
 
-	    case EXPRESSION_NODE:
-	    	printf("\nExpression semantics\n");
+	      case EXPRESSION_NODE:
+	    	      //printf("\nExpression semantics\n");
 	      	if(ast->expression_expr.expr != NULL);
 	      		return semantic_check(ast->expression_expr.expr, 0);
 	      	break;
 
-	    default: break;
+	      default: break;
 	}
   return 0; // failed checks
 }
@@ -1012,41 +1012,19 @@ char* get_Type(int value){
 
 }
 
-symbol* find_Symbol(char *name){
-      symbol *s;
-      int b;
-      int found = 0;
-      for(b = scope; b >= 0; b--){
-            for(s = a[b]->symtable; s != NULL; s = s->next){
-                  if (!strcmp(name, s->name)){
-                        found = 1;
-                              printf("\nfound symbol %s\n", name);
-                        break;
-                  }
-            }
-            if(found == 1)
-                  break;
-      }
-      if(found == 0)
-            s = find_Sym(name);
-
-      if(s == NULL){
-            fprintf(errorFile, "Unable to find variable %s\n", name);
-            errorOccurred = 1;
-            return NULL;
-      }
-
-      return s;
-}
-
 symbol* find_Symbol_External(char *name){
       symbol *s;
       int b;
       int found = 0;
+      printf("In findsymbol external\n");
+      printf("scope: %d\n", scope);
       for(b = scope; b >= 0; b--){
+            printf("b: %d\n", b);
             for(s = a[b]->symtable; s != NULL; s = s->next){
+                  printf("Name: %s\n", s->name);
                   if (!strcmp(name, s->name)){
                         found = 1;
+                        printf("\nfound symbol %s\n", name);
                         break;
                   }
             }
@@ -1057,6 +1035,7 @@ symbol* find_Symbol_External(char *name){
             s = find_Sym_External(name);
 
       if(s == NULL){
+            fprintf(errorFile, "Unable to find variable %s\n", name);
             errorOccurred = 1;
             return NULL;
       }

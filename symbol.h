@@ -2,6 +2,7 @@
 #define _SYMBOL_H
 
 #include <stdio.h>
+#include "common.h"
 
 typedef union{
         int value;

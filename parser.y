@@ -133,7 +133,6 @@ program
   : scope 
       { ast = $1;
         yTRACE("program -> scope\n");
-        //debug_printSymbolTable();
         semantic_check(ast, 0);}
   ;
 

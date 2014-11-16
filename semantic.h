@@ -43,6 +43,5 @@ extern symbol *a[20];
 
 int semantic_check(node *ast, int assign);
 char* get_Type(int value);
-symbol* find_Symbol(char *name);
 symbol* find_Symbol_External(char *name);
 #endif

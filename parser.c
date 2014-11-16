@@ -539,12 +539,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   133,   133,   141,   141,   147,   151,   156,   160,   165,
-     169,   173,   180,   183,   186,   189,   192,   197,   200,   203,
-     206,   209,   212,   220,   223,   226,   229,   234,   237,   242,
-     245,   248,   251,   254,   257,   260,   263,   266,   269,   272,
-     275,   278,   283,   286,   289,   292,   297,   300,   306,   309,
-     315,   318,   324,   328
+       0,   133,   133,   140,   140,   146,   150,   155,   159,   164,
+     168,   172,   179,   182,   185,   188,   191,   196,   199,   202,
+     205,   208,   211,   219,   222,   225,   228,   233,   236,   241,
+     244,   247,   250,   253,   256,   259,   262,   265,   268,   271,
+     274,   277,   282,   285,   288,   291,   296,   299,   305,   308,
+     314,   317,   323,   327
 };
 #endif
 
@@ -1571,21 +1571,20 @@ yyreduce:
 #line 134 "parser.y"
     { ast = (yyvsp[(1) - (1)].as_ast);
         yTRACE("program -> scope\n");
-        debug_printSymbolTable();
         semantic_check(ast, 0);}
     break;
 
   case 3:
 
 /* Line 1806 of yacc.c  */
-#line 141 "parser.y"
+#line 140 "parser.y"
     {newScope();}
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 142 "parser.y"
+#line 141 "parser.y"
     { (yyval.as_ast) = ast_allocate(SCOPE_NODE, (yyvsp[(3) - (5)].as_ast), (yyvsp[(4) - (5)].as_ast));
         yTRACE("scope -> { declarations statements }\n") }
     break;
@@ -1593,7 +1592,7 @@ yyreduce:
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 148 "parser.y"
+#line 147 "parser.y"
     { (yyval.as_ast) = ast_allocate(DECLARATIONS_NODE, (yyvsp[(1) - (2)].as_ast), (yyvsp[(2) - (2)].as_ast));
         yTRACE("declarations -> declarations declaration\n") }
     break;
@@ -1601,7 +1600,7 @@ yyreduce:
   case 6:
 
 /* Line 1806 of yacc.c  */
-#line 151 "parser.y"
+#line 150 "parser.y"
     { (yyval.as_ast) = NULL;
         yTRACE("declarations -> \n") }
     break;
@@ -1609,7 +1608,7 @@ yyreduce:
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 157 "parser.y"
+#line 156 "parser.y"
     { (yyval.as_ast) = ast_allocate(STATEMENT_NODE, (yyvsp[(1) - (2)].as_ast), (yyvsp[(2) - (2)].as_ast));
         yTRACE("statements -> statements statement\n") }
     break;
@@ -1617,7 +1616,7 @@ yyreduce:
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 160 "parser.y"
+#line 159 "parser.y"
     { (yyval.as_ast) = NULL;
         yTRACE("statements -> \n") }
     break;
@@ -1625,7 +1624,7 @@ yyreduce:
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 166 "parser.y"
+#line 165 "parser.y"
     { pushVar((yyvsp[(2) - (3)].as_str), (yyvsp[(1) - (3)].as_int), 0);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (3)].as_int), (yyvsp[(2) - (3)].as_str), NULL, -1, yyline);
         yTRACE("declaration -> type ID ;\n") }
@@ -1634,7 +1633,7 @@ yyreduce:
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 170 "parser.y"
+#line 169 "parser.y"
     { pushVar((yyvsp[(2) - (5)].as_str), (yyvsp[(1) - (5)].as_int), 0);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (5)].as_int), (yyvsp[(2) - (5)].as_str), (yyvsp[(4) - (5)].as_ast), -2, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
@@ -1643,7 +1642,7 @@ yyreduce:
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 174 "parser.y"
+#line 173 "parser.y"
     { pushVar((yyvsp[(3) - (6)].as_str), (yyvsp[(2) - (6)].as_int), 1);
         (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(2) - (6)].as_int), (yyvsp[(3) - (6)].as_str), (yyvsp[(5) - (6)].as_ast), CONST, yyline);
         yTRACE("declaration -> CONST type ID = expression ;\n") }
@@ -1652,7 +1651,7 @@ yyreduce:
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 181 "parser.y"
+#line 180 "parser.y"
     { (yyval.as_ast) = ast_allocate(ASSIGNMENT_NODE, (yyvsp[(1) - (4)].as_ast), (yyvsp[(3) - (4)].as_ast), yyline);
         yTRACE("statement -> variable = expression ;\n") }
     break;
@@ -1660,7 +1659,7 @@ yyreduce:
   case 13:
 
 /* Line 1806 of yacc.c  */
-#line 184 "parser.y"
+#line 183 "parser.y"
     { (yyval.as_ast) = ast_allocate(IF_STATEMENT_NODE, (yyvsp[(3) - (7)].as_ast), (yyvsp[(5) - (7)].as_ast), (yyvsp[(7) - (7)].as_ast), yyline);
         yTRACE("statement -> IF ( expression ) statement ELSE statement \n") }
     break;
@@ -1668,7 +1667,7 @@ yyreduce:
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 187 "parser.y"
+#line 186 "parser.y"
     { (yyval.as_ast) = ast_allocate(IF_STATEMENT_NODE, (yyvsp[(3) - (5)].as_ast), (yyvsp[(5) - (5)].as_ast), NULL, yyline);
         yTRACE("statement -> IF ( expression ) statement \n") }
     break;
@@ -1676,7 +1675,7 @@ yyreduce:
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 190 "parser.y"
+#line 189 "parser.y"
     { (yyval.as_ast) = ast_allocate(NESTED_SCOPE_NODE, (yyvsp[(1) - (1)].as_ast), resetScope());
 	      yTRACE("statement -> scope \n") }
     break;
@@ -1684,14 +1683,14 @@ yyreduce:
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 193 "parser.y"
+#line 192 "parser.y"
     { yTRACE("statement -> ; \n") }
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 198 "parser.y"
+#line 197 "parser.y"
     { (yyval.as_int) = 1;
         yTRACE("type -> INT_T \n") }
     break;
@@ -1699,7 +1698,7 @@ yyreduce:
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 201 "parser.y"
+#line 200 "parser.y"
     { (yyval.as_int) = 10 + yyval.as_vec;
         yTRACE("type -> IVEC_T \n") }
     break;
@@ -1707,7 +1706,7 @@ yyreduce:
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 204 "parser.y"
+#line 203 "parser.y"
     { (yyval.as_int) = 2;
         yTRACE("type -> BOOL_T \n") }
     break;
@@ -1715,7 +1714,7 @@ yyreduce:
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 207 "parser.y"
+#line 206 "parser.y"
     { (yyval.as_int) = 20 + yyval.as_vec;
         yTRACE("type -> BVEC_T \n") }
     break;
@@ -1723,7 +1722,7 @@ yyreduce:
   case 21:
 
 /* Line 1806 of yacc.c  */
-#line 210 "parser.y"
+#line 209 "parser.y"
     { (yyval.as_int) = 3;
         yTRACE("type -> FLOAT_T \n") }
     break;
@@ -1731,7 +1730,7 @@ yyreduce:
   case 22:
 
 /* Line 1806 of yacc.c  */
-#line 213 "parser.y"
+#line 212 "parser.y"
     { (yyval.as_int) = 30 + yyval.as_vec;
         yTRACE("type -> VEC_T \n") }
     break;
@@ -1739,7 +1738,7 @@ yyreduce:
   case 23:
 
 /* Line 1806 of yacc.c  */
-#line 221 "parser.y"
+#line 220 "parser.y"
     { (yyval.as_ast) = ast_allocate(CONSTRUCTOR_NODE, (yyvsp[(1) - (4)].as_int), (yyvsp[(3) - (4)].as_ast));
         yTRACE("expression -> type ( arguments_opt ) \n") }
     break;
@@ -1747,7 +1746,7 @@ yyreduce:
   case 24:
 
 /* Line 1806 of yacc.c  */
-#line 224 "parser.y"
+#line 223 "parser.y"
     { (yyval.as_ast) = ast_allocate(FUNCTION_NODE, FUNC1, (yyvsp[(3) - (4)].as_ast));
         yTRACE("expression -> FUNC ( arguments_opt ) \n") }
     break;
@@ -1755,7 +1754,7 @@ yyreduce:
   case 25:
 
 /* Line 1806 of yacc.c  */
-#line 227 "parser.y"
+#line 226 "parser.y"
     { (yyval.as_ast) = ast_allocate(FUNCTION_NODE, FUNC2, (yyvsp[(3) - (4)].as_ast));
         yTRACE("expression -> FUNC ( arguments_opt ) \n") }
     break;
@@ -1763,7 +1762,7 @@ yyreduce:
   case 26:
 
 /* Line 1806 of yacc.c  */
-#line 230 "parser.y"
+#line 229 "parser.y"
     { (yyval.as_ast) = ast_allocate(FUNCTION_NODE, FUNC3, (yyvsp[(3) - (4)].as_ast));
         yTRACE("expression -> FUNC ( arguments_opt ) \n") }
     break;
@@ -1771,7 +1770,7 @@ yyreduce:
   case 27:
 
 /* Line 1806 of yacc.c  */
-#line 235 "parser.y"
+#line 234 "parser.y"
     { (yyval.as_ast) = ast_allocate(UNARY_EXPRESSION_NODE, UMINUS, (yyvsp[(2) - (2)].as_ast));
         yTRACE("expression -> - expression \n") }
     break;
@@ -1779,7 +1778,7 @@ yyreduce:
   case 28:
 
 /* Line 1806 of yacc.c  */
-#line 238 "parser.y"
+#line 237 "parser.y"
     { (yyval.as_ast) = ast_allocate(UNARY_EXPRESSION_NODE, '!', (yyvsp[(2) - (2)].as_ast));
         yTRACE("expression -> ! expression \n") }
     break;
@@ -1787,7 +1786,7 @@ yyreduce:
   case 29:
 
 /* Line 1806 of yacc.c  */
-#line 243 "parser.y"
+#line 242 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, AND, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression AND expression \n") }
     break;
@@ -1795,7 +1794,7 @@ yyreduce:
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 246 "parser.y"
+#line 245 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, OR, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression OR expression \n") }
     break;
@@ -1803,7 +1802,7 @@ yyreduce:
   case 31:
 
 /* Line 1806 of yacc.c  */
-#line 249 "parser.y"
+#line 248 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, EQ, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression EQ expression \n") }
     break;
@@ -1811,7 +1810,7 @@ yyreduce:
   case 32:
 
 /* Line 1806 of yacc.c  */
-#line 252 "parser.y"
+#line 251 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, NEQ, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression NEQ expression \n") }
     break;
@@ -1819,7 +1818,7 @@ yyreduce:
   case 33:
 
 /* Line 1806 of yacc.c  */
-#line 255 "parser.y"
+#line 254 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '<', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression < expression \n") }
     break;
@@ -1827,7 +1826,7 @@ yyreduce:
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 258 "parser.y"
+#line 257 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, LEQ, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression LEQ expression \n") }
     break;
@@ -1835,7 +1834,7 @@ yyreduce:
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 261 "parser.y"
+#line 260 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '>', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression > expression \n") }
     break;
@@ -1843,7 +1842,7 @@ yyreduce:
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 264 "parser.y"
+#line 263 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, GEQ, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression GEQ expression \n") }
     break;
@@ -1851,7 +1850,7 @@ yyreduce:
   case 37:
 
 /* Line 1806 of yacc.c  */
-#line 267 "parser.y"
+#line 266 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '+', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression + expression \n") }
     break;
@@ -1859,7 +1858,7 @@ yyreduce:
   case 38:
 
 /* Line 1806 of yacc.c  */
-#line 270 "parser.y"
+#line 269 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '-', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression - expression \n") }
     break;
@@ -1867,7 +1866,7 @@ yyreduce:
   case 39:
 
 /* Line 1806 of yacc.c  */
-#line 273 "parser.y"
+#line 272 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '*', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression * expression \n") }
     break;
@@ -1875,7 +1874,7 @@ yyreduce:
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 276 "parser.y"
+#line 275 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '/', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression / expression \n") }
     break;
@@ -1883,7 +1882,7 @@ yyreduce:
   case 41:
 
 /* Line 1806 of yacc.c  */
-#line 279 "parser.y"
+#line 278 "parser.y"
     { (yyval.as_ast) = ast_allocate(BINARY_EXPRESSION_NODE, '^', (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("expression -> expression ^ expression \n") }
     break;
@@ -1891,7 +1890,7 @@ yyreduce:
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 284 "parser.y"
+#line 283 "parser.y"
     { (yyval.as_ast) = ast_allocate(BOOL_NODE, TRUE_C);
         yTRACE("expression -> TRUE_C \n") }
     break;
@@ -1899,7 +1898,7 @@ yyreduce:
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 287 "parser.y"
+#line 286 "parser.y"
     { (yyval.as_ast) = ast_allocate(BOOL_NODE, FALSE_C);
         yTRACE("expression -> FALSE_C \n") }
     break;
@@ -1907,7 +1906,7 @@ yyreduce:
   case 44:
 
 /* Line 1806 of yacc.c  */
-#line 290 "parser.y"
+#line 289 "parser.y"
     { (yyval.as_ast) = ast_allocate(INT_NODE, (yyvsp[(1) - (1)].as_int));
         yTRACE("expression -> INT_C \n") }
     break;
@@ -1915,7 +1914,7 @@ yyreduce:
   case 45:
 
 /* Line 1806 of yacc.c  */
-#line 293 "parser.y"
+#line 292 "parser.y"
     { (yyval.as_ast) = ast_allocate(FLOAT_NODE, (yyvsp[(1) - (1)].as_float));
         yTRACE("expression -> FLOAT_C \n") }
     break;
@@ -1923,7 +1922,7 @@ yyreduce:
   case 46:
 
 /* Line 1806 of yacc.c  */
-#line 298 "parser.y"
+#line 297 "parser.y"
     { (yyval.as_ast) = ast_allocate(EXPRESSION_NODE, (yyvsp[(2) - (3)].as_ast));
         yTRACE("expression -> ( expression ) \n") }
     break;
@@ -1931,7 +1930,7 @@ yyreduce:
   case 47:
 
 /* Line 1806 of yacc.c  */
-#line 301 "parser.y"
+#line 300 "parser.y"
     { (yyval.as_ast) = ast_allocate(EXPRESSION_NODE, (yyvsp[(1) - (1)].as_ast));
         yTRACE("expression -> variable \n") }
     break;
@@ -1939,7 +1938,7 @@ yyreduce:
   case 48:
 
 /* Line 1806 of yacc.c  */
-#line 307 "parser.y"
+#line 306 "parser.y"
     { (yyval.as_ast) = ast_allocate(VAR_NODE, (yyvsp[(1) - (1)].as_str), -1);
         yTRACE("variable -> ID \n") }
     break;
@@ -1947,7 +1946,7 @@ yyreduce:
   case 49:
 
 /* Line 1806 of yacc.c  */
-#line 310 "parser.y"
+#line 309 "parser.y"
     { (yyval.as_ast) = ast_allocate(VAR_NODE, (yyvsp[(1) - (4)].as_str), (yyvsp[(3) - (4)].as_int));
         yTRACE("variable -> ID [ INT_C ] \n") }
     break;
@@ -1955,7 +1954,7 @@ yyreduce:
   case 50:
 
 /* Line 1806 of yacc.c  */
-#line 316 "parser.y"
+#line 315 "parser.y"
     { (yyval.as_ast) = ast_allocate(ARGUMENTS_NODE, (yyvsp[(1) - (3)].as_ast), (yyvsp[(3) - (3)].as_ast));
         yTRACE("arguments -> arguments , expression \n") }
     break;
@@ -1963,7 +1962,7 @@ yyreduce:
   case 51:
 
 /* Line 1806 of yacc.c  */
-#line 319 "parser.y"
+#line 318 "parser.y"
     { (yyval.as_ast) = ast_allocate(ARGUMENTS_NODE, NULL, (yyvsp[(1) - (1)].as_ast));
         yTRACE("arguments -> expression \n") }
     break;
@@ -1971,7 +1970,7 @@ yyreduce:
   case 52:
 
 /* Line 1806 of yacc.c  */
-#line 325 "parser.y"
+#line 324 "parser.y"
     { (yyval.as_ast) = ast_allocate(ARGUMENTS_OPT_NODE, (yyvsp[(1) - (1)].as_ast));
         yTRACE("arguments_opt -> arguments \n") }
     break;
@@ -1979,7 +1978,7 @@ yyreduce:
   case 53:
 
 /* Line 1806 of yacc.c  */
-#line 328 "parser.y"
+#line 327 "parser.y"
     { (yyval.as_ast) = NULL;
         yTRACE("arguments_opt -> \n") }
     break;
@@ -1987,7 +1986,7 @@ yyreduce:
 
 
 /* Line 1806 of yacc.c  */
-#line 1991 "y.tab.c"
+#line 1990 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2218,7 +2217,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 332 "parser.y"
+#line 331 "parser.y"
 
 
 /***********************************************************************ol
