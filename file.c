@@ -7,6 +7,15 @@
 
 	f2 = f2 + f + 3.000;
 
+	if (f2 == 10000.0 + 2.00){
+		f = f - 1.0;
+	}
+	else
+	{
+		f = f + 2.0;
+	}
+
+	
 	/*
 	ivec4 myVec = ivec4(0,1,2,3);
 	float num = 1.0 + myVec[1];

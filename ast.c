@@ -705,41 +705,34 @@ void ast_print(node * ast) {
       //ast_print(ast->assign_expr.left->expression_expr.expr);
       ast_print(ast->assign_expr.right);
       break; 
-    /*  
-    
-    
-    
-    */
-    /*    
     case IF_STATEMENT_NODE:
       //ast_print(ast->if_expr.if_comparison);
-      //fprintf(dumpFile, "IF_STATEMENT_NODE: if_comparison\n");
+      //fprintf(dumpFile, "IF_STATEMENT_NODE\n");
       //ast_print(ast->if_expr.if_statement);
       //fprintf(dumpFile, "IF_STATEMENT_NODE: if_statement\n");
-      //ast_print(ast->if_expr.else_statement);
       if(ast->if_expr.if_comparison && ast->if_expr.if_statement){
-        if(ast->if_expr.else_statement)
-          fprintf(dumpFile, "IF\t(IF %s %s %s)\n", ast->if_expr.if_comparison, ast->if_expr.if_statement, ast->if_expr.else_statement);
+        if(ast->if_expr.else_statement){
+          fprintf(dumpFile, "(IF ");
+          ast_print(ast->if_expr.if_comparison);
+          ast_print(ast->if_expr.if_statement);
+          ast_print(ast->if_expr.else_statement);
+        }
         else
-          fprintf(dumpFile, "IF\t(IF %s %s)\n", ast->if_expr.if_comparison, ast->if_expr.if_statement);
+        {
+          fprintf(dumpFile, "(IF ");
+          ast_print(ast->if_expr.if_comparison);
+          ast_print(ast->if_expr.if_statement);
+        }
       }
 
       break;
-    
 
-    
-
+    /*    
     case FUNCTION_NODE:
       ast_print(ast->func_expr.arguments);
       fprintf(dumpFile, "FUNCTION_NODE\n");
       fprintf(dumpFile, "func: %d\n", ast->func_expr.func);
       break;
-
-    
-
-    
-
-   
     */
    
     default: break;
