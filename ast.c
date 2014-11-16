@@ -254,60 +254,60 @@ char* getType(int type)
   char * typeString = NULL;
   switch(type){
         case -1:
-          typeString = (char *)"invalid";
+          typeString = (char*)"invalid";
         case INT_NODE:
-          typeString = (char *)"int";
+          typeString = (char*)"int";
           break;
         case FLOAT_NODE:
-          typeString = (char *)"float";
+          typeString = (char*)"float";
           break;       
         case 1: 
-          typeString = (char *)"int";
+          typeString = (char*)"int";
           break;
         case 2: 
-          typeString = (char *)"bool";
+          typeString = (char*)"bool";
           break;
         case 3: 
-          typeString = (char *)"float";
+          typeString = (char*)"float";
           break;
         case 11: 
-          typeString = (char *)"ivec2";
+          typeString = (char*)"ivec2";
           break;
         case 12: 
-          typeString = (char *)"ivec3";
+          typeString = (char*)"ivec3";
           break;
         case 13: 
-          typeString = (char *)"ivec4";
+          typeString = (char*)"ivec4";
           break;
         case 21: 
-          typeString = (char *)"bvec2";
+          typeString = (char*)"bvec2";
           break;
         case 22: 
-          typeString = (char *)"bvec3";
+          typeString = (char*)"bvec3";
           break;
         case 23: 
-          typeString = (char *)"bvec4";
+          typeString = (char*)"bvec4";
           break;
         case 31: 
-          typeString = (char *)"vec2";
+          typeString = (char*)"vec2";
           break;
         case 32: 
-          typeString = (char *)"vec3";
+          typeString = (char*)"vec3";
           break;    
         case 33: 
-          typeString = (char *)"vec4";
+          typeString = (char*)"vec4";
           break;
         case 261:
-          typeString = (char *)"const";
+          typeString = (char*)"const";
           break;
         case 264:
-          typeString = (char *)"dp3";
+          typeString = (char*)"dp3";
           break;
         case 266:
-          typeString = (char *)"rsq";
+          typeString = (char*)"rsq";
           break;
         case 265:
-          typeString = (char *)"lit";
+          typeString = (char*)"lit";
           break;
   }
   return typeString;
@@ -430,8 +430,11 @@ void ast_print(node * ast) {
   int unaryTypeVal;
   int leftBinTypeVal;
   int rightBinTypeVal;
-  
-  if(ast == NULL) return;
+  if(ast == NULL){
+    //printf("AST NODE IS NULL\n");
+    return;
+  } 
+    
   switch(ast->kind) {
     // Working
     case SCOPE_NODE:
@@ -708,9 +711,9 @@ void ast_print(node * ast) {
       break;
     
     case NESTED_SCOPE_NODE:
-      fprintf(dumpFile, "(NESTED SCOPE\n");
+      //fprintf(dumpFile, "(NESTED SCOPE\n");
       ast_print(ast->nest_scope_expr.scope);
-      fprintf(dumpFile, ")\n");      
+      //fprintf(dumpFile, ")\n");      
       break;
 
     case CONSTRUCTOR_NODE:
@@ -724,26 +727,33 @@ void ast_print(node * ast) {
       break;
 
     case ARGUMENTS_NODE:
-      //fprintf(dumpFile, "ARGUMENTS_NODE\n");
       ast_print(ast->arguments_expr.left);
+      if(ast->arguments_expr.left)
+        fprintf(dumpFile, ", ");
+   
       ast_print(ast->arguments_expr.right);
-      fprintf(dumpFile, ", ");
       
       break;
 
     case ARGUMENTS_OPT_NODE:
-      //fprintf(dumpFile, "ARGUMENTS_OPT_NODE\n");
+      //fprintf(dumpFile, "--ARGUMENTS_OPT_NODE--");
       fprintf(dumpFile, "(");
       ast_print(ast->arguments_opt_expr.argum);
+      //notFirstArg = false;
       fprintf(dumpFile, ")");
       fprintf(dumpFile, ")");
       break; 
 
     case STATEMENT_NODE:
       fprintf(dumpFile, "(STATEMENTS\n");
+      //if(ast->statement_expr.left == NULL)
+      //  printf("left null\n");
+      //if(ast->statement_expr.right == NULL)
+      //  printf("right null\n");
       ast_print(ast->statement_expr.left);
       ast_print(ast->statement_expr.right);
       fprintf(dumpFile, ")\n");
+      //printf("here.......\n");
       break;
 
     case ASSIGNMENT_NODE:
@@ -779,15 +789,15 @@ void ast_print(node * ast) {
         
     case FUNCTION_NODE:
       type = getType(ast->func_expr.func);
+      //fprintf(dumpFile, "FUNCTION_NODE\n");  
       fprintf(dumpFile, "(CALL %s ", type);
       ast_print(ast->func_expr.arguments);
       fprintf(dumpFile, "\n");
-      //fprintf(dumpFile, "<--FUNCTION_NODE\n");
       
       break;
     
     default: 
-      fprintf(dumpFile, "DEFAULT\n");
+      //fprintf(dumpFile, "DEFAULT\n");
       
       break;
   }

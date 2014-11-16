@@ -10,7 +10,7 @@
 
 	vec2 myVec = vec2(1.0,5.0);
 	ivec4 myIvec = ivec4(0,1,2,3);
-
+	/*
 	{
 		int c;
 		c = a;
@@ -24,4 +24,5 @@
 			e = a;
 		}
 	}
+	*/
 }
