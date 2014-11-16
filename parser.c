@@ -1636,7 +1636,7 @@ yyreduce:
 /* Line 1806 of yacc.c  */
 #line 170 "parser.y"
     { pushVar((yyvsp[(2) - (5)].as_str), (yyvsp[(1) - (5)].as_int), 0);
-        (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (5)].as_int), (yyvsp[(2) - (5)].as_str), (yyvsp[(4) - (5)].as_ast), -1, yyline);
+        (yyval.as_ast) = ast_allocate(DECLARATION_NODE, (yyvsp[(1) - (5)].as_int), (yyvsp[(2) - (5)].as_str), (yyvsp[(4) - (5)].as_ast), -2, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
     break;
 
