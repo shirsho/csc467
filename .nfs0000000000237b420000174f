@@ -14,7 +14,7 @@ int semantic_check(node *ast, int assign) {
 	symbol *s;
 	switch(ast->kind){
 		case SCOPE_NODE:
-			//printf("\nScope semantics\n");
+			printf("\nScope semantics\n");
 			if(ast->scope_expr.left != NULL)
 				semantic_check(ast->scope_expr.left, 0);
 			if(ast->scope_expr.right != NULL)
@@ -22,7 +22,7 @@ int semantic_check(node *ast, int assign) {
 			break;
 
 		case BINARY_EXPRESSION_NODE:
-			//printf("\nBinary semantics\n");
+			printf("\nBinary semantics\n");
       		expr_left = semantic_check(ast->binary_expr.left, 0);
       		expr_right = semantic_check(ast->binary_expr.right, 0);
       		op = ast->binary_expr.op;
@@ -244,7 +244,7 @@ int semantic_check(node *ast, int assign) {
       		break;
 
 	    case UNARY_EXPRESSION_NODE:
-	    	//printf("\nUnary semantics\n");
+	    	printf("\nUnary semantics\n");
 	      	expr_right = semantic_check(ast->unary_expr.right, 0);
 			type1 = get_Type(expr_right);
 

@@ -1,7 +1,10 @@
 {
-	vec4 v4 = vec4(1.0, 2.0, 3.0, 4.0);
-  	vec4 myVec4 = lit(v4);
-  	vec4 myNewVec4 = lit(v4) + myVec4;
+	
+	ivec4 myVec = ivec4(0,1,2,3);
+	int a = 1;
+	int b = 2;
+	int num = myVec[a+b];
+
 	/*
 	vec4 myNewVec4 = lit(v4) + myVec4;
 	vec4 myVec4 = lit(v4);
@@ -15,8 +18,11 @@
   	ivec4 myVec1 = ivec4(0,1,2,3);
   	ivec4 myVec2 = ivec4(0,1,2,3);
 	int f = 1 + dp3(myVec1, myVec2); 
+	vec4 myVec4 = lit(v4);
+  	vec4 myNewVec4 = lit(v4) + myVec4;
 	
-
+	vec4 v4 = vec4(1.0, 2.0, 3.0, 4.0);
+  	
 
 
 	// INDEX TODO
@@ -25,9 +31,7 @@
 
 
 
-	ivec4 myVec = ivec4(0,1,2,3);
-	int num = myVec[2];
-
+	
 
 
 	float num = 1.0 + myVec[1];

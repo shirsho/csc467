@@ -487,7 +487,13 @@ void ast_print(node * ast) {
 
     case VAR_NODE:
       // Got stuff TODO
-      fprintf(dumpFile, "%s ", ast->var_expr.id);
+      // Could be:
+        // ID 
+        // ID '[' INT_C ']'
+      if(ast->var_expr.arr == -1)
+        fprintf(dumpFile, "%s ", ast->var_expr.id);
+      else
+        fprintf(dumpFile, "(INDEX int %s %d", ast->var_expr.id, ast->var_expr.arr);
       //printf("<---VAR_NODE\t");
 
       break;
