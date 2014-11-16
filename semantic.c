@@ -1038,3 +1038,28 @@ symbol* find_Symbol(char *name){
 
       return s;
 }
+
+symbol* find_Symbol_External(char *name){
+      symbol *s;
+      int b;
+      int found = 0;
+      for(b = scope; b >= 0; b--){
+            for(s = a[b]->symtable; s != NULL; s = s->next){
+                  if (!strcmp(name, s->name)){
+                        found = 1;
+                        break;
+                  }
+            }
+            if(found == 1)
+                  break;
+      }
+      if(found == 0)
+            s = find_Sym(name);
+
+      if(s == NULL){
+            errorOccurred = 1;
+            return NULL;
+      }
+
+      return s;
+}
