@@ -1,8 +1,8 @@
 {
-	bool x = true;
-	bool y = false;
-	bool z = x && y;
-	bool b = !true && z;
+	int x = 10;
+	int y = 20;
+	bool b = (x >= y);
+
 	/*int y = 1 + 2 * 3 / 4;*/
 	
 

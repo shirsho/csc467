@@ -463,13 +463,13 @@ void ast_print(node * ast) {
         type = getType(unaryTypeVal);
         fprintf(dumpFile, "(UNARY %s - ", type);
         ast_print(ast->unary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->unary_expr.op == 33) // op is unary !
       {  
         fprintf(dumpFile, "(UNARY bool ! ");
         ast_print(ast->unary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       break;
     
@@ -493,7 +493,7 @@ void ast_print(node * ast) {
           fprintf(dumpFile, "(BINARY INVALID + ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
         
       }
       else if(ast->binary_expr.op == 45) // for -
@@ -510,7 +510,7 @@ void ast_print(node * ast) {
           fprintf(dumpFile, "(BINARY INVALID - ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == 42) // for *
       {  
@@ -526,7 +526,7 @@ void ast_print(node * ast) {
           fprintf(dumpFile, "(BINARY INVALID * ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == 47) // for /
       {  
@@ -542,7 +542,7 @@ void ast_print(node * ast) {
           fprintf(dumpFile, "(BINARY INVALID / ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == AND)
       {  
@@ -553,49 +553,105 @@ void ast_print(node * ast) {
         if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
         {
           type = getType(leftBinTypeVal);
-          fprintf(dumpFile, "(BINARY %s AND ", type);
+          if(strcmp(type, "bool") == 0)
+            fprintf(dumpFile, "(BINARY bool AND ");
+          else
+            fprintf(dumpFile, "(BINARY INVALID AND ");
         }
         else // type mismatch
           fprintf(dumpFile, "(BINARY INVALID AND ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
         
       }
       else if(ast->binary_expr.op == OR)
       {  
-        fprintf(dumpFile, "(BINARY <type> OR ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          if(strcmp(type, "bool") == 0)
+            fprintf(dumpFile, "(BINARY bool OR ");
+          else // type mismatch
+            fprintf(dumpFile, "(BINARY INVALID GEQ ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID OR ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == NEQ)
       {  
-        fprintf(dumpFile, "(BINARY <type> NEQ ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool NEQ ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID NEQ ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == EQ)
       {  
-        fprintf(dumpFile, "(BINARY <type> EQ ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool EQ ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID EQ ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == LEQ)   
       {  
-        fprintf(dumpFile, "(BINARY <type> LEQ ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool LEQ ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID LEQ ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       else if(ast->binary_expr.op == GEQ)
       {  
-        fprintf(dumpFile, "(BINARY <type> GEQ ");
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool GEQ ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID GEQ ");
         ast_print(ast->binary_expr.left);
         ast_print(ast->binary_expr.right);
-        fprintf(dumpFile, ")");
+        fprintf(dumpFile, ") ");
       }
       
 
