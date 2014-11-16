@@ -42,5 +42,7 @@ extern int scope;
 extern symbol *a[20];
 
 int semantic_check(node *ast, int assign);
+char* get_Type(int value);
+symbol* find_Symbol(char *name);
 
 #endif

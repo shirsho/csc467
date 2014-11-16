@@ -8,8 +8,6 @@
 	int c = 9;
 	int d = 2;
 	int x = a + b * c / d;
-
-
 	int x = a - b;
 	int y = a * b;
 	int z = a / b;
@@ -23,10 +21,8 @@
 	int c = a + b;
 	
 	float f = 1.0;
-
 	vec2 myVec = vec2(1.0,5.0);
 	ivec4 myIvec = ivec4(0,1,2,3);
-
 	{
 		int c;
 		c = a;

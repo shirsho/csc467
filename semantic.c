@@ -6,12 +6,10 @@ symbol *a[20];
 
 int semantic_check(node *ast, int assign) {
 	int expr_left;
-    int expr_right;
-    int expr_middle;
-    int op;
-    int b;
-    int found = 0;
-    char *type1;
+      int expr_right;
+      int expr_middle;
+      int op;
+      char *type1;
 	char *type2;
 	symbol *s;
 	switch(ast->kind){
@@ -28,83 +26,8 @@ int semantic_check(node *ast, int assign) {
       		expr_left = semantic_check(ast->binary_expr.left, 0);
       		expr_right = semantic_check(ast->binary_expr.right, 0);
       		op = ast->binary_expr.op;
-			switch(expr_left){
-				case INT:
-					type1 = (char *)"int";
-					break;
-				case FLOAT:
-					type1 = (char *)"float";
-					break;
-				case BOOL:
-					type1 = (char *)"bool";
-					break;
-				case IVEC2:
-					type1 = (char *)"ivec2";
-					break;
-				case IVEC3:
-					type1 = (char *)"ivec3";
-					break;
-				case IVEC4:
-					type1 = (char *)"ivec4";
-					break;
-				case VEC2:
-					type1 = (char *)"vec2";
-					break;
-				case VEC3:
-					type1 = (char *)"vec3";
-					break;
-				case VEC4:
-					type1 = (char *)"vec4";
-					break;
-				case BVEC2:
-					type1 = (char *)"bvec2";
-					break;
-				case BVEC3:
-					type1 = (char *)"bvec3";
-					break;
-				case BVEC4:
-					type1 = (char *)"bvec4";
-					break;
-			}
-
-			switch(expr_right){
-				case INT:
-					type2 = (char *)"int";
-					break;
-				case FLOAT:
-					type2 = (char *)"float";
-					break;
-				case BOOL:
-					type2 = (char *)"bool";
-					break;
-				case IVEC2:
-					type2 = (char *)"ivec2";
-					break;
-				case IVEC3:
-					type2 = (char *)"ivec3";
-					break;
-				case IVEC4:
-					type2 = (char *)"ivec4";
-					break;
-				case VEC2:
-					type2 = (char *)"vec2";
-					break;
-				case VEC3:
-					type2 = (char *)"vec3";
-					break;
-				case VEC4:
-					type2 = (char *)"vec4";
-					break;
-				case BVEC2:
-					type2 = (char *)"bvec2";
-					break;
-				case BVEC3:
-					type2 = (char *)"bvec3";
-					break;
-				case BVEC4:
-					type2 = (char *)"bvec4";
-					break;
-			}
+			type1 = get_Type(expr_left);
+                  type2 = get_Type(expr_right); 
 
       		switch(op){
       			case '+':	
@@ -323,44 +246,7 @@ int semantic_check(node *ast, int assign) {
 	    case UNARY_EXPRESSION_NODE:
 	    	printf("\nUnary semantics\n");
 	      	expr_right = semantic_check(ast->unary_expr.right, 0);
-			switch(expr_right){
-				case INT:
-					type1 = (char *)"int";
-					break;
-				case FLOAT:
-					type1 = (char *)"float";
-					break;
-				case BOOL:
-					type1 = (char *)"bool";
-					break;
-				case IVEC2:
-					type1 = (char *)"ivec2";
-					break;
-				case IVEC3:
-					type1 = (char *)"ivec3";
-					break;
-				case IVEC4:
-					type1 = (char *)"ivec4";
-					break;
-				case VEC2:
-					type1 = (char *)"vec2";
-					break;
-				case VEC3:
-					type1 = (char *)"vec3";
-					break;
-				case VEC4:
-					type1 = (char *)"vec4";
-					break;
-				case BVEC2:
-					type1 = (char *)"bvec2";
-					break;
-				case BVEC3:
-					type1 = (char *)"bvec3";
-					break;
-				case BVEC4:
-					type1 = (char *)"bvec4";
-					break;
-			}
+			type1 = get_Type(expr_right);
 
 			switch(ast->unary_expr.op){
 				case UMINUS:
@@ -416,162 +302,147 @@ int semantic_check(node *ast, int assign) {
 
 	    case VAR_NODE:
 	    	printf("\nVariable Semantics\n");
-    		for(b = scope; b >= 0; b--){
-	    		for(s = a[b]->symtable; s != NULL; s = s->next){
-    	    		if (!strcmp(ast->var_expr.id, s->name)){
-    	    			found = 1;
-    	       			printf("\nfound symbol %s\n", ast->var_expr.id);
-    	        		break;
-    	    		}
-    			}
-    			if(found == 1)
-    				break;
-    		}
-    		if(found == 0)
-    			s = find_Sym(ast->var_expr.id);
+    		
+            s = find_Symbol(ast->var_expr.id);
 
-    		found = 0;
+            if(s == NULL)
+                  break;
 
-	      	if(s == NULL){
-	      		fprintf(errorFile, "Unable to find variable %s\n", ast->var_expr.id);
-      			errorOccurred = 1;
-      			return 0;
-	      	}
+      	if(s->constant == 1 && assign == 1){
+      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
+			errorOccurred = 1;
+			return CONSTANT;
+      	}
 
-	      	if(s->constant == 1 && assign == 1){
-	      		fprintf(errorFile, "Invalid asignment to variable %s with constant value\n", ast->var_expr.id);
-      			errorOccurred = 1;
-      			return CONSTANT;
-	      	}
-	      	switch(s->type_int){
-				case 1:					
-					if(ast->var_expr.arr != -1){
-						fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-      					errorOccurred = 1;
-      					return 0;
-					}else{
-						return INT;
-					}
-					break;
-				case 3:
-					if(ast->var_expr.arr != -1){
-						fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-      					errorOccurred = 1;
-      					return 0;
-					}else{
-						return FLOAT;
-					}
-					break;
-				case 2:
-					if(ast->var_expr.arr != -1){
-						fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
-      					errorOccurred = 1;
-      					return 0;
-					}else{
-						return BOOL;
-					}
-					break;
-				case 11:
-					if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of ivec2 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return IVEC2;
-					}else{
-						return INT;
-					}
-					break;
-				case 12:
-					if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of ivec3 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return IVEC3;
-					}else{
-						return INT;
-					}
-					break;
-				case 13:
-					if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of ivec4 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return IVEC4;
-					}else{
-						return INT;
-					}
-					break;
-				case 31:
-					if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of vec2 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return VEC2;
-					}else{
-						return FLOAT;
-					}
-					break;
-				case 32:
-					if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of vec3 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return VEC3;
-					}else{
-						return FLOAT;
-					}
-					break;
-				case 33:
-					if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of vec4 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return VEC4;
-					}else{
-						return FLOAT;
-					}
-					break;
-				case 21:
-					if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of bvec2 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return BVEC2;
-					}else{
-						return BOOL;
-					}
-					break;
-				case 22:
-					if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of bvec3 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return BVEC3;
-					}else{
-						return BOOL;
-					}
-					break;
-				case 23:
-					if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
-						fprintf(errorFile, "Invalid syntax, %d is out of bvec4 array addressable range\n", ast->var_expr.arr);
-      					errorOccurred = 1;
-      					return 0;
-					}else if(ast->var_expr.arr == -1){
-						return BVEC4;
-					}else{
-						return BOOL;
-					}
-					break;
-			}
-	      	break;
+      	switch(s->type_int){
+			case 1:					
+				if(ast->var_expr.arr != -1){
+					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+					errorOccurred = 1;
+					return 0;
+				}else{
+					return INT;
+				}
+				break;
+			case 3:
+				if(ast->var_expr.arr != -1){
+					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+					errorOccurred = 1;
+					return 0;
+				}else{
+					return FLOAT;
+				}
+				break;
+			case 2:
+				if(ast->var_expr.arr != -1){
+					fprintf(errorFile, "Invalid syntax, int variable is not array addressable\n");
+					errorOccurred = 1;
+					return 0;
+				}else{
+					return BOOL;
+				}
+				break;
+			case 11:
+				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of ivec2 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return IVEC2;
+				}else{
+					return INT;
+				}
+				break;
+			case 12:
+				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of ivec3 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return IVEC3;
+				}else{
+					return INT;
+				}
+				break;
+			case 13:
+				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of ivec4 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return IVEC4;
+				}else{
+					return INT;
+				}
+				break;
+			case 31:
+				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of vec2 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return VEC2;
+				}else{
+					return FLOAT;
+				}
+				break;
+			case 32:
+				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of vec3 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return VEC3;
+				}else{
+					return FLOAT;
+				}
+				break;
+			case 33:
+				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of vec4 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return VEC4;
+				}else{
+					return FLOAT;
+				}
+				break;
+			case 21:
+				if(ast->var_expr.arr >= 2 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of bvec2 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return BVEC2;
+				}else{
+					return BOOL;
+				}
+				break;
+			case 22:
+				if(ast->var_expr.arr >= 3 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of bvec3 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return BVEC3;
+				}else{
+					return BOOL;
+				}
+				break;
+			case 23:
+				if(ast->var_expr.arr >= 4 || ast->var_expr.arr < -1){
+					fprintf(errorFile, "Invalid syntax, %d is out of bvec4 array addressable range\n", ast->var_expr.arr);
+					errorOccurred = 1;
+					return 0;
+				}else if(ast->var_expr.arr == -1){
+					return BVEC4;
+				}else{
+					return BOOL;
+				}
+				break;
+		}
+      	break;
 
 	    case DECLARATION_NODE:
 	    	printf("\nDeclaration semantics\n");
@@ -713,89 +584,8 @@ int semantic_check(node *ast, int assign) {
 	      	if(ast->assign_expr.right != NULL)
 	      		expr_right = semantic_check(ast->assign_expr.right, 0);
 			
-			switch(expr_left){
-				case INT:
-					type1 = (char *)"int";
-					break;
-				case FLOAT:
-					type1 = (char *)"float";
-					break;
-				case BOOL:
-					type1 = (char *)"bool";
-					break;
-				case IVEC2:
-					type1 = (char *)"ivec2";
-					break;
-				case IVEC3:
-					type1 = (char *)"ivec3";
-					break;
-				case IVEC4:
-					type1 = (char *)"ivec4";
-					break;
-				case VEC2:
-					type1 = (char *)"vec2";
-					break;
-				case VEC3:
-					type1 = (char *)"vec3";
-					break;
-				case VEC4:
-					type1 = (char *)"vec4";
-					break;
-				case BVEC2:
-					type1 = (char *)"bvec2";
-					break;
-				case BVEC3:
-					type1 = (char *)"bvec3";
-					break;
-				case BVEC4:
-					type1 = (char *)"bvec4";
-					break;
-				default:
-					type1 = (char *)"unknown";
-					break;
-			}
-
-			switch(expr_right){
-				case INT:
-					type2 = (char *)"int";
-					break;
-				case FLOAT:
-					type2 = (char *)"float";
-					break;
-				case BOOL:
-					type2 = (char *)"bool";
-					break;
-				case IVEC2:
-					type2 = (char *)"ivec2";
-					break;
-				case IVEC3:
-					type2 = (char *)"ivec3";
-					break;
-				case IVEC4:
-					type2 = (char *)"ivec4";
-					break;
-				case VEC2:
-					type2 = (char *)"vec2";
-					break;
-				case VEC3:
-					type2 = (char *)"vec3";
-					break;
-				case VEC4:
-					type2 = (char *)"vec4";
-					break;
-				case BVEC2:
-					type2 = (char *)"bvec2";
-					break;
-				case BVEC3:
-					type2 = (char *)"bvec3";
-					break;
-				case BVEC4:
-					type2 = (char *)"bvec4";
-					break;
-				default:
-					type2 = (char *)"unknown";
-					break;
-			}
+                  type1 = get_Type(expr_left);
+                  type2 = get_Type(expr_right);
 
 			if(expr_left == INT && expr_right == INT){
 				return VALID;
@@ -1175,4 +965,76 @@ int semantic_check(node *ast, int assign) {
 	    default: break;
 	}
   return 0; // failed checks
+}
+
+char* get_Type(int value){
+      switch(value){
+            case INT:
+                  return (char *)"int";
+                  break;
+            case FLOAT:
+                  return (char *)"float";
+                  break;
+            case BOOL:
+                  return (char *)"bool";
+                  break;
+            case IVEC2:
+                  return (char *)"ivec2";
+                  break;
+            case IVEC3:
+                  return (char *)"ivec3";
+                  break;
+            case IVEC4:
+                  return (char *)"ivec4";
+                  break;
+            case VEC2:
+                  return (char *)"vec2";
+                  break;
+            case VEC3:
+                  return (char *)"vec3";
+                  break;
+            case VEC4:
+                  return (char *)"vec4";
+                  break;
+            case BVEC2:
+                  return (char *)"bvec2";
+                  break;
+            case BVEC3:
+                  return (char *)"bvec3";
+                  break;
+            case BVEC4:
+                  return (char *)"bvec4";
+                  break;
+            default:
+                  return (char *)"unknown";
+                  break;
+      }
+
+}
+
+symbol* find_Symbol(char *name){
+      symbol *s;
+      int b;
+      int found = 0;
+      for(b = scope; b >= 0; b--){
+            for(s = a[b]->symtable; s != NULL; s = s->next){
+                  if (!strcmp(name, s->name)){
+                        found = 1;
+                              printf("\nfound symbol %s\n", name);
+                        break;
+                  }
+            }
+            if(found == 1)
+                  break;
+      }
+      if(found == 0)
+            s = find_Sym(name);
+
+      if(s == NULL){
+            fprintf(errorFile, "Unable to find variable %s\n", name);
+            errorOccurred = 1;
+            return NULL;
+      }
+
+      return s;
 }
