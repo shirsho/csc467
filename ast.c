@@ -351,17 +351,79 @@ void ast_print(node * ast) {
       fprintf(dumpFile, "%f ", ast->float_expr.val);
       break;
 
-    /*  
     case VAR_NODE:
-      //printf("VAR_NODE\n");
       fprintf(dumpFile, "%s ", ast->var_expr.id);
       break;
     
-
     case EXPRESSION_NODE:
       ast_print(ast->expression_expr.expr);
-      fprintf(dumpFile, "EXPRESSION_NODE\n");
+      //fprintf(dumpFile, "EXPRESSION_NODE\n");
       break;
+    
+    case UNARY_EXPRESSION_NODE:
+      // TODO This makes no sense
+      //fprintf(dumpFile, "op: %d\n", ast->unary_expr.op);
+      if(ast->unary_expr.op == 281) // op is unary minus
+      {
+        fprintf(dumpFile, "(UNARY <type> - ");
+        ast_print(ast->unary_expr.right);
+      }
+      else if(ast->unary_expr.op == 33) // op is unary !
+      {  
+        fprintf(dumpFile, "(UNARY bool ! ");
+        ast_print(ast->unary_expr.right);
+      }
+      break;
+    
+    case BINARY_EXPRESSION_NODE:
+      //ast_print(ast->binary_expr.left);
+      //printf("binary op:%d\n", ast->binary_expr.op);
+      if(ast->binary_expr.op == 43) // for +
+      {
+        fprintf(dumpFile, "(BINARY <type> + ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == 45) // for -
+      {  
+        fprintf(dumpFile, "(BINARY <type> - ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == 42) // for *
+      {  
+        fprintf(dumpFile, "(BINARY <type> * ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == 47) // for /
+      {  
+        fprintf(dumpFile, "(BINARY <type> / ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ")");
+      }
+      else if(ast->binary_expr.op == AND);
+      else if(ast->binary_expr.op == OR);
+      else if(ast->binary_expr.op == NEQ); 
+      else if(ast->binary_expr.op == EQ);
+      else if(ast->binary_expr.op == LEQ);       
+      else if(ast->binary_expr.op == GEQ);
+      
+
+
+      //fprintf(dumpFile, "(BINARY <type>");
+      //fprintf(dumpFile, "op: %d\n", ast->binary_expr.op);
+
+      //ast_print(ast->binary_expr.right);
+      break;
+ 
+
+    /*  
+    
     case STATEMENT_NODE:
       fprintf(dumpFile, "STATEMENTS\t(STATEMENTS...)\n");
       ast_print(ast->statement_expr.left);
@@ -370,32 +432,8 @@ void ast_print(node * ast) {
     
     */
     /*
-    case BINARY_EXPRESSION_NODE:
-      //ast_print(ast->binary_expr.left);
-      int op = ast->binary_expr.op;
-      if(op == '-')
-      fprintf(dumpFile, "BINARY\t(BINARY <type> \n");
-      fprintf(dumpFile, "op: %d\n", ast->binary_expr.op);
-
-      //ast_print(ast->binary_expr.right);
-      break;
-
-    case DECLARATIONS_NODE:
-      ast_print(ast->declarations_expr.left);
-      fprintf(dumpFile, "DECLARATIONS\t(DECLARATIONS...)\n");
-      ast_print(ast->declarations_expr.right);
-      break;
-
-    case UNARY_EXPRESSION_NODE:
-      // TODO This makes no sense
-      int op = ast->unary_expr.op;
-      if(op == '-')
-        fprintf(dumpFile, "UNARY:\t(<type> - %s)\n", ast->unary_expr.right);
-      else if(op == '!')
-        fprintf(dumpFile, "UNARY:\t(<type> ! %s)\n", ast->unary_expr.right);
-      //fprintf(dumpFile, "op: %d\n", ast->unary_expr.op);
-      //ast_print(ast->unary_expr.right);
-      break;
+    
+    
 
     
 
