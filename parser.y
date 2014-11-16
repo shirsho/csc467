@@ -168,7 +168,7 @@ declaration
         yTRACE("declaration -> type ID ;\n") }
   | type ID '=' expression ';'
       { pushVar($2, $1, 0);
-        $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -1, yyline);
+        $$ = ast_allocate(DECLARATION_NODE, $1, $2, $4, -2, yyline);
         yTRACE("declaration -> type ID = expression ;\n") }
   | CONST type ID '=' expression ';'
       { pushVar($3, $2, 1);
