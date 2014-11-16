@@ -1,13 +1,16 @@
 {
-	int a = 10;
-	int y = 100;
-	int bla = 23;
-	int x = -(a + y + 1000 * bla);
-	/*int x; int y = 6;*/	
+	bool x = true;
+	bool y = false;
+	bool z = x && y;
+	bool b = !true && z;
 	/*int y = 1 + 2 * 3 / 4;*/
 	
 
 	/*
+	int x = -(a + y + 1000 * bla);
+	
+
+	int z = a + y + 23 - 3 / 4 * bla;
 	int x = 2 + 2 * 2;
 
 	int a = -1;
@@ -34,8 +37,7 @@
 	const int a = 1;
 	int b = 2 + 2;
 	
-	bool x = true;
-	bool y = false;
+	
 	
 	int c = a + b;
 	
