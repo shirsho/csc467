@@ -1,6 +1,8 @@
 {
-	
-	int x = - (5 + 1 / 2 - 3 * 4);
+	int a = 10;
+	int y = 100;
+	int bla = 23;
+	int x = -(a + y + 1000 * bla);
 	/*int x; int y = 6;*/	
 	/*int y = 1 + 2 * 3 / 4;*/
 	

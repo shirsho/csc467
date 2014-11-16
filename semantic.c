@@ -1054,7 +1054,7 @@ symbol* find_Symbol_External(char *name){
                   break;
       }
       if(found == 0)
-            s = find_Sym(name);
+            s = find_Sym_External(name);
 
       if(s == NULL){
             errorOccurred = 1;

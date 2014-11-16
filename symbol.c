@@ -163,6 +163,16 @@ struct symbol* find_Sym(char const *name){
     return NULL;
 }
 
+struct symbol* find_Sym_External(char const *name){
+    symbol *s = NULL;
+    for(s = currentScope->symtable; s != NULL; s = s->next){ 
+        if (!strcmp(name, s->name)){
+            return s;
+        }
+    }
+    return NULL;
+}
+
 void debug_printSymbolTable(){
     symbol *s = NULL;
     symbol *t = NULL;

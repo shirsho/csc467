@@ -330,23 +330,25 @@ int burrow(node * ast)
     case INT_NODE:
       //printf("INT_NODE in burrow\n");
       //printf("typeval int ---->%d\n", INT_NODE);
-      typeVal = INT_NODE;
+      typeVal = 1; // to match with getType()
+      //printf("INT_NODE typeVal ----->%d\n", typeVal);
+      
       break;
     case FLOAT_NODE:
       //printf("FLOAT_NODE in burrow\n");
-      typeVal = FLOAT_NODE;
+      typeVal = 3; // to match with getType()
       break;
     case VAR_NODE:
       //printf("VAR_NODE in burrow: %s \n", ast->var_expr.id);
-      typeVal = VAR_NODE;
-      //printf("\ntypeVal ----->%d \n", typeVal);
       
       // find the type associated with this variable from symbol table
       sym = find_Symbol_External(ast->var_expr.id);
       if(sym)
-        return sym->type_int;
+        typeVal = sym->type_int;
       else
-        return -1;
+        typeVal = -1;
+      //printf("\nVAR_NODE typeVal ----->%d \n", typeVal);
+      
       break;
     case EXPRESSION_NODE:
       //printf("EXPRESSION_NODE in burrow.....\n");
@@ -466,7 +468,7 @@ void ast_print(node * ast) {
       //printf("binary op:%d\n", ast->binary_expr.op);
       if(ast->binary_expr.op == 43) // for +
       {
-        //leftBinTypeVal = burrow(ast->binary_expr.left);
+        leftBinTypeVal = burrow(ast->binary_expr.left);
         rightBinTypeVal = burrow(ast->binary_expr.right);
         //printf("rightBinTypeVal:%d\n", rightBinTypeVal);
         

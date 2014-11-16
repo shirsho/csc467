@@ -26,6 +26,8 @@ void pushFunc(int type, char const *name);
 
 struct symbol* find_Sym(char const *name);
 
+struct symbol* find_Sym_External(char const *name);
+
 int exists_Sym_glob(char const *name);
 
 int exists_Sym_loc(char const *name);
