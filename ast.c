@@ -402,23 +402,23 @@ void ast_print(node * ast) {
       fprintf(dumpFile, "(DECLARATIONS\n");
       ast_print(ast->declarations_expr.left); // come back to declarations
       ast_print(ast->declarations_expr.right); // go to declaration
-      fprintf(dumpFile, ")\n");
+      fprintf(dumpFile, "\n)\n");
       break;
     
     case DECLARATION_NODE:
       type = getType(ast->declaration_expr.type);
       //fprintf(dumpFile, "id: %s\n", ast->declaration_expr.id);
       if(ast->declaration_expr.constant == -1) // right hand side is a literal
-        fprintf(dumpFile, "(DECLARATION %s %s)\n", type, ast->declaration_expr.id);
+        fprintf(dumpFile, "(DECLARATION %s %s)\n", ast->declaration_expr.id, type);
       else if(ast->declaration_expr.constant == -2) // right hand side is an expression form
       {
-        fprintf(dumpFile, "(DECLARATION %s %s ", type, ast->declaration_expr.id);
+        fprintf(dumpFile, "(DECLARATION %s %s ", ast->declaration_expr.id, type);
         // the right hand side expression will be printed in the next recursive call
         ast_print(ast->declaration_expr.right);
       }
       else if(ast->declaration_expr.constant == CONST)
       {
-        fprintf(dumpFile, "(DECLARATION const %s %s ", type, ast->declaration_expr.id);
+        fprintf(dumpFile, "(DECLARATION const %s %s ", ast->declaration_expr.id, type);
         // the right hand side expression will be printed in the next recursive call
         ast_print(ast->declaration_expr.right);
       }
@@ -426,7 +426,7 @@ void ast_print(node * ast) {
     
     case INT_NODE:
       //printf("INT_NODE --->\n");
-      fprintf(dumpFile, "%d ", ast->int_expr.val);
+      fprintf(dumpFile, "%d", ast->int_expr.val);
       break;
 
     case BOOL_NODE:
@@ -441,6 +441,7 @@ void ast_print(node * ast) {
       break;
 
     case VAR_NODE:
+      // Got stuff TODO
       fprintf(dumpFile, "%s ", ast->var_expr.id);
       //printf("<---VAR_NODE\t");
 
@@ -653,21 +654,38 @@ void ast_print(node * ast) {
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ") ");
       }
-      
-
-
-      //fprintf(dumpFile, "(BINARY <type>");
-      //fprintf(dumpFile, "op: %d\n", ast->binary_expr.op);
-
-      //ast_print(ast->binary_expr.right);
       break;
     
     case NESTED_SCOPE_NODE:
       fprintf(dumpFile, "(NESTED SCOPE\n");
       ast_print(ast->nest_scope_expr.scope);
-      fprintf(dumpFile, ") <--NESTED SCOPE END\n");      
+      fprintf(dumpFile, ")\n");      
       break;
 
+    case CONSTRUCTOR_NODE:
+      //ast_print(ast->construt_expr.left);
+      type = getType(ast->construt_expr.type);
+      //fprintf(dumpFile, "type: %d\n", ast->construt_expr.type);
+      // dont need to print this
+      //fprintf(dumpFile, "CONSTRUCTOR_NODE\n");
+      ast_print(ast->construt_expr.right); // get the arguments
+      break;
+
+    case ARGUMENTS_NODE:
+      //fprintf(dumpFile, "ARGUMENTS_NODE\n");
+      ast_print(ast->arguments_expr.left);
+      ast_print(ast->arguments_expr.right);
+      fprintf(dumpFile, ", ");
+      
+      break;
+
+    case ARGUMENTS_OPT_NODE:
+      //fprintf(dumpFile, "ARGUMENTS_OPT_NODE\n");
+      fprintf(dumpFile, "(");
+      ast_print(ast->arguments_opt_expr.argum);
+      fprintf(dumpFile, ")");
+      fprintf(dumpFile, ")");
+      break;  
     /*  
     
     case STATEMENT_NODE:
@@ -677,14 +695,7 @@ void ast_print(node * ast) {
       break;
     
     */
-    /*
-    
-    
-
-    
-
-    
-
+    /*    
     case IF_STATEMENT_NODE:
       //ast_print(ast->if_expr.if_comparison);
       //fprintf(dumpFile, "IF_STATEMENT_NODE: if_comparison\n");
@@ -715,25 +726,11 @@ void ast_print(node * ast) {
       fprintf(dumpFile, "func: %d\n", ast->func_expr.func);
       break;
 
-    case CONSTRUCTOR_NODE:
-      //ast_print(ast->construt_expr.left);
-      fprintf(dumpFile, "type: %d\n", ast->construt_expr.type);
-      fprintf(dumpFile, "CONSTRUCTOR_NODE\n");
-      ast_print(ast->construt_expr.right);
-      break;
+    
 
     
 
-    case ARGUMENTS_NODE:
-      ast_print(ast->arguments_expr.left);
-      fprintf(dumpFile, "ARGUMENTS_NODE\n");
-      ast_print(ast->arguments_expr.right);
-      break;
-
-    case ARGUMENTS_OPT_NODE:
-      ast_print(ast->arguments_opt_expr.argum);
-      fprintf(dumpFile, "ARGUMENTS_OPT_NODE\n");
-      break;
+   
     */
    
     default: break;

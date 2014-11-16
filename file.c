@@ -1,7 +1,7 @@
 {
-	int x = 10;
-	int y = 20;
-	bool b = (x >= y);
+	ivec4 myVec = ivec4(0,1,2,3);
+	
+
 
 	/*int y = 1 + 2 * 3 / 4;*/
 	
@@ -9,6 +9,7 @@
 	/*
 	int x = -(a + y + 1000 * bla);
 	
+	int num = myVec[2];
 
 	int z = a + y + 23 - 3 / 4 * bla;
 	int x = 2 + 2 * 2;
