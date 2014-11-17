@@ -1,4 +1,7 @@
+.scanner.l.swo
 *.o
 .gitignore~
+.gitignore.swp
+semantic.h~
 file.c~
 compiler467
