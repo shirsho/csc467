@@ -128,8 +128,8 @@ int exists_Sym_glob(char const *name){
     symbol *s = NULL;
     //printf("searching for symbol \"%s\" in global table\n",name);
     if(currentScope->symtable == NULL){
-        fprintf(errorFile, "ERROR   --      global symboltable is empty \n");
-        errorOccurred = 1;
+        //fprintf(errorFile, "ERROR   --      global symboltable is empty \n");
+        //errorOccurred = 1;
         return 0;
     }
 
