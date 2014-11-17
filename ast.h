@@ -18,6 +18,8 @@
 struct node_;
 typedef struct node_ node;
 extern node *ast;
+extern int scope_ast;
+extern symbol *b[20];
 
 typedef enum {
   UNKNOWN               = 0,
@@ -151,4 +153,5 @@ node *ast_allocate(node_kind type, ...);
 void ast_free(node *ast);
 void ast_print(node * ast);
 char* getType(int type);
+symbol* find_Symbol_External(char *name);
 #endif /* AST_H_ */

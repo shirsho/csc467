@@ -4,6 +4,7 @@
 int scope = -1;
 symbol *a[20];
 
+/*Semantic check each of the different semantic cases possible*/
 int semantic_check(node *ast, int assign) {
 	int expr_left;
       int expr_right;
@@ -300,9 +301,9 @@ int semantic_check(node *ast, int assign) {
 	     	     break;
 
 	      case VAR_NODE:
-      	    	printf("\nVariable Semantics\n");
+      	    	//printf("\nVariable Semantics\n");
           		
-                  s = find_Symbol_External(ast->var_expr.id);
+                  s = find_Symbol(ast->var_expr.id);
 
                   if(s == NULL)
                         break;
@@ -558,7 +559,7 @@ int semantic_check(node *ast, int assign) {
 	      	if(ast->if_expr.if_statement != NULL)
 	      		semantic_check(ast->if_expr.if_statement, 0);
 	      	if(ast->if_expr.else_statement != NULL)
-	      		expr_right = semantic_check(ast->if_expr.else_statement, 0);
+	      		semantic_check(ast->if_expr.else_statement, 0);
 	      	if(expr_left != BOOL){
 	      		fprintf(errorFile, "Invalid expression in if statement on line %d\n", ast->if_expr.line);
       			errorOccurred = 1;
@@ -761,7 +762,7 @@ int semantic_check(node *ast, int assign) {
 
 
 	      case NESTED_SCOPE_NODE:
-      	    	printf("\nNested Scope semantics\n");
+      	    	//printf("\nNested Scope semantics\n");
             	scope = scope + 1;
             	a[scope] = ast->nest_scope_expr.variables;
             	if(ast->nest_scope_expr.scope != NULL)
@@ -967,6 +968,7 @@ int semantic_check(node *ast, int assign) {
   return 0; // failed checks
 }
 
+/*Return the type in string format*/
 char* get_Type(int value){
       switch(value){
             case INT:
@@ -1012,19 +1014,16 @@ char* get_Type(int value){
 
 }
 
-symbol* find_Symbol_External(char *name){
+/*Find the variable from the symbol table*/
+symbol* find_Symbol(char *name){
       symbol *s;
       int b;
       int found = 0;
-      printf("In findsymbol external\n");
-      printf("scope: %d\n", scope);
       for(b = scope; b >= 0; b--){
-            printf("b: %d\n", b);
             for(s = a[b]->symtable; s != NULL; s = s->next){
-                  printf("Name: %s\n", s->name);
                   if (!strcmp(name, s->name)){
                         found = 1;
-                        printf("\nfound symbol %s\n", name);
+                        //printf("\nfound symbol %s\n", name);
                         break;
                   }
             }

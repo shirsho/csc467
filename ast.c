@@ -11,7 +11,10 @@
 #define DEBUG_PRINT_TREE 0
 
 node *ast = NULL;
+int scope_ast = -1;
+symbol *b[20];
 
+/*Builds the tree*/
 node *ast_allocate(node_kind kind, ...) {
   va_list args;
 
@@ -25,95 +28,95 @@ node *ast_allocate(node_kind kind, ...) {
   switch(kind) {
   
     case SCOPE_NODE:
-      ast->scope_expr.left = va_arg(args, node *);
-      ast->scope_expr.right = va_arg(args, node *);
+      ast->scope_expr.left = va_arg(args, node *);  //Declarations
+      ast->scope_expr.right = va_arg(args, node *);   //Statements
       break;
 
     case BINARY_EXPRESSION_NODE:
-      ast->binary_expr.op = va_arg(args, int);
-      ast->binary_expr.left = va_arg(args, node *);
-      ast->binary_expr.right = va_arg(args, node *);
+      ast->binary_expr.op = va_arg(args, int);    //Operation
+      ast->binary_expr.left = va_arg(args, node *);   //Left side of binary op
+      ast->binary_expr.right = va_arg(args, node *);    //Right side of binary op
       break;
 
     case UNARY_EXPRESSION_NODE:
-      ast->unary_expr.op = va_arg(args, int);
-      ast->unary_expr.right = va_arg(args, node *);
+      ast->unary_expr.op = va_arg(args, int);   //Operation
+      ast->unary_expr.right = va_arg(args, node *);   ///Right side of unary op
       break;
 
     case INT_NODE:
-      ast->int_expr.val = va_arg(args, int);
+      ast->int_expr.val = va_arg(args, int);    //An int literal
       break;
 
     case FLOAT_NODE:
-      ast->float_expr.val = va_arg(args, double);
+      ast->float_expr.val = va_arg(args, double);   //A float literal
       break;
 
     case BOOL_NODE:
-      ast->bool_expr.val = va_arg(args, int);
+      ast->bool_expr.val = va_arg(args, int);   //A bool literal
       break;
 
     case VAR_NODE:
-      ast->var_expr.id = va_arg(args, char*);
-      ast->var_expr.arr = va_arg(args, int);
+      ast->var_expr.id = va_arg(args, char*);   //The variable id
+      ast->var_expr.arr = va_arg(args, int);    //The array accessing of the variable
       break;
 
     case DECLARATION_NODE:
-      ast->declaration_expr.type = va_arg(args, int);
-      ast->declaration_expr.id = va_arg(args, char*);
-      ast->declaration_expr.right = va_arg(args, node *);
-      ast->declaration_expr.constant = va_arg(args, int);
-      ast->declaration_expr.line = va_arg(args, int);
+      ast->declaration_expr.type = va_arg(args, int);   //Type of variable
+      ast->declaration_expr.id = va_arg(args, char*);   //ID of variable
+      ast->declaration_expr.right = va_arg(args, node *);   //What the variable is equal to
+      ast->declaration_expr.constant = va_arg(args, int);   //If it is constant
+      ast->declaration_expr.line = va_arg(args, int);   //The line it occurs on
       break;
 
     case IF_STATEMENT_NODE:
-      ast->if_expr.if_comparison = va_arg(args, node *);
-      ast->if_expr.if_statement = va_arg(args, node *);
-      ast->if_expr.else_statement = va_arg(args, node *);
-      ast->if_expr.line = va_arg(args, int);
+      ast->if_expr.if_comparison = va_arg(args, node *);    //The comparison
+      ast->if_expr.if_statement = va_arg(args, node *);   //The statement
+      ast->if_expr.else_statement = va_arg(args, node *);   //The else statement
+      ast->if_expr.line = va_arg(args, int);      //The line it occurs on
       break;
 
     case STATEMENT_NODE:
-      ast->statement_expr.left = va_arg(args, node *);
-      ast->statement_expr.right = va_arg(args, node *);
+      ast->statement_expr.left = va_arg(args, node *);    //Statements
+      ast->statement_expr.right = va_arg(args, node *);   //Statement
       break;
 
     case ASSIGNMENT_NODE:
-      ast->assign_expr.left = va_arg(args, node *);
-      ast->assign_expr.right = va_arg(args, node *);
-      ast->assign_expr.line = va_arg(args, int);
+      ast->assign_expr.left = va_arg(args, node *);   //The variable assigned to
+      ast->assign_expr.right = va_arg(args, node *);    //The variable or value assigning
+      ast->assign_expr.line = va_arg(args, int);    //The line it occurs on
       break;
 
     case FUNCTION_NODE:
-      ast->func_expr.func = va_arg(args, int);
-      ast->func_expr.arguments = va_arg(args, node *);
+      ast->func_expr.func = va_arg(args, int);    //Function
+      ast->func_expr.arguments = va_arg(args, node *);    //Arguments
       break;
 
     case CONSTRUCTOR_NODE:
-      ast->construt_expr.type = va_arg(args, int);
-      ast->construt_expr.right = va_arg(args, node *);
+      ast->construt_expr.type = va_arg(args, int);     //Type of constructor
+      ast->construt_expr.right = va_arg(args, node *);    //Arguments
       break;
 
     case NESTED_SCOPE_NODE:
-      ast->nest_scope_expr.scope = va_arg(args, node *);
-      ast->nest_scope_expr.variables = va_arg(args, symbol *);
-      break;
+      ast->nest_scope_expr.scope = va_arg(args, node *);    //The scope
+      ast->nest_scope_expr.variables = va_arg(args, symbol *);    //The symbol table
+      break; 
 
     case DECLARATIONS_NODE:
-      ast->declarations_expr.left = va_arg(args, node *);
-      ast->declarations_expr.right = va_arg(args, node *);
+      ast->declarations_expr.left = va_arg(args, node *);   //Declarations
+      ast->declarations_expr.right = va_arg(args, node *);  //Declaration
       break;
 
     case ARGUMENTS_NODE:
-      ast->arguments_expr.left = va_arg(args, node *);
-      ast->arguments_expr.right = va_arg(args, node *);
+      ast->arguments_expr.left = va_arg(args, node *);    //Arguments
+      ast->arguments_expr.right = va_arg(args, node *);   //Expression
       break;
 
     case ARGUMENTS_OPT_NODE:
-      ast->arguments_opt_expr.argum = va_arg(args, node *);
+      ast->arguments_opt_expr.argum = va_arg(args, node *);   //Arguments
       break;
 
     case EXPRESSION_NODE:
-      ast->expression_expr.expr = va_arg(args, node *);
+      ast->expression_expr.expr = va_arg(args, node *);   //For either brackets or accessing a variable
       break;
 
     default: break;
@@ -124,6 +127,7 @@ node *ast_allocate(node_kind kind, ...) {
   return ast;
 }
 
+/*Frees all the nodes in the ast tree*/
 void ast_free(node *ast) {
 
   switch(ast->kind) {
@@ -214,6 +218,8 @@ void ast_free(node *ast) {
     case NESTED_SCOPE_NODE:
       if(ast->nest_scope_expr.scope != NULL)
         ast_free(ast->nest_scope_expr.scope);
+      if(ast->nest_scope_expr.variables != NULL)
+        free(ast->nest_scope_expr.variables);
       free(ast);
       break;
 
@@ -249,65 +255,66 @@ void ast_free(node *ast) {
   }
 }
 
+/*Returns the type of the variable in string format*/
 char* getType(int type)
 {
   char * typeString = NULL;
   switch(type){
         case -1:
-          typeString = (char*)"invalid";
+          typeString = (char *)"invalid";
         case INT_NODE:
-          typeString = (char*)"int";
+          typeString = (char *)"int";
           break;
         case FLOAT_NODE:
-          typeString = (char*)"float";
+          typeString = (char *)"float";
           break;       
         case 1: 
-          typeString = (char*)"int";
+          typeString = (char *)"int";
           break;
         case 2: 
-          typeString = (char*)"bool";
+          typeString = (char *)"bool";
           break;
         case 3: 
-          typeString = (char*)"float";
+          typeString = (char *)"float";
           break;
         case 11: 
-          typeString = (char*)"ivec2";
+          typeString = (char *)"ivec2";
           break;
         case 12: 
-          typeString = (char*)"ivec3";
+          typeString = (char *)"ivec3";
           break;
         case 13: 
-          typeString = (char*)"ivec4";
+          typeString = (char *)"ivec4";
           break;
         case 21: 
-          typeString = (char*)"bvec2";
+          typeString = (char *)"bvec2";
           break;
         case 22: 
-          typeString = (char*)"bvec3";
+          typeString = (char *)"bvec3";
           break;
         case 23: 
-          typeString = (char*)"bvec4";
+          typeString = (char *)"bvec4";
           break;
         case 31: 
-          typeString = (char*)"vec2";
+          typeString = (char *)"vec2";
           break;
         case 32: 
-          typeString = (char*)"vec3";
+          typeString = (char *)"vec3";
           break;    
         case 33: 
-          typeString = (char*)"vec4";
+          typeString = (char *)"vec4";
           break;
         case 261:
-          typeString = (char*)"const";
+          typeString = (char *)"const";
           break;
         case 264:
-          typeString = (char*)"dp3";
+          typeString = (char *)"dp3";
           break;
         case 266:
-          typeString = (char*)"rsq";
+          typeString = (char *)"rsq";
           break;
         case 265:
-          typeString = (char*)"lit";
+          typeString = (char *)"lit";
           break;
   }
   return typeString;
@@ -430,15 +437,12 @@ void ast_print(node * ast) {
   int unaryTypeVal;
   int leftBinTypeVal;
   int rightBinTypeVal;
-  if(ast == NULL){
-    //printf("AST NODE IS NULL\n");
-    return;
-  } 
-    
+  
+  if(ast == NULL) return;
   switch(ast->kind) {
     // Working
     case SCOPE_NODE:
-      fprintf(dumpFile, "\n(SCOPE \n");
+      fprintf(dumpFile, "(SCOPE \n");
       // call to get (DECLARATIONS...)  (STATEMENTS...));
       ast_print(ast->scope_expr.left);  // go to declarations
       ast_print(ast->scope_expr.right); // go to statements
@@ -711,9 +715,11 @@ void ast_print(node * ast) {
       break;
     
     case NESTED_SCOPE_NODE:
-      //fprintf(dumpFile, "(NESTED SCOPE\n");
+      scope_ast = scope_ast + 1;
+      b[scope_ast] = ast->nest_scope_expr.variables;
+      fprintf(dumpFile, "(NESTED SCOPE\n");
       ast_print(ast->nest_scope_expr.scope);
-      //fprintf(dumpFile, ")\n");      
+      fprintf(dumpFile, ")\n");      
       break;
 
     case CONSTRUCTOR_NODE:
@@ -727,33 +733,26 @@ void ast_print(node * ast) {
       break;
 
     case ARGUMENTS_NODE:
+      //fprintf(dumpFile, "ARGUMENTS_NODE\n");
       ast_print(ast->arguments_expr.left);
-      if(ast->arguments_expr.left)
-        fprintf(dumpFile, ", ");
-   
       ast_print(ast->arguments_expr.right);
+      fprintf(dumpFile, ", ");
       
       break;
 
     case ARGUMENTS_OPT_NODE:
-      //fprintf(dumpFile, "--ARGUMENTS_OPT_NODE--");
+      //fprintf(dumpFile, "ARGUMENTS_OPT_NODE\n");
       fprintf(dumpFile, "(");
       ast_print(ast->arguments_opt_expr.argum);
-      //notFirstArg = false;
       fprintf(dumpFile, ")");
       fprintf(dumpFile, ")");
       break; 
 
     case STATEMENT_NODE:
       fprintf(dumpFile, "(STATEMENTS\n");
-      //if(ast->statement_expr.left == NULL)
-      //  printf("left null\n");
-      //if(ast->statement_expr.right == NULL)
-      //  printf("right null\n");
       ast_print(ast->statement_expr.left);
       ast_print(ast->statement_expr.right);
       fprintf(dumpFile, ")\n");
-      //printf("here.......\n");
       break;
 
     case ASSIGNMENT_NODE:
@@ -789,18 +788,44 @@ void ast_print(node * ast) {
         
     case FUNCTION_NODE:
       type = getType(ast->func_expr.func);
-      //fprintf(dumpFile, "FUNCTION_NODE\n");  
       fprintf(dumpFile, "(CALL %s ", type);
       ast_print(ast->func_expr.arguments);
       fprintf(dumpFile, "\n");
+      //fprintf(dumpFile, "<--FUNCTION_NODE\n");
       
       break;
     
     default: 
-      //fprintf(dumpFile, "DEFAULT\n");
+      fprintf(dumpFile, "DEFAULT\n");
       
       break;
   }
   return;
 }
 
+symbol* find_Symbol_External(char *name){
+      symbol *s;
+      int c;
+      int found = 0;
+      for(c = scope_ast; c >= 0; c--){
+            for(s = b[c]->symtable; s != NULL; s = s->next){
+                  if (!strcmp(name, s->name)){
+                        found = 1;
+                        //printf("\nfound symbol %s\n", name);
+                        break;
+                  }
+            }
+            if(found == 1)
+                  break;
+      }
+      if(found == 0)
+            s = find_Sym_External(name);
+
+      if(s == NULL){
+            fprintf(errorFile, "Unable to find variable %s\n", name);
+            errorOccurred = 1;
+            return NULL;
+      }
+
+      return s;
+}

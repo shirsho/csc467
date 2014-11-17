@@ -13,13 +13,14 @@ symbol *currentScope = NULL;
 symbol *previousScope = NULL;
 int ScopeCount = 0;
 
-
+/*Add the variable to the symbol table*/
 void pushVar(char *name, int type, int constant) {
     struct symbol *s = NULL;
     s = (struct symbol*)malloc(sizeof(struct symbol));
     s->name = name;
     s->type_int = type;
     s->constant = constant;
+    //Get the type in a string format
     switch(type){
     	case 1: 
     		s->type = (char *)"int";
@@ -59,6 +60,7 @@ void pushVar(char *name, int type, int constant) {
     		break;
     }
 
+    //Assign the scope of the variable
     if(ScopeCount != 1){
         s->var.scope = currentScope;
         //printf("identified a variable \"%s\" in the scope of function \"%d\"\n",s->name,s->var.scope->scope);
@@ -67,7 +69,8 @@ void pushVar(char *name, int type, int constant) {
     {   // Do nothing
         //printf("identified a global variable \"%s\"\n",s->name);
     } 
-        
+    
+    //Look for the variable in the symbol table
     if(ScopeCount == 1)
         if(!exists_Sym_glob(name)){
             //printf("appending symbol \"%s\" to global symboltable \n",name);
@@ -99,10 +102,12 @@ void pushVar(char *name, int type, int constant) {
     }
 }
 
+/*Moves the scope back 1 when the nested scope is finished*/
 struct symbol* resetScope(){
     //debug_printSymbolTable();
     symbol *s = head;
     symbol *t = NULL;
+    //Find the scope that is right before the previous one and then assign it to current scope
     if(currentScope != head){
         while(s->next != currentScope)
             s = s->next;
@@ -113,19 +118,23 @@ struct symbol* resetScope(){
     ScopeCount--;
     //printf("reset scope to %d\n", currentScope->scope);
     //printf("-----------------------------------------------------------------\n");
+
+    //Return the scope for the ast to use
     return t;
 }
 
+/*Search the global symbol table for the variable to see if it was previously declared*/
 int exists_Sym_glob(char const *name){
     symbol *s = NULL;
     //printf("searching for symbol \"%s\" in global table\n",name);
     if(currentScope->symtable == NULL){
-        //printf("global symboltable is empty\n");
+        fprintf(errorFile, "ERROR   --      global symboltable is empty \n");
+        errorOccurred = 1;
         return 0;
     }
 
     for(s = currentScope->symtable; s != NULL; s = s->next){  
-        if (! strcmp(name, s->name)){
+        if (!strcmp(name, s->name)){
         	fprintf(errorFile, "ERROR   --      multiple declaration of variable \"%s\"\n", name);
             errorOccurred = 1;
             return 1;
@@ -135,7 +144,7 @@ int exists_Sym_glob(char const *name){
     return 0;
 }
 
-
+/*Search the local symbol table for the variable to see if it was previously declared*/
 int exists_Sym_loc(char const *name){
     symbol *s = NULL;
     //printf("searching for symbol \"%s\" in table \"%d\"\n",name,currentScope->scope);
@@ -157,29 +166,31 @@ int exists_Sym_loc(char const *name){
     return 0;
 }
 
-
+/*Search the symbol table for a variable*/
 struct symbol* find_Sym(char const *name){
     symbol *s = NULL;
     for(s = currentScope->symtable; s != NULL; s = s->next){ 
         if (!strcmp(name, s->name)){
-            printf("\nfound symbol %s\n",name);
+            //printf("\nfound symbol %s\n",name);
             return s;
         }
     }
     return NULL;
 }
 
+/*Search the symbol table for a variable*/
 struct symbol* find_Sym_External(char const *name){
     symbol *s = NULL;
     for(s = currentScope->symtable; s != NULL; s = s->next){ 
         if (!strcmp(name, s->name)){
-            printf("\nfound symbol %s\n",name);
+            //printf("\nfound symbol %s\n",name);
             return s;
         }
     }
     return NULL;
 }
 
+/*Print out the symbol table, but not used since this isn't required*/
 void debug_printSymbolTable(){
     symbol *s = NULL;
     symbol *t = NULL;
@@ -202,6 +213,7 @@ void debug_printSymbolTable(){
     }
 }
 
+/*Make a new scope for each nested scope*/
 void newScope(){
 	ScopeCount = ScopeCount + 1;		
 	struct symbol *s = NULL;
