@@ -442,19 +442,26 @@ void ast_print(node * ast) {
   switch(ast->kind) {
     // Working
     case SCOPE_NODE:
-      fprintf(dumpFile, "(SCOPE \n");
+      fprintf(dumpFile, "\n(SCOPE \n");
       // call to get (DECLARATIONS...)  (STATEMENTS...));
       ast_print(ast->scope_expr.left);  // go to declarations
+      fprintf(dumpFile, "(STATEMENTS\n");
       ast_print(ast->scope_expr.right); // go to statements
-      // close scope bracket
-      fprintf(dumpFile, ")\n");     
+      // close STATEMENTS, SCOPE
+      fprintf(dumpFile, ")\n");
+      //fprintf(dumpFile, ")\n");     
+      fprintf(dumpFile, ")\n");
       break;
 
     case DECLARATIONS_NODE:
-      fprintf(dumpFile, "(DECLARATIONS\n");
+      //fprintf(dumpFile, "(DECLARATIONS\n");
       ast_print(ast->declarations_expr.left); // come back to declarations
+      if(ast->declarations_expr.left == NULL)
+        fprintf(dumpFile, "(DECLARATIONS\n");
+      
       ast_print(ast->declarations_expr.right); // go to declaration
-      fprintf(dumpFile, "\n)\n");
+      fprintf(dumpFile, ")\n");     
+      //fprintf(dumpFile, "\n)\n");
       break;
     
     case DECLARATION_NODE:
@@ -717,9 +724,9 @@ void ast_print(node * ast) {
     case NESTED_SCOPE_NODE:
       scope_ast = scope_ast + 1;
       b[scope_ast] = ast->nest_scope_expr.variables;
-      fprintf(dumpFile, "(NESTED SCOPE\n");
+      //fprintf(dumpFile, "(NESTED SCOPE\n");
       ast_print(ast->nest_scope_expr.scope);
-      fprintf(dumpFile, ")\n");      
+      //fprintf(dumpFile, ")\n");      
       break;
 
     case CONSTRUCTOR_NODE:
@@ -749,10 +756,10 @@ void ast_print(node * ast) {
       break; 
 
     case STATEMENT_NODE:
-      fprintf(dumpFile, "(STATEMENTS\n");
+      //fprintf(dumpFile, "(STATEMENTS\n");
       ast_print(ast->statement_expr.left);
       ast_print(ast->statement_expr.right);
-      fprintf(dumpFile, ")\n");
+      //fprintf(dumpFile, ")\n");
       break;
 
     case ASSIGNMENT_NODE:
@@ -765,6 +772,7 @@ void ast_print(node * ast) {
       fprintf(dumpFile, "(ASSIGN %s %s ", type, ast->assign_expr.left->var_expr.id);
       //ast_print(ast->assign_expr.left->expression_expr.expr);
       ast_print(ast->assign_expr.right);
+      fprintf(dumpFile, ")\n");
       break; 
     case IF_STATEMENT_NODE:
       //fprintf(dumpFile, "IF_STATEMENT_NODE\n");
@@ -802,7 +810,7 @@ void ast_print(node * ast) {
   }
   return;
 }
-
+  
 symbol* find_Symbol_External(char *name){
       symbol *s;
       int c;
