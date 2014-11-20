@@ -117,8 +117,15 @@
 #define UMINUS 279
 #define WITHOUT_ELSE 280
 #define WITH_ELSE 281
-
-
+#define GL_FRAGCOLOR 299
+#define GL_FRAGCOORD 300
+#define GL_FRAGDEPTH 301
+#define GL_LIGHTHALF 302
+#define GL_AMBIENT 303
+#define GL_MATERIAL_SHININESS 304
+#define ENV1 305
+#define ENV2 306
+#define ENV3 307
 
 
 /* Copy the first part of user declarations.  */

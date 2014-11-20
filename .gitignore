@@ -2,6 +2,7 @@
 *.o
 .gitignore~
 .gitignore.swp
+parser.tab.c~
 semantic.h~
 file.c~
 compiler467

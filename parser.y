@@ -137,8 +137,8 @@ program
   ;
 
 scope
-  : '{' {newScope();} declarations statements '}'
-      { $$ = ast_allocate(SCOPE_NODE, $3, $4);
+  : '{' {newScope();} {init_PredefinedVars();} declarations statements '}'
+      { $$ = ast_allocate(SCOPE_NODE, $4, $5);
         yTRACE("scope -> { declarations statements }\n") }
   ;
 

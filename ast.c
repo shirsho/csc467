@@ -746,8 +746,9 @@ void ast_print(node * ast) {
     case ARGUMENTS_NODE:
       //fprintf(dumpFile, "ARGUMENTS_NODE\n");
       ast_print(ast->arguments_expr.left);
+      if(ast->arguments_expr.left)
+        fprintf(dumpFile, ", ");
       ast_print(ast->arguments_expr.right);
-      fprintf(dumpFile, ", ");
       
       break;
 

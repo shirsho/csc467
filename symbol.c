@@ -18,6 +18,65 @@ symbol *currentScope = NULL;
 symbol *previousScope = NULL;
 int ScopeCount = 0;
 
+// Predefined variables
+char* predefined[13] = {
+    "gl_FragColor",
+    "gl_FragDepth",    
+    "gl_FragCoord",
+    "gl_TexCoord",
+    "gl_Color",
+    "gl_Secondary",
+    "gl_FogFragCoord",
+    "gl_Light_Half",
+    "gl_Light_Ambient",
+    "gl_Material_Shininess",
+    "env1",
+    "env2",
+    "env3"
+};
+// Initailize the global symbol table with predefined variables
+void init_PredefinedVars()
+{
+    //printf("initPreDefVars\n");
+    int i;
+    struct symbol *s = NULL;
+    
+    for(i = 0; i < 13; i++)
+    {   
+        s = (struct symbol*)malloc(sizeof(struct symbol));
+        // only gl_FragDepth is bool
+        if(strcmp(predefined[i], "gl_FragDepth") == 0)
+        {
+            s->type_int = 2;
+            s->type = (char *)"bool";
+        }
+        // rest is vec4
+        else
+        {
+            s->type_int = 33;
+            s->type = (char *)"vec4";
+        }
+        s->name = (char*) predefined[i];
+        s->constant = -1;
+        s->next = NULL;
+    
+        symbol *tmp = currentScope->symtable;
+        if(tmp == NULL)
+        {
+            currentScope->symtable = s;
+        }
+        else
+        {
+            while(tmp->next != NULL){
+                tmp = tmp->next;
+            }
+            tmp->next = s;
+        }
+    }
+ 
+    //debug_printSymbolTable();
+}
+
 /*Add the variable to the symbol table*/
 void pushVar(char *name, int type, int constant) {
     struct symbol *s = NULL;

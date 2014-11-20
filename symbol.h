@@ -46,4 +46,5 @@ void init_table();
 
 void newScope();
 
+void init_PredefinedVars();
 #endif
