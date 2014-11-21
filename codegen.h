@@ -13,4 +13,5 @@ Samprit Raihan, 998138830
 #include "ast.h"
 #include "symbol.h"
 
+void generateAssembly(node * ast);
 #endif

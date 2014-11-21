@@ -23,6 +23,7 @@
 #include "ast.h"
 #include "symbol.h"
 #include "semantic.h"
+#include "codegen.h"
 
 #define YYERROR_VERBOSE
 #define yTRACE(x)    { if (traceParser) fprintf(traceFile, "%s\n", x); }
@@ -135,6 +136,7 @@ program
         yTRACE("program -> scope\n");
         semantic_check(ast, 0);
         //debug_printSymbolTable();
+        generateAssembly(ast);
         }
   ;
 
