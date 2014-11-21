@@ -9,10 +9,6 @@ Samprit Raihan, 998138830
 
 #include "symbol.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 symbol *head = NULL;
 symbol *currentScope = NULL;
 symbol *previousScope = NULL;
