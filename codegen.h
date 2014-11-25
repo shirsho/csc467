@@ -15,5 +15,8 @@ Samprit Raihan, 998138830
 
 extern FILE *filePointer;
 
-void generateAssembly(node * ast);
+extern int tempCount;
+extern int argumentsCount;
+
+int generateAssembly(node * ast);
 #endif

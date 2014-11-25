@@ -4,16 +4,19 @@ Samprit Raihan, 998138830
 */
 #include "codegen.h"
 
+int tempCount = 1;
+int argumentsCount = 0;
+
 FILE *filePointer = fopen("./frag.txt", "w");
 
-void generateAssembly(node * ast){
-
+int generateAssembly(node * ast){
+	int s;
 	// Open the assembly file
 	
 	switch(ast->kind) {
   
 	    case SCOPE_NODE:
-	    	fprintf(filePointer, "#SCOPE\n");
+	    	printf("SCOPE\n");
 	    	if(ast->scope_expr.left != NULL){
 	    		generateAssembly(ast->scope_expr.left);
 	    	}
@@ -23,7 +26,6 @@ void generateAssembly(node * ast){
 	      break;
 
 	    case BINARY_EXPRESSION_NODE:
-
 	      	break;
 
 	    case UNARY_EXPRESSION_NODE:
@@ -60,17 +62,25 @@ void generateAssembly(node * ast){
 	    case DECLARATION_NODE:
 	    	fprintf(filePointer, "#DECLARATION\n");
 	    	if(ast->declaration_expr.constant == 261){
-	    		generateAssembly(ast->declaration_expr.right);
-	    		fprintf(filePointer, "PARAM %s = tempVar;\n", ast->declaration_expr.id);
+	    		if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE){
+	    			generateAssembly(ast->declaration_expr.right);
+	    			fprintf(filePointer, "PARAM %s = tempVar%d;\n", ast->declaration_expr.id, tempCount);
+	    		}else{
+	    			fprintf(filePointer, "PARAM %s = ",  ast->declaration_expr.id);
+	    			generateAssembly(ast->declaration_expr.right);
+	    			fprintf(filePointer, ";\n");
+	    		}
 	    	}else{
 	    		if(ast->declaration_expr.right == NULL){
 	    			fprintf(filePointer, "TEMP %s;\n", ast->declaration_expr.id);
 	    		}else{
 	    			fprintf(filePointer, "TEMP %s;\n",  ast->declaration_expr.id);
-	    			if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE){
-	    				fprintf(filePointer, "TEMP tempVar;\n");
+	    			if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE || 
+	    				ast->declaration_expr.right->kind == UNARY_EXPRESSION_NODE ||
+	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
+	    				ast->declaration_expr.right->kind == FUNCTION_NODE){
 	    				generateAssembly(ast->declaration_expr.right);
-	    				fprintf(filePointer, "MOV %s, tempVar;\n",  ast->declaration_expr.id);
+	    				fprintf(filePointer, "MOV %s, tempVar%d;\n",  ast->declaration_expr.id, tempCount);
 	    			}else{
 	    				fprintf(filePointer, "MOV %s, ",  ast->declaration_expr.id);
 	    				generateAssembly(ast->declaration_expr.right);
@@ -91,16 +101,24 @@ void generateAssembly(node * ast){
 	      	break;
 
 	    case FUNCTION_NODE:
+
 	      	break;
 
 	    case CONSTRUCTOR_NODE:
+	    	fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+	    	generateAssembly(ast->construt_expr.right);
+	    	return s;
 	      	break;
 
 	    case NESTED_SCOPE_NODE:
+	    	printf("NESTED SCOPE\n");
+	    	if(ast->nest_scope_expr.scope != NULL){
+	    		generateAssembly(ast->nest_scope_expr.scope);
+	    	}
 	      	break;
 
 	    case DECLARATIONS_NODE:
-	    	fprintf(filePointer, "#DECLARATIONS\n");
+	    	printf("DECLARATIONS\n");
 	    	if(ast->declarations_expr.left != NULL){
 	    		generateAssembly(ast->declarations_expr.left);
 	    	}
@@ -110,9 +128,34 @@ void generateAssembly(node * ast){
 	      	break;
 
 	    case ARGUMENTS_NODE:
+	    	if(ast->arguments_expr.left != NULL)
+	    		generateAssembly(ast->arguments_expr.left);
+	    	if(argumentsCount == 0){
+	    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount);
+	    		generateAssembly(ast->arguments_expr.right);
+	    		argumentsCount += 1;
+	    		fprintf(filePointer, ";\n");
+	    	}else if(argumentsCount == 1){
+	    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount);
+	    		generateAssembly(ast->arguments_expr.right);
+	    		argumentsCount += 1;
+	    		fprintf(filePointer, ";\n");
+	    	}else if(argumentsCount == 2){
+	    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount);
+	    		generateAssembly(ast->arguments_expr.right);
+	    		argumentsCount += 1;
+	    		fprintf(filePointer, ";\n");
+	    	}else if(argumentsCount == 3){
+	    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount);
+	    		generateAssembly(ast->arguments_expr.right);
+	    		argumentsCount += 1;
+	    		fprintf(filePointer, ";\n");
+	    	}
 	      	break;
 
 	    case ARGUMENTS_OPT_NODE:
+	    	generateAssembly(ast->arguments_opt_expr.argum);
+	    	argumentsCount = 0;
 	      	break;
 
 	    case EXPRESSION_NODE:
