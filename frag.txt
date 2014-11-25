@@ -1,3 +1,7 @@
-This is testing for fprintf...
-This is testing for fprintf...
-#This is an assembly file
+#SCOPE
+#DECLARATIONS
+#DECLARATION
+TEMP tempVar;
+#INT
+MOV tempVar, 1;
+PARAM a = tempVar;

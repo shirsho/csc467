@@ -13,5 +13,7 @@ Samprit Raihan, 998138830
 #include "ast.h"
 #include "symbol.h"
 
+extern FILE *filePointer;
+
 void generateAssembly(node * ast);
 #endif
