@@ -1,5 +1,3 @@
-#SCOPE
-#DECLARATIONS
 #DECLARATION
 TEMP red;
 TEMP tempVar1;
@@ -8,3 +6,19 @@ MOV tempVar1.y, 0.000000;
 MOV tempVar1.z, 0.000000;
 MOV tempVar1.w, 1.000000;
 MOV red, tempVar1;
+#DECLARATION
+TEMP blue;
+MOV tempVar1.x, 1.000000;
+MOV tempVar1.y, 0.000000;
+MOV tempVar1.z, 0.000000;
+MOV tempVar1.w, 1.000000;
+MOV blue, tempVar1;
+#DECLARATION
+TEMP a;
+DP3 tempVar1, red, blue;
+MOV a, tempVar1;
+#DECLARATION
+TEMP b;
+MOV b, a;
+RSQ tempVar1, a;
+MOV b, tempVar1;

@@ -1,5 +1,9 @@
 {
 	vec4 red = vec4(1.0,0.0,0.0,1.0);
+	vec4 blue = vec4(1.0,0.0,0.0,1.0);
+	float a = dp3(red, blue);
+	float b = a;
+	b = rsq(a);
 }
 
 

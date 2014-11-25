@@ -16,7 +16,10 @@ Samprit Raihan, 998138830
 extern FILE *filePointer;
 
 extern int tempCount;
+extern int tempDeclared;
 extern int argumentsCount;
+extern int constructfunc;
+extern int ifFlag;
 
 int generateAssembly(node * ast);
 #endif
