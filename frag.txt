@@ -1,7 +1,5 @@
 #SCOPE
 #DECLARATIONS
 #DECLARATION
-TEMP tempVar;
-#INT
-MOV tempVar, 1;
-PARAM a = tempVar;
+TEMP a;
+MOV a, 1;

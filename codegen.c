@@ -30,20 +30,20 @@ void generateAssembly(node * ast){
 	      	break;
 
 	    case INT_NODE:
-	    	fprintf(filePointer, "#INT\n");
-	    	fprintf(filePointer, "MOV tempVar, %d;\n", ast->int_expr.val);
+	    	//fprintf(filePointer, "#INT\n");
+	    	fprintf(filePointer, "%d", ast->int_expr.val);
 	      	break;
 
 	    case FLOAT_NODE:
-	    	fprintf(filePointer, "#FLOAT\n");
-	    	fprintf(filePointer, "MOV tempVar, %f;\n", ast->float_expr.val);
+	    	//fprintf(filePointer, "#FLOAT\n");
+	    	fprintf(filePointer, "%f", ast->float_expr.val);
 	     	break;
 
 	    case BOOL_NODE:
 	      	break;
 
 	    case VAR_NODE:
-	    	fprintf(filePointer, "#VAR\n");
+	    	//fprintf(filePointer, "#VAR\n");
 	    	if(ast->var_expr.arr == -1){
 	    		fprintf(filePointer, "%s", ast->var_expr.id);
 	    	}else if(ast->var_expr.arr == 0){
@@ -59,7 +59,6 @@ void generateAssembly(node * ast){
 
 	    case DECLARATION_NODE:
 	    	fprintf(filePointer, "#DECLARATION\n");
-	    	fprintf(filePointer, "TEMP tempVar;\n");
 	    	if(ast->declaration_expr.constant == 261){
 	    		generateAssembly(ast->declaration_expr.right);
 	    		fprintf(filePointer, "PARAM %s = tempVar;\n", ast->declaration_expr.id);
@@ -68,8 +67,16 @@ void generateAssembly(node * ast){
 	    			fprintf(filePointer, "TEMP %s;\n", ast->declaration_expr.id);
 	    		}else{
 	    			fprintf(filePointer, "TEMP %s;\n",  ast->declaration_expr.id);
-	    			generateAssembly(ast->declaration_expr.right);
-	    			fprintf(filePointer, "MOV %s, tempVar;\n",  ast->declaration_expr.id);
+	    			if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE){
+	    				fprintf(filePointer, "TEMP tempVar;\n");
+	    				generateAssembly(ast->declaration_expr.right);
+	    				fprintf(filePointer, "MOV %s, tempVar;\n",  ast->declaration_expr.id);
+	    			}else{
+	    				fprintf(filePointer, "MOV %s, ",  ast->declaration_expr.id);
+	    				generateAssembly(ast->declaration_expr.right);
+	    				fprintf(filePointer, ";\n");
+	    			}
+
 	    		}
 	    	}
 	      	break;
