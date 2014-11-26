@@ -3,7 +3,13 @@
 	vec4 blue = vec4(1.0,0.0,0.0,1.0);
 	float a = dp3(red, blue);
 	float b = a;
-	b = rsq(a);
+	if(true){
+		if(true){
+			b = rsq(a);
+		}else{
+			b = 1.0;
+		}
+	}
 }
 
 

@@ -9,11 +9,13 @@ int tempDeclared = 0;
 int argumentsCount = 0;
 int constructfunc = 0;
 int ifFlag = 0;
+int ifMax = 0;
 
 FILE *filePointer = fopen("./frag.txt", "w");
 
 int generateAssembly(node * ast){
 	int s;
+	int i;
 	// Open the assembly file
 	
 	switch(ast->kind) {
@@ -45,35 +47,25 @@ int generateAssembly(node * ast){
 	     	break;
 
 	    case BOOL_NODE:
+	    	if(ast->bool_expr.val == 263)
+	    		fprintf(filePointer, "1");
+	    	if(ast->bool_expr.val == 262)
+	    		fprintf(filePointer, "-1");
 	      	break;
 
 	    case VAR_NODE:
 	    	printf("VAR\n");
-	    	if(ifFlag == 0){
-		    	if(ast->var_expr.arr == -1){
-		    		fprintf(filePointer, "%s", ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 0){
-		    		fprintf(filePointer, "%s.x", ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 1){
-		    		fprintf(filePointer, "%s.y", ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 2){
-		    		fprintf(filePointer, "%s.z", ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 3){
-		    		fprintf(filePointer, "%s.w", ast->var_expr.id);
-		    	}
-		    }else{
-		    	if(ast->var_expr.arr == -1){
-		    		fprintf(filePointer, "MOV tempVar%d, %s", tempCount, ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 0){
-		    		fprintf(filePointer, "MOV tempVar%d, %s.x", tempCount, ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 1){
-		    		fprintf(filePointer, "MOV tempVar%d, %s.y", tempCount, ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 2){
-		    		fprintf(filePointer, "MOV tempVar%d, %s.z", tempCount, ast->var_expr.id);
-		    	}else if(ast->var_expr.arr == 3){
-		    		fprintf(filePointer, "MOV tempVar%d, %s.w", tempCount, ast->var_expr.id);
-		    	}
-		    }
+	    	if(ast->var_expr.arr == -1){
+	    		fprintf(filePointer, "%s", ast->var_expr.id);
+	    	}else if(ast->var_expr.arr == 0){
+	    		fprintf(filePointer, "%s.x", ast->var_expr.id);
+	    	}else if(ast->var_expr.arr == 1){
+	    		fprintf(filePointer, "%s.y", ast->var_expr.id);
+	    	}else if(ast->var_expr.arr == 2){
+	    		fprintf(filePointer, "%s.z", ast->var_expr.id);
+	    	}else if(ast->var_expr.arr == 3){
+	    		fprintf(filePointer, "%s.w", ast->var_expr.id);
+	    	}
 	      	break;
 
 	    case DECLARATION_NODE:
@@ -103,15 +95,38 @@ int generateAssembly(node * ast){
 	    				generateAssembly(ast->declaration_expr.right);
 	    				fprintf(filePointer, ";\n");
 	    			}
-
 	    		}
 	    	}
 	      	break;
 
 	    case IF_STATEMENT_NODE:
-	    	ifFlag += 1;
-
-	    	ifFlag -= 1;
+	    	if(ifFlag >= ifMax){
+	    		ifMax += 1;
+	    		ifFlag += 1;
+	    		fprintf(filePointer, "TEMP condVar%d;\n", ifFlag);
+	    	}else{
+	    		ifFlag += 1;
+	    	}
+	    	if(ast->if_expr.if_comparison != NULL){
+				if(ast->if_expr.if_comparison->kind == BINARY_EXPRESSION_NODE || 
+					ast->if_expr.if_comparison->kind == UNARY_EXPRESSION_NODE ||
+					ast->if_expr.if_comparison->kind == CONSTRUCTOR_NODE ||
+					ast->if_expr.if_comparison->kind == FUNCTION_NODE){
+					s = generateAssembly(ast->if_expr.if_comparison);
+					fprintf(filePointer, "CMP condVar%d, tempVar%d;\n", ifFlag, s);
+				}else{
+					fprintf(filePointer, "MOV condVar%d, ", ifFlag);
+					generateAssembly(ast->if_expr.if_comparison);
+					fprintf(filePointer, ";\n");
+				}
+			}
+			if(ast->if_expr.if_statement != NULL)
+				generateAssembly(ast->if_expr.if_statement);
+			fprintf(filePointer, "SUB condVar%d, 0, condVar%d;\n", ifFlag, ifFlag);
+			if(ast->if_expr.else_statement != NULL)
+				generateAssembly(ast->if_expr.else_statement);
+	    	if(ifFlag >= ifMax)
+	    		ifFlag -= 1;
 	      	break;
 
 	    case STATEMENT_NODE:
@@ -125,22 +140,76 @@ int generateAssembly(node * ast){
 	     	break;
 
 	    case ASSIGNMENT_NODE:
-	    	if(ast->assign_expr.right->kind == BINARY_EXPRESSION_NODE || 
-				ast->assign_expr.right->kind == UNARY_EXPRESSION_NODE ||
-				ast->assign_expr.right->kind == CONSTRUCTOR_NODE ||
-				ast->assign_expr.right->kind == FUNCTION_NODE){
-				s = generateAssembly(ast->assign_expr.right);
-				fprintf(filePointer, "MOV ");
-				generateAssembly(ast->assign_expr.left);
-				fprintf(filePointer, ", tempVar%d;\n", s);
+	    	if(ifFlag <= 0){
+		    	if(ast->assign_expr.right->kind == BINARY_EXPRESSION_NODE || 
+					ast->assign_expr.right->kind == UNARY_EXPRESSION_NODE ||
+					ast->assign_expr.right->kind == CONSTRUCTOR_NODE ||
+					ast->assign_expr.right->kind == FUNCTION_NODE){
+					s = generateAssembly(ast->assign_expr.right);
+					fprintf(filePointer, "MOV ");
+					generateAssembly(ast->assign_expr.left);
+					fprintf(filePointer, ", tempVar%d;\n", s);
+				}else{
+					fprintf(filePointer, "MOV ");
+					generateAssembly(ast->assign_expr.left);
+					fprintf(filePointer, ", ");
+					generateAssembly(ast->assign_expr.right);
+					fprintf(filePointer, ";\n");
+				}
+				return s;
 			}else{
-				fprintf(filePointer, "MOV ");
-				generateAssembly(ast->assign_expr.left);
-				fprintf(filePointer, ", ");
-				generateAssembly(ast->assign_expr.right);
-				fprintf(filePointer, ";\n");
+				if(ast->assign_expr.right->kind == BINARY_EXPRESSION_NODE || 
+					ast->assign_expr.right->kind == UNARY_EXPRESSION_NODE ||
+					ast->assign_expr.right->kind == CONSTRUCTOR_NODE ||
+					ast->assign_expr.right->kind == FUNCTION_NODE){
+					s = generateAssembly(ast->assign_expr.right);
+					for(i = ifFlag; i >= 1; i--){
+						if(i == 1){
+							fprintf(filePointer, "CMP ");
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer, ", condVar%d, ", i);
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer,", tempVar%d;\n", s);
+						}else{
+							fprintf(filePointer, "CMP ");
+							fprintf(filePointer, "tempVar%d, condVar%d, ", s, i);
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer,", tempVar%d;\n", s);
+						}
+					}
+				}else{
+					if(tempCount >= tempDeclared){
+			    		tempDeclared += 1;
+			    		tempCount += 1;
+			    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    		s = tempCount;
+			    	}else{
+			    		tempCount += 1;
+			    		s = tempCount;
+			    	}
+					for(i = ifFlag; i >= 1; i--){
+						if(i == 1){
+							fprintf(filePointer, "CMP ");
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer, ", condVar%d, ", i);
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer, ", ");
+							generateAssembly(ast->assign_expr.right);
+							fprintf(filePointer, ";\n");
+						}else{
+							fprintf(filePointer, "CMP ");
+							fprintf(filePointer, "tempVar%d, condVar%d, ", s, i);
+							generateAssembly(ast->assign_expr.left);
+							fprintf(filePointer, ", ");
+							generateAssembly(ast->assign_expr.right);
+							fprintf(filePointer, ";\n");
+						}
+					}
+					if(tempCount >= tempDeclared)
+	    				tempCount -= 1;
+				}
+				return s;
 			}
-			return s;
 	      	break;
 
 	    case FUNCTION_NODE:
@@ -255,6 +324,7 @@ int generateAssembly(node * ast){
 
 	    default: break;
 	}
+	return -1;
 	/*
 		From this point on, keep adding new instructions
 		to the assembly file on a new line using 

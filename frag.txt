@@ -20,5 +20,14 @@ MOV a, tempVar1;
 #DECLARATION
 TEMP b;
 MOV b, a;
+TEMP condVar1;
+MOV condVar1, 1;
+TEMP condVar2;
+MOV condVar2, 1;
 RSQ tempVar1, a;
-MOV b, tempVar1;
+CMP tempVar1, condVar2, b, tempVar1;
+CMP b, condVar1, b, tempVar1;
+SUB condVar2, 0, condVar2;
+CMP tempVar1, condVar2, b, 1.000000;
+CMP b, condVar1, b, 1.000000;
+SUB condVar1, 0, condVar1;
