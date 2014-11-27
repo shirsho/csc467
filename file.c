@@ -1,17 +1,6 @@
 {
-	vec4 red = gl_FragColor;
-	vec4 blue = vec4(1.0,0.0,0.0,1.0);
-	float a = dp3(red, blue);
-	float b = a;
-	if(true){
-		if(true){
-			b = rsq(a);
-		}else{
-			b = 1.0;
-		}
-	}
+	int a = - (1+2+3);
 }
-
 
 /*{
 	vec4 fCol = gl_Color;
