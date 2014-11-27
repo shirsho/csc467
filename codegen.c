@@ -3,7 +3,10 @@ Justin Canton, 1000017910
 Samprit Raihan, 998138830
 */
 #include "codegen.h"
-
+#include "common.h"
+//#include "parser.tab.h"
+#include "symbol.h"
+#include "semantic.h"
 int tempCount = 0;
 int tempDeclared = 0;
 int argumentsCount = 0;
@@ -31,13 +34,353 @@ int generateAssembly(node * ast){
 	      break;
 
 	    case BINARY_EXPRESSION_NODE:
+	    	//printf("BINARY_EXPRESSION_NODE\n");
+    		switch(ast->binary_expr.op){
+    			case 43: // +
+    			  	printf("BINARY +\n");
+    				if(ast->binary_expr.left)
+    				{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					
+	    					printf("left recurse\n");
+	    					//fprintf(filePointer, ".....blah0....\n");
+	    					
+	    					generateAssembly(ast->binary_expr.left);
+	    					//fprintf(filePointer, ".....blah1....\n");
+	    					//generateAssembly(ast->binary_expr.right);
+	    					//fprintf(filePointer, ".....blah2....\n");
+	    					
+	    					/*
+	    					if(ast->binary_expr.left->op == 42) // for *
+	    					{
+	    						generateAssembly(ast->binary_expr.left);
+	    						generateAssembly(ast->binary_expr.right);
+	    					}
+	    					else
+	    					{
+	    						generateAssembly(ast->binary_expr.right);
+	    						generateAssembly(ast->binary_expr.left);
+	    					}
+	    					*/
+	    				}
+	    				else if(ast->binary_expr.left->kind == INT_NODE ||
+	    						ast->binary_expr.left->kind == FLOAT_NODE
+	    						)
+	    				{
+	    					printf("----------binary expr left ---------\n");
+	    			  		printf("tempCount = %d\n", tempCount);
+		    				printf("TEMP tempVar%d;\n", tempCount);
+		    				printf("MOV tempVar%d, ", tempCount);
+		    				
+		    				//////////////
+		    				// ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				
+		    				//////////////
+		    				printf(";\n");
+		    				printf("----------\n");
+
+		    				tempCount++;
+		    				//generateAssembly(ast->binary_expr.right);
+
+					
+	    				}
+	    			}
+	    			if(ast->binary_expr.right)
+	    			{
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("right recurse\n");
+	    					//generateAssembly(ast->binary_expr.left);
+	    					generateAssembly(ast->binary_expr.right);
+	    					//printf("if left kind = BINARY_EXPRESSION_NODE\n");
+	    				}
+	    				else if(ast->binary_expr.right->kind == INT_NODE ||
+	    						ast->binary_expr.right->kind == FLOAT_NODE
+	    						)
+	    				{
+
+	    					printf("----------binary expr right ---------\n");
+	    			  		printf("tempCount = %d\n", tempCount);
+		    				printf("TEMP tempVar%d;\n", tempCount);
+		    				printf("MOV tempVar%d, ", tempCount);
+		    				/////////////////////
+		    				//ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+		    				/////////////////////////
+		    				printf(";\n");
+		    				printf("----------\n");
+
+		    				tempCount++;
+
+		    				// generate ADD instruction
+		    				////////////////////
+		    				//ACTUAL
+							fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							
+
+							printf("----Adding-----\n");
+		    				printf("TEMP tempVar%d;\n", tempCount);
+			    			printf("ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							printf("--------\n");
+							tempCount++;
+							////////////////////////
+							//tempCount = tempCount - 2;
+		    				//generateAssembly(ast->binary_expr.right);	
+	    				}
+	    			}
+    				return tempCount - 1;
+    				break;
+    			case 45: // -
+    				printf("BINARY -\n");
+    				if(ast->binary_expr.left)
+    				{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("left recurse\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    					//generateAssembly(ast->binary_expr.right);
+	    				}
+	    				else if(ast->binary_expr.left->kind == INT_NODE ||
+	    						ast->binary_expr.left->kind == FLOAT_NODE 
+	    						)
+	    				{
+
+	    					//printf("----------binary expr left ---------\n");
+	    			  		//printf("tempCount = %d\n", tempCount);
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+		    				//printf("MOV tempVar%d, ", tempCount);
+		    				
+		    				//////////////
+		    				// ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				
+		    				//////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				tempCount++;
+		    				//generateAssembly(ast->binary_expr.right);
+
+					
+	    				}
+	    			}
+	    			if(ast->binary_expr.right)
+	    			{
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("right recurse\n");
+	    					//generateAssembly(ast->binary_expr.left);
+	    					generateAssembly(ast->binary_expr.right);
+	    					//printf("if left kind = BINARY_EXPRESSION_NODE\n");
+	    				}
+	    				else if(ast->binary_expr.right->kind == INT_NODE ||
+	    						ast->binary_expr.right->kind == FLOAT_NODE 
+	    						)
+	    				{
+
+	    					//printf("----------binary expr right ---------\n");
+	    			  		//printf("tempCount = %d\n", tempCount);
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+		    				//printf("MOV tempVar%d, ", tempCount);
+		    				//printf("\n.....WTF.....\n");
+		    				/////////////////////
+		    				//ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+		    				/////////////////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				tempCount++;
+
+		    				// generate SUB instruction
+		    				////////////////////
+		    				//ACTUAL
+							fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							
+
+							//printf("----Adding-----\n");
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+			    			//printf("ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							//printf("--------\n");
+							tempCount++;
+							////////////////////////
+							//tempCount = tempCount - 2;
+		    				//generateAssembly(ast->binary_expr.right);	
+	    				}
+	    			}
+    				return tempCount - 1;
+
+    				break;
+    			case 42: // *
+    				printf("BINARY *\n");
+    				if(ast->binary_expr.left)
+    				{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("left recurse\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    					//generateAssembly(ast->binary_expr.right);
+	    				}
+	    				else if(ast->binary_expr.left->kind == INT_NODE)
+	    				{
+
+	    					//printf("----------binary expr left ---------\n");
+	    			  		//printf("tempCount = %d\n", tempCount);
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+		    				//printf("MOV tempVar%d, ", tempCount);
+		    				
+		    				//////////////
+		    				// ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				
+		    				//////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				tempCount++;
+		    				//generateAssembly(ast->binary_expr.right);
+
+					
+	    				}
+	    			}
+	    			if(ast->binary_expr.right)
+	    			{
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("right recurse\n");
+	    					//generateAssembly(ast->binary_expr.left);
+	    					generateAssembly(ast->binary_expr.right);
+	    					//printf("if left kind = BINARY_EXPRESSION_NODE\n");
+	    				}
+	    				else if(ast->binary_expr.right->kind == INT_NODE)
+	    				{
+
+	    					//printf("----------binary expr right ---------\n");
+	    			  		//printf("tempCount = %d\n", tempCount);
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+		    				//printf("MOV tempVar%d, ", tempCount);
+		    				//printf("\n.....WTF.....\n");
+		    				/////////////////////
+		    				//ACTUAL
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+		    				/////////////////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				tempCount++;
+
+		    				// generate MUL instruction
+		    				////////////////////
+		    				//ACTUAL
+							fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "MUL tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							
+
+							//printf("----Adding-----\n");
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+			    			//printf("ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							//printf("--------\n");
+							tempCount++;
+							////////////////////////
+							//tempCount = tempCount - 2;
+		    				//generateAssembly(ast->binary_expr.right);	
+	    				}
+	    			}
+    				return tempCount - 1;
+
+    				break;
+    			case 47: // /
+    				printf("BINARY /\n");
+
+    				break;
+    			case AND:
+    				printf("BINARY AND\n");
+    				break;
+    			case OR:
+    				printf("BINARY OR\n");
+    				break;
+    			case NEQ:
+    				printf("BINARY NEQ\n");
+    				break;
+    			case EQ:
+    				printf("BINARY EQ\n");
+    				break;
+    			case LEQ:
+    				printf("BINARY LEQ\n");
+    				break;
+    			case GEQ:
+    				printf("BINARY GEQ\n");
+    				break;
+    		}
+	    	//if(ast->binary_expr)
 	      	break;
 
 	    case UNARY_EXPRESSION_NODE:
+
+			//fprintf(filePointer, "#UNARY EXPRESSION\n");
+			printf("UNARY_EXPRESSION_NODE\n");
+			if(ast->unary_expr.op == UMINUS){
+				printf("UMINUS\n");
+				// subtract the expression from zero
+				// format is SUB rout , rin1 , rin2
+				// so here it's rout, 0, rin2
+				if(ast->unary_expr.right != NULL){
+					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+					fprintf(filePointer, "SUB tempVar%d, 0, ", tempCount);
+					//tempCount++;
+					generateAssembly(ast->unary_expr.right);
+					fprintf(filePointer, ";\n");
+
+				}
+			}
+			else{
+				printf("UNARY_NOT\n");
+				if(ast->unary_expr.right != NULL){
+					// implement unary NOT
+					// compare the unary expression with TRUE or FALSE
+					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+					fprintf(filePointer, "CMP tempVar%d, ", tempCount);
+					tempCount++;
+					generateAssembly(ast->unary_expr.right);
+					fprintf(filePointer, ", 1, -1");
+					fprintf(filePointer, ";\n");
+					return tempCount;
+				}
+				else
+					printf("null\n");
+			}
+
 	      	break;
 
+
 	    case INT_NODE:
+	    	//printf("INT---");
 	    	//fprintf(filePointer, "#INT\n");
+	    	//printf("int expr val = %d\n", ast->int_expr.val);
+	    	printf("%d", ast->int_expr.val);
+	      	
 	    	fprintf(filePointer, "%d", ast->int_expr.val);
 	      	break;
 
@@ -47,6 +390,7 @@ int generateAssembly(node * ast){
 	     	break;
 
 	    case BOOL_NODE:
+	    	printf("BOOL_NODE\n");
 	    	if(ast->bool_expr.val == 263)
 	    		fprintf(filePointer, "1");
 	    	if(ast->bool_expr.val == 262)
@@ -88,9 +432,13 @@ int generateAssembly(node * ast){
 	    				ast->declaration_expr.right->kind == UNARY_EXPRESSION_NODE ||
 	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
 	    				ast->declaration_expr.right->kind == FUNCTION_NODE){
+	    										printf("in if\n");
+
 	    				s = generateAssembly(ast->declaration_expr.right);
 	    				fprintf(filePointer, "MOV %s, tempVar%d;\n",  ast->declaration_expr.id, s);
 	    			}else{
+	    					    				printf("in else\n");
+
 	    				fprintf(filePointer, "MOV %s, ",  ast->declaration_expr.id);
 	    				generateAssembly(ast->declaration_expr.right);
 	    				fprintf(filePointer, ";\n");
