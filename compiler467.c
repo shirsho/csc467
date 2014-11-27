@@ -92,7 +92,9 @@ int main (int argc, char *argv[]) {
   if (dumpAST)
     ast_print(ast);
 /* Phase 4: Add code to call the code generation routine */
+  fprintf(filePointer, "!!ARBfp1.0\n");
   generateAssembly(ast);
+  fprintf(filePointer, "END\n");
   fclose(filePointer);
 
   if (errorOccurred)

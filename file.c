@@ -1,5 +1,5 @@
 {
-	vec4 red = vec4(1.0,0.0,0.0,1.0);
+	vec4 red = gl_FragColor;
 	vec4 blue = vec4(1.0,0.0,0.0,1.0);
 	float a = dp3(red, blue);
 	float b = a;

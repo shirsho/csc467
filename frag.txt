@@ -1,13 +1,10 @@
+!!ARBfp1.0
 #DECLARATION
 TEMP red;
-TEMP tempVar1;
-MOV tempVar1.x, 1.000000;
-MOV tempVar1.y, 0.000000;
-MOV tempVar1.z, 0.000000;
-MOV tempVar1.w, 1.000000;
-MOV red, tempVar1;
+MOV red, result.color;
 #DECLARATION
 TEMP blue;
+TEMP tempVar1;
 MOV tempVar1.x, 1.000000;
 MOV tempVar1.y, 0.000000;
 MOV tempVar1.z, 0.000000;
@@ -31,3 +28,4 @@ SUB condVar2, 0, condVar2;
 CMP tempVar1, condVar2, b, 1.000000;
 CMP b, condVar1, b, 1.000000;
 SUB condVar1, 0, condVar1;
+END
