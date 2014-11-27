@@ -16,6 +16,38 @@ int ifMax = 0;
 
 FILE *filePointer = fopen("./frag.txt", "w");
 
+char* glslPredefined[13] = {
+    "gl_FragColor",
+    "gl_FragDepth",    
+    "gl_FragCoord",
+    "gl_TexCoord",
+    "gl_Color",
+    "gl_Secondary",
+    "gl_FogFragCoord",
+    "gl_Light_Half",
+    "gl_Light_Ambient",
+    "gl_Material_Shininess",
+    "env1",
+    "env2",
+    "env3"
+};
+
+char* arbPredefined[13] = {
+	"result.color",
+	"result.depth",
+	"fragment.position",
+	"fragment.texcoord",
+	"fragment.color",
+	"fragment.color.secondary",
+	"fragment.fogcoord",
+	"state.light[0].half",
+	"state.lightmodel.ambient",
+	"state.material.shininess",
+	"program.env[1]",
+	"program.env[2]",
+	"program.env[3]"
+};
+
 int generateAssembly(node * ast){
 	int s;
 	int i;
@@ -432,17 +464,35 @@ int generateAssembly(node * ast){
 
 	    case VAR_NODE:
 	    	printf("VAR\n");
-	    	if(ast->var_expr.arr == -1){
-	    		fprintf(filePointer, "%s", ast->var_expr.id);
-	    	}else if(ast->var_expr.arr == 0){
-	    		fprintf(filePointer, "%s.x", ast->var_expr.id);
-	    	}else if(ast->var_expr.arr == 1){
-	    		fprintf(filePointer, "%s.y", ast->var_expr.id);
-	    	}else if(ast->var_expr.arr == 2){
-	    		fprintf(filePointer, "%s.z", ast->var_expr.id);
-	    	}else if(ast->var_expr.arr == 3){
-	    		fprintf(filePointer, "%s.w", ast->var_expr.id);
+	    	for(i = 0; i < 13; i++){
+	    		if(!strcmp(glslPredefined[i], ast->var_expr.id)){
+	    			if(ast->var_expr.arr == -1){
+	    				fprintf(filePointer, "%s", arbPredefined[i]);
+			    	}else if(ast->var_expr.arr == 0){
+			    		fprintf(filePointer, "%s.x", arbPredefined[i]);
+			    	}else if(ast->var_expr.arr == 1){
+			    		fprintf(filePointer, "%s.y", arbPredefined[i]);
+			    	}else if(ast->var_expr.arr == 2){
+			    		fprintf(filePointer, "%s.z", arbPredefined[i]);
+			    	}else if(ast->var_expr.arr == 3){
+			    		fprintf(filePointer, "%s.w", arbPredefined[i]);
+			    	}
+			    	break;
+	    		}
 	    	}
+	    	if(i >= 13){
+		    	if(ast->var_expr.arr == -1){
+		    		fprintf(filePointer, "%s", ast->var_expr.id);
+		    	}else if(ast->var_expr.arr == 0){
+		    		fprintf(filePointer, "%s.x", ast->var_expr.id);
+		    	}else if(ast->var_expr.arr == 1){
+		    		fprintf(filePointer, "%s.y", ast->var_expr.id);
+		    	}else if(ast->var_expr.arr == 2){
+		    		fprintf(filePointer, "%s.z", ast->var_expr.id);
+		    	}else if(ast->var_expr.arr == 3){
+		    		fprintf(filePointer, "%s.w", ast->var_expr.id);
+		    	}
+		    }
 	      	break;
 
 	    case DECLARATION_NODE:
