@@ -510,6 +510,12 @@ int generateAssembly(node * ast){
     			case EQ:
     				printf("BINARY EQ\n");
     				break;
+    			case 60: // LESS THAN
+    				printf("BINARY <\n");
+    				break;
+    			case 62: // GREATER THAN
+    				printf("BINARY >\n");
+    				break;
     			case LEQ:
     				printf("BINARY LEQ\n");
     				break;

@@ -706,6 +706,42 @@ void ast_print(node * ast) {
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ") ");
       }
+
+      else if(ast->binary_expr.op == 60) // LESS THAN
+      {  
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool < ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID < ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ") ");
+      }
+
+      else if(ast->binary_expr.op == 62) // GREATER THAN
+      {  
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        //printf("leftBinTypeVal:%d\n", leftBinTypeVal);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY bool > ");
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID > ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ") ");
+      }
       else if(ast->binary_expr.op == LEQ)   
       {  
         leftBinTypeVal = burrow(ast->binary_expr.left);
