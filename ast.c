@@ -614,6 +614,23 @@ void ast_print(node * ast) {
         ast_print(ast->binary_expr.right);
         fprintf(dumpFile, ") ");
       }
+      else if(ast->binary_expr.op == 94) // case for POW
+      {
+        leftBinTypeVal = burrow(ast->binary_expr.left);
+        rightBinTypeVal = burrow(ast->binary_expr.right);
+        //printf("leftBinTypeVal:%d, rightBinTypeVal:%d\n", leftBinTypeVal, rightBinTypeVal);
+        if(leftBinTypeVal != -1 && rightBinTypeVal != -1 && leftBinTypeVal == rightBinTypeVal)
+        {
+          type = getType(leftBinTypeVal);
+          fprintf(dumpFile, "(BINARY %s ^ ", type);
+        }
+        else // type mismatch
+          fprintf(dumpFile, "(BINARY INVALID ^ ");
+        ast_print(ast->binary_expr.left);
+        ast_print(ast->binary_expr.right);
+        fprintf(dumpFile, ") ");
+      }
+
       else if(ast->binary_expr.op == AND)
       {  
         leftBinTypeVal = burrow(ast->binary_expr.left);
