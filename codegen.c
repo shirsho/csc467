@@ -74,24 +74,9 @@ int generateAssembly(node * ast){
     				{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
 	    				{
-	    					
-	    					printf("left recurse add\n");
-	    					
+	    					printf("left recurse add\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					//generateAssembly(ast->binary_expr.right);
-	    					
-	    					/*
-	    					if(ast->binary_expr.left->op == 42) // for *
-	    					{
-	    						generateAssembly(ast->binary_expr.left);
-	    						generateAssembly(ast->binary_expr.right);
-	    					}
-	    					else
-	    					{
-	    						generateAssembly(ast->binary_expr.right);
-	    						generateAssembly(ast->binary_expr.left);
-	    					}
-	    					*/
 	    				}
 	    				else if(ast->binary_expr.left->kind == INT_NODE ||
 	    						ast->binary_expr.left->kind == FLOAT_NODE
@@ -125,7 +110,19 @@ int generateAssembly(node * ast){
 	    				{
 	    					printf("right recurse add\n");
 	    					//generateAssembly(ast->binary_expr.left);
-	    					generateAssembly(ast->binary_expr.right);
+	    					int prevTempCount = tempCount;
+	    				 	s = generateAssembly(ast->binary_expr.right);
+	    					
+	    					// Generate ADD instruction
+	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, prevTempCount - 1);
+							
+							printf("----Adding-----\n");
+		    				printf("TEMP tempVar%d;\n", tempCount);
+			    			printf("ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, prevTempCount - 1);
+							printf("--------\n");
+							tempCount++;
+	    					
 	    					//printf("if left kind = BINARY_EXPRESSION_NODE\n");
 	    				}
 	    				else if(ast->binary_expr.right->kind == INT_NODE ||
@@ -176,6 +173,20 @@ int generateAssembly(node * ast){
 	    				{
 	    					printf("left recurse\n");
 	    					generateAssembly(ast->binary_expr.left);
+
+
+
+
+
+	    					// Generate SUB instruction
+	    					//fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			//fprintf(filePointer, "SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+
+			    			//printf("----Adding-----\n");
+		    				//printf("TEMP tempVar%d;\n", tempCount);
+			    			//printf("ADD tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							//printf("--------\n");
+							//tempCount++;
 	    					//generateAssembly(ast->binary_expr.right);
 	    				}
 	    				else if(ast->binary_expr.left->kind == INT_NODE ||
@@ -211,7 +222,25 @@ int generateAssembly(node * ast){
 	    				{
 	    					printf("right recurse\n");
 	    					//generateAssembly(ast->binary_expr.left);
-	    					generateAssembly(ast->binary_expr.right);
+	    					//generateAssembly(ast->binary_expr.right);
+
+
+
+	    												///////////////////////////////////
+	    					int prevTempCount = tempCount;
+	    				 	s = generateAssembly(ast->binary_expr.right);
+	    					
+	    					// Generate ADD instruction
+	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount,  prevTempCount - 1, tempCount - 1);
+							
+							printf("----Subtracting-----\n");
+		    				printf("TEMP tempVar%d;\n", tempCount);
+			    			printf("SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount, prevTempCount - 1, tempCount - 1);
+							printf("--------\n");
+							tempCount++;
+
+							///////////////////////////////
 	    					//printf("if left kind = BINARY_EXPRESSION_NODE\n");
 	    				}
 	    				else if(ast->binary_expr.right->kind == INT_NODE ||
@@ -240,7 +269,7 @@ int generateAssembly(node * ast){
 		    				////////////////////
 		    				//ACTUAL
 							fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-			    			fprintf(filePointer, "SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+			    			fprintf(filePointer, "SUB tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 2, tempCount - 1);
 							
 
 							//printf("----Subtracting-----\n");
@@ -258,6 +287,7 @@ int generateAssembly(node * ast){
     				break;
     			case 42: // *
     				////////////////////////////////////////////////////
+    				printf("BINARY *\n");
 	    			if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
