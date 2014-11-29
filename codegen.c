@@ -264,6 +264,15 @@ int generateAssembly(node * ast){
 	    					  		fprintf(filePointer, ", ");		    					
 									generateAssembly(ast->binary_expr.right);
 									fprintf(filePointer, ";\n");
+
+									// Now multiply left operand with the reciprocal
+	    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+				    				fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
+	    					  		generateAssembly(ast->binary_expr.left);
+			    					fprintf(filePointer, ", ");
+			    					generateAssembly(ast->binary_expr.right);
+			    					fprintf(filePointer, ";\n");
+			    					tempCount++;
     					  		}
     					  		else
     					  		{
@@ -273,17 +282,27 @@ int generateAssembly(node * ast){
 	    					  		fprintf(filePointer, ", ");		    					
 									generateAssembly(ast->binary_expr.right);
 									fprintf(filePointer, ";\n");
-									tempCount++; 
+									tempCount++;
+
+									// Now multiply left operand with the reciprocal
+	    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+				    				fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
+	    					  		generateAssembly(ast->binary_expr.left);
+			    					fprintf(filePointer, ", ");
+			    					fprintf(filePointer, "tempVar%d", tempCount -1);
+			    					fprintf(filePointer, ";\n");
+			    					tempCount++; 
     					  		}    					  		
 			    				// Now multiply left operand with the reciprocal
-    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-			    				fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
-    					  		generateAssembly(ast->binary_expr.left);
-		    					fprintf(filePointer, ", ");
-		    					generateAssembly(ast->binary_expr.right);
-		    					fprintf(filePointer, ";\n");
-		    					tempCount++;
-    					  	}									    					
+    					  // 		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				// fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
+    					  // 		generateAssembly(ast->binary_expr.left);
+		    					// fprintf(filePointer, ", ");
+		    					// generateAssembly(ast->binary_expr.right);
+		    					// fprintf(filePointer, ";\n");
+		    					// tempCount++;
+    					  // 	}									    					
+	    					}
 	    				}
 	    			}
 	    			return tempCount - 1;
@@ -352,17 +371,25 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
     					 	  )
 	    					{
+	    						printf("if\n");
 	    						generateAssembly(ast->binary_expr.right);
 	    					}
 	    					else
 	    					{
+
 	    						// ADD
 	    						////////////////////////////////////////////////////////////
 	    						//There is a problem here there are only 2 inputs to the ADD
 	    						////////////////////////////////////////////////////////////
+	    						// EDIT: This is probably fixed now
+	    						tempCount++;
 	    						fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    				fprintf(filePointer, "ADD tempVar%d", tempCount);
 								fprintf(filePointer, ", ");
+								// add carried over evaluation result from previous AND
+								fprintf(filePointer, "tempVar%d", tempCount - 1);
+								fprintf(filePointer, ", ");
+								// with right expression's result
 			    				generateAssembly(ast->binary_expr.right);
 								fprintf(filePointer, ";\n");
 			    				tempCount++;
@@ -390,12 +417,14 @@ int generateAssembly(node * ast){
     					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
     					 	  	  )
 			    				{
+
 			    					generateAssembly(ast->binary_expr.left);		
 			    				}
 			    				else
 			    				{
 
 				    				generateAssembly(ast->binary_expr.right);
+				    				fprintf(filePointer, "\nProblem area\n" );
 			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    					
 			    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
@@ -417,6 +446,7 @@ int generateAssembly(node * ast){
 			    			}
     					  	else
     					  	{
+
     					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    				fprintf(filePointer, "ADD tempVar%d, ", tempCount);
 								generateAssembly(ast->binary_expr.left);
@@ -460,9 +490,17 @@ int generateAssembly(node * ast){
 	    					else
 	    					{
 	    						// ADD
+	    						////////////////////////////////////////////////////////////
+	    						//The 2 inputs to the ADD problem occured here as well, this is now fixed
+	    						////////////////////////////////////////////////////////////
+	    						tempCount++;
 	    						fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    				fprintf(filePointer, "ADD tempVar%d", tempCount);
 								fprintf(filePointer, ", ");
+								// add carried over evaluation result from previous AND
+								fprintf(filePointer, "tempVar%d", tempCount - 1);
+								fprintf(filePointer, ", ");
+								// with right expression's result
 			    				generateAssembly(ast->binary_expr.right);
 								fprintf(filePointer, ";\n");
 			    				tempCount++;
@@ -497,7 +535,7 @@ int generateAssembly(node * ast){
 
 				    				generateAssembly(ast->binary_expr.right);
 			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-			    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
+			    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);			    					
 			    					generateAssembly(ast->binary_expr.left);
 									fprintf(filePointer, ", ");
 				    				fprintf(filePointer, "tempVar%d", tempCount - 1);
