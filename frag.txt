@@ -2,17 +2,16 @@
 #DECLARATION
 TEMP a;
 TEMP tempVar0;
-MOV tempVar0, 1;
+ADD tempVar0, 1, 1;
 TEMP tempVar1;
-MOV tempVar1, 1;
+SUB tempVar1, tempVar0, 1;
 TEMP tempVar2;
-SGE tempVar2, tempVar1, tempVar0;
+CMP tempVar2, tempVar1, 1, -1;
+TEMP tempVar2;
+ADD tempVar2, -1;
 TEMP tempVar3;
-SGE tempVar3, tempVar0, tempVar1;
+MAX tempVar3, tempVar3, tempVar2;
 TEMP tempVar4;
-MUL tempVar4, tempVar3, tempVar2;
-TEMP tempVar5;
-MUL tempVar5, -1, tempVar4;
-CMP tempVar6, tempVar5, 1, -1;
-MOV a, tempVar5;
+CMP tempVar4, tempVar3, -1, 1;
+MOV a, tempVar4;
 END

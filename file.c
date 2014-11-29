@@ -1,5 +1,5 @@
 {
-	bool a = (1==1);
+	bool a = (true && true) || false;
 }
 
 /*{
@@ -26,7 +26,6 @@
 }*/
 
 /*
-
 {
 	vec4 temp;
 	if (true){
@@ -41,9 +40,9 @@
 	gl_FragColor = temp;
 
 }
+*/
 
-
-
+/*
 
 	vec4 v4 = gl_Color;
 	int num = gl_Color[3];
