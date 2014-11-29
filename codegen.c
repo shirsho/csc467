@@ -337,6 +337,105 @@ int generateAssembly(node * ast){
     				break;
     			case AND:
     				printf("BINARY AND\n");
+    				if(ast->binary_expr.left && ast->binary_expr.right)
+    				{
+    					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					  )
+	    				{
+
+	    					printf("left recurse AND\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    					// Now evaluate right side
+
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+	    					{
+	    						generateAssembly(ast->binary_expr.right);
+	    					}
+	    					else
+	    					{
+	    						// ADD
+	    						fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "ADD tempVar%d", tempCount, tempCount - 1);
+								fprintf(filePointer, ", ");
+			    				generateAssembly(ast->binary_expr.right);
+								fprintf(filePointer, ";\n");
+			    				tempCount++;
+			    				// SUB
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "SUB tempVar%d, tempVar%d, 1;\n", tempCount, tempCount - 1);
+			    				tempCount++;
+								// CMP
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, -1, 1;\n", tempCount, tempCount - 1);
+
+	    					}
+	    					
+	    					
+	    				}
+						else
+	    				{	
+
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+			    			{
+			    				printf("right recurse AND\n");
+			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					 	  	  )
+			    				{
+			    					generateAssembly(ast->binary_expr.left);		
+			    				}
+			    				else
+			    				{
+
+				    				generateAssembly(ast->binary_expr.right);
+			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    					
+			    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
+			    					generateAssembly(ast->binary_expr.left);
+									fprintf(filePointer, ", ");
+				    				fprintf(filePointer, "tempVar%d", tempCount - 1);
+				    				fprintf(filePointer, ";\n");
+				    				tempCount++;
+
+				    				// SUB
+			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    					fprintf(filePointer, "SUB tempVar%d, tempVar%d, 1;\n", tempCount, tempCount - 1);
+			    					tempCount++;
+
+			    					//CMP
+				    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+				    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
+			    				}
+			    			}
+    					  	else
+    					  	{
+    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "ADD tempVar%d, ", tempCount);
+								generateAssembly(ast->binary_expr.left);
+								fprintf(filePointer, ", ");
+			    				generateAssembly(ast->binary_expr.right);
+								fprintf(filePointer, ";\n");
+			    				tempCount++;
+
+			    				// SUB
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "SUB tempVar%d, tempVar%d, 1;\n", tempCount, tempCount - 1);
+			    				tempCount++;
+
+			    				// CMP
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
+	    					}
+
+										    					
+	    				}
+	    			}
+	    			return tempCount;
     				break;
     			case OR:
     				printf("BINARY OR\n");
