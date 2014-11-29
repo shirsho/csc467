@@ -810,8 +810,8 @@ int generateAssembly(node * ast){
 	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
 	    				ast->declaration_expr.right->kind == FUNCTION_NODE ||
 	    				ast->declaration_expr.right->kind == EXPRESSION_NODE){
-	    			generateAssembly(ast->declaration_expr.right);
-	    			fprintf(filePointer, "PARAM %s = tempVar%d;\n", ast->declaration_expr.id, tempCount);
+	    			s = generateAssembly(ast->declaration_expr.right);
+	    			fprintf(filePointer, "PARAM %s = tempVar%d;\n", ast->declaration_expr.id, s);
 	    		}else{
 	    			fprintf(filePointer, "PARAM %s = ",  ast->declaration_expr.id);
 	    			generateAssembly(ast->declaration_expr.right);
