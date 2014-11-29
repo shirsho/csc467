@@ -615,9 +615,82 @@ int generateAssembly(node * ast){
     				break;
     			case GEQ:
     				printf("BINARY GEQ\n");
+    				if(ast->binary_expr.left)
+	    			{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					
+	    					printf("left recurse EQ\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    				
+	    				}
+	    				else if(ast->binary_expr.left->kind == INT_NODE ||
+	    						ast->binary_expr.left->kind == FLOAT_NODE
+	    						)
+	    				{
+	    					/*
+	    					printf("----------binary expr left ---------\n");
+	    			  		printf("tempCount = %d\n", tempCount);
+		    				printf("TEMP tempVar%d;\n", tempCount);
+		    				printf("MOV tempVar%d, ", tempCount);
+		    				*/
+		    				//////////////
+		    				// STORING LEFT OF BINARY EXPRESSION
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				
+		    				//////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				tempCount++;
+		    				//generateAssembly(ast->binary_expr.right);
+
+					
+	    				}
+	    			}
+	    			if(ast->binary_expr.right)
+	    			{
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					//printf("right recurse EQ\n");
+	    					generateAssembly(ast->binary_expr.right);
+	    				}
+	    				else if(ast->binary_expr.right->kind == INT_NODE ||
+	    						ast->binary_expr.right->kind == FLOAT_NODE
+	    						)
+	    				{
+	    					/*
+	    					printf("----------binary expr right ---------\n");
+	    			  		printf("tempCount = %d\n", tempCount);
+		    				printf("TEMP tempVar%d;\n", tempCount);
+		    				printf("MOV tempVar%d, ", tempCount);
+		    				*/
+		    				////////////////////////////
+		    				// STORING RIGHT OF BINARY EXPRESSION
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+		    				
+		    				///////////////////////
+		    				//printf(";\n");
+		    				//printf("----------\n");
+
+		    				// GENERATING INSTRUCTIONS TO DO EQ
+		    				tempCount++;
+			    			
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "SGE tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+			    			
+							tempCount++;					
+	    				}
+		    		}
+	    			return tempCount - 1;
     				break;
     		}
-	    	//if(ast->binary_expr)
 	      	break;
 
 	    case UNARY_EXPRESSION_NODE:
