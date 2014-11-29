@@ -447,7 +447,6 @@ int generateAssembly(node * ast){
     				break;
     			case 60: // LESS THAN
     				printf("BINARY <\n");
-    				    				printf("BINARY LEQ\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -532,6 +531,87 @@ int generateAssembly(node * ast){
     				break;
     			case 62: // GREATER THAN
     				printf("BINARY >\n");
+    				if(ast->binary_expr.left && ast->binary_expr.right)
+    				{
+    					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					  )
+	    				{
+
+	    					printf("left recurse >\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    					// Now evaluate right side
+
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+	    					{
+	    						generateAssembly(ast->binary_expr.right);
+	    					}
+	    					else
+	    					{
+	    						fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "SUB tempVar%d, tempVar%d ", tempCount, tempCount - 1);
+								fprintf(filePointer, ", ");
+			    				generateAssembly(ast->binary_expr.right);
+								fprintf(filePointer, ";\n");
+			    				tempCount++;
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, -1, 1;\n", tempCount, tempCount - 1);
+
+	    					}
+	    					
+	    					
+	    				}
+						else
+	    				{	
+
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+			    			{
+			    				printf("right recurse >\n");
+			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					 	  	  )
+			    				{
+			    					generateAssembly(ast->binary_expr.left);		
+			    				}
+			    				else
+			    				{
+
+				    				generateAssembly(ast->binary_expr.right);
+			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    					
+			    					fprintf(filePointer, "SUB tempVar%d, ", tempCount);
+			    					generateAssembly(ast->binary_expr.left);
+									fprintf(filePointer, ", ");
+				    				fprintf(filePointer, "tempVar%d", tempCount - 1);
+				    				fprintf(filePointer, ";\n");
+				    				tempCount++;
+
+				    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+				    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, -1, 1;\n", tempCount, tempCount - 1);
+			    				}
+			    			}
+    					  	else
+    					  	{
+    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "SUB tempVar%d, ", tempCount);
+								generateAssembly(ast->binary_expr.left);
+								fprintf(filePointer, ", ");
+			    				generateAssembly(ast->binary_expr.right);
+								fprintf(filePointer, ";\n");
+			    				tempCount++;
+
+			    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "CMP tempVar%d, tempVar%d, -1, 1;\n", tempCount, tempCount - 1);
+	    					}
+
+										    					
+	    				}
+	    			}
+	    			return tempCount;
     				break;
     			case LEQ:
     				printf("BINARY LEQ\n");
