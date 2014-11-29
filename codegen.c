@@ -598,11 +598,12 @@ int generateAssembly(node * ast){
 			    			
 			    			tempCount++;
 			    			// THIS RESULT REGISTER STORES WHETHER THEY ARE EQUAL OR NOT
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    			fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
 					
 	    				}
 		    		}
-	    			return tempCount - 1;
+	    			return tempCount;
     				break;
     			case 60: // LESS THAN
     				printf("BINARY <\n");
@@ -750,7 +751,7 @@ int generateAssembly(node * ast){
 	    	//printf("---INT---");
 	    	//fprintf(filePointer, "#INT\n");
 	    	//printf("int expr val = %d\n", ast->int_expr.val);
-	    	printf("%d", ast->int_expr.val);
+	    	//printf("%d", ast->int_expr.val);
 	      	
 	    	fprintf(filePointer, "%d", ast->int_expr.val);
 	      	break;
