@@ -72,14 +72,12 @@ int generateAssembly(node * ast){
     			  	printf("BINARY +\n");
     			  	if(ast->binary_expr.left && ast->binary_expr.right)
     				{
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+    					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					  )
 	    				{
 	    					printf("left recurse add\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
-	    					//generateAssembly(ast->binary_expr.right);
-	    				}
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
-	    				{
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 	    					fprintf(filePointer, "ADD tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
 	    					generateAssembly(ast->binary_expr.right);
@@ -87,15 +85,34 @@ int generateAssembly(node * ast){
 	    					tempCount++;
 							
 	    				}
-	    				else
+						else
 	    				{
-	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-			    			fprintf(filePointer, "ADD tempVar%d, ", tempCount);								
-							generateAssembly(ast->binary_expr.left);
-		    				fprintf(filePointer, ", ");
-		    				generateAssembly(ast->binary_expr.right);
-		    				fprintf(filePointer, ";\n");
-		    				tempCount++;		    					
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+			    			{
+			    				printf("right recurse add\n");	    					
+		    					generateAssembly(ast->binary_expr.right);
+		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
+		    					generateAssembly(ast->binary_expr.left);
+		    					fprintf(filePointer, ", ");
+		    					fprintf(filePointer, "tempVar%d", tempCount - 1);
+		    					fprintf(filePointer, ";\n");
+		    					tempCount++;
+			    			}
+    					  	else
+    					  	{
+    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "ADD tempVar%d, ", tempCount);	
+    					  		generateAssembly(ast->binary_expr.left);
+		    					fprintf(filePointer, ", ");
+		    					generateAssembly(ast->binary_expr.right);
+		    					fprintf(filePointer, ";\n");
+		    					tempCount++;
+    					  	}
+
+										    					
 	    				}
 	    			}
     				return tempCount - 1;
@@ -170,6 +187,38 @@ int generateAssembly(node * ast){
     				break;
     			case 94:
     				printf("BINARY ^\n");
+    ////////////////////////////////////////////////////////////////
+    				printf("BINARY *\n");
+    				if(ast->binary_expr.left && ast->binary_expr.right)
+    				{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					printf("left recurse ^\n");	    					
+	    					generateAssembly(ast->binary_expr.left);
+	    					//generateAssembly(ast->binary_expr.right);
+	    				}
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+	    					fprintf(filePointer, "POW tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
+	    					generateAssembly(ast->binary_expr.right);
+	    					fprintf(filePointer, ";\n");
+	    					tempCount++;
+							
+	    				}
+	    				else
+	    				{
+	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "POW tempVar%d, ", tempCount);								
+							generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ", ");
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+		    				tempCount++;		    					
+	    				}
+	    			}
+    /////////////////////////////////////////////////////////////////
+    				#if 0
     				if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
@@ -269,6 +318,8 @@ int generateAssembly(node * ast){
 		    				//generateAssembly(ast->binary_expr.right);	
 	    				}
 		    		}
+		    		#endif
+
 	    			return tempCount - 1;
 
     				break;
