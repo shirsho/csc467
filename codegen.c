@@ -288,7 +288,7 @@ int generateAssembly(node * ast){
 	    			}
 	    			return tempCount - 1;
     				break;
-    			case 94:
+    			case 94: // ^
     				printf("BINARY ^\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
@@ -343,6 +343,57 @@ int generateAssembly(node * ast){
     				break;
     			case NEQ:
     				printf("BINARY NEQ\n");
+					if(ast->binary_expr.left)
+	    			{
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					//printf("left recurse EQ\n");
+	    					generateAssembly(ast->binary_expr.left);
+	    				}
+	    			}
+	    			if(ast->binary_expr.right)
+	    			{
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				{
+	    					//printf("right recurse EQ\n");
+	    					generateAssembly(ast->binary_expr.right);
+	    				}
+						else
+	    				{
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "SGE tempVar%d, ", tempCount);
+							generateAssembly(ast->binary_expr.left);
+							fprintf(filePointer, ", ");
+		    				generateAssembly(ast->binary_expr.right);
+		    				fprintf(filePointer, ";\n");
+			    			tempCount++;
+
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "SGE tempVar%d, ", tempCount);
+							generateAssembly(ast->binary_expr.right);
+							fprintf(filePointer, ", ");
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				tempCount++;
+
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MUL tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							tempCount++;
+			    			
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MUL tempVar%d, -1, tempVar%d;\n", tempCount, tempCount - 1);			    			
+			    			tempCount++;
+
+			    			// THIS RESULT REGISTER STORES WHETHER THEY ARE EQUAL OR NOT
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
+			    			tempCount++;
+			    			// NOW IF THEY ARE EQUAL, RETURN FALSE, ELSE RETURN TRUE
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
+	    				}
+		    		}
+	    			return tempCount;
     				break;
     			case EQ:
     				printf("BINARY EQ\n");
@@ -421,7 +472,6 @@ int generateAssembly(node * ast){
 	    					}
 	    					else
 	    					{
-	    						printf("bleh\n");
 	    						fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    				fprintf(filePointer, "SGE tempVar%d, tempVar%d ", tempCount, tempCount - 1);
 								fprintf(filePointer, ", ");
@@ -477,7 +527,6 @@ int generateAssembly(node * ast){
 			    			}
     					  	else
     					  	{
-    					  		printf("in else\n");
     					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    				fprintf(filePointer, "SGE tempVar%d, ", tempCount);
 								generateAssembly(ast->binary_expr.left);
