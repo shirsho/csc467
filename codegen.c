@@ -1061,9 +1061,17 @@ int generateAssembly(node * ast){
 
 	    case EXPRESSION_NODE:
 	    	if(ast->expression_expr.expr != NULL){
-	    		generateAssembly(ast->expression_expr.expr);
+	    		s = generateAssembly(ast->expression_expr.expr);
 	    	}
+	    	return s;
 	      	break;
+
+	    case VARIABLE_NODE:
+      		if(ast->variable_expr.expr != NULL){
+      			s = generateAssembly(ast->variable_expr.expr);
+      		}
+      		return s;
+      		break;
 
 	    default: break;
 	}

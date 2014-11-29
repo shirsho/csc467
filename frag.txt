@@ -14,5 +14,5 @@ MUL tempVar4, tempVar3, tempVar2;
 TEMP tempVar5;
 MUL tempVar5, -1, tempVar4;
 CMP tempVar6, tempVar5, 1, -1;
-MOV a, tempVar-1;
+MOV a, tempVar5;
 END
