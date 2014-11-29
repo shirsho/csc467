@@ -215,7 +215,78 @@ int generateAssembly(node * ast){
     				break;
     			case 47: // /
     				printf("BINARY /\n");
+    				if(ast->binary_expr.left && ast->binary_expr.right)
+    				{
+    					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					  )
+	    				{
+	    					printf("left recurse div\n");	    					
+	    					generateAssembly(ast->binary_expr.left);
+	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 
+	    					fprintf(filePointer, "MUL tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
+	    					generateAssembly(ast->binary_expr.right);
+	    					fprintf(filePointer, ";\n");
+	    					tempCount++;
+							
+	    				}
+						else
+	    				{
+	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					 	  )
+			    			{
+			    				printf("right recurse div\n");	    					
+		    					generateAssembly(ast->binary_expr.right);
+		    					// Generate reciprocal received from right expression
+		    					fprintf(filePointer, "RCP ");
+    					  		fprintf(filePointer, "tempVar%d", tempCount-1);
+								fprintf(filePointer, ", ");	
+    					  		fprintf(filePointer, "tempVar%d", tempCount-1);	    					  		
+	    					  	fprintf(filePointer, ";\n");
+	    					  	// Now multiply left operand with the reciprocal
+		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    					fprintf(filePointer, "MUL tempVar%d, ", tempCount);
+		    					generateAssembly(ast->binary_expr.left);
+		    					fprintf(filePointer, ", ");
+		    					fprintf(filePointer, "tempVar%d", tempCount - 1);
+		    					fprintf(filePointer, ";\n");
+		    					tempCount++;
+			    			}
+    					  	else
+    					  	{
+    					  		// Generate reciprocal first
+    					  		if(ast->binary_expr.right->kind == VAR_NODE)
+    					  		{
+    					  			fprintf(filePointer, "RCP ");
+	    					  		generateAssembly(ast->binary_expr.right);
+	    					  		fprintf(filePointer, ", ");		    					
+									generateAssembly(ast->binary_expr.right);
+									fprintf(filePointer, ";\n");
+    					  		}
+    					  		else
+    					  		{
+    					  			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+    					  			fprintf(filePointer, "RCP ");
+									fprintf(filePointer, "tempVar%d", tempCount);	    					  		
+	    					  		fprintf(filePointer, ", ");		    					
+									generateAssembly(ast->binary_expr.right);
+									fprintf(filePointer, ";\n");
+									tempCount++; 
+    					  		}    					  		
+			    				// Now multiply left operand with the reciprocal
+    					  		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    				fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
+    					  		generateAssembly(ast->binary_expr.left);
+		    					fprintf(filePointer, ", ");
+		    					generateAssembly(ast->binary_expr.right);
+		    					fprintf(filePointer, ";\n");
+		    					tempCount++;
+    					  	}									    					
+	    				}
+	    			}
+	    			return tempCount - 1;
     				break;
     			case 94:
     				printf("BINARY ^\n");
