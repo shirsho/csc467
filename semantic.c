@@ -967,6 +967,12 @@ int semantic_check(node *ast, int assign) {
 	      		return semantic_check(ast->expression_expr.expr, 0);
 	      	break;
 
+            case VARIABLE_NODE:
+                  //printf("\nExpression semantics\n");
+                  if(ast->variable_expr.expr != NULL);
+                        return semantic_check(ast->variable_expr.expr, 0);
+                  break;
+
 	      default: break;
 	}
   return 0; // failed checks

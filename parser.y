@@ -299,7 +299,7 @@ expression
       { $$ = ast_allocate(EXPRESSION_NODE, $2);
         yTRACE("expression -> ( expression ) \n") }
   | variable 
-      { $$ = ast_allocate(EXPRESSION_NODE, $1);
+      { $$ = ast_allocate(VARIABLE_NODE, $1);
         yTRACE("expression -> variable \n") }
   ;
 

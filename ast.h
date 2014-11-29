@@ -50,7 +50,8 @@ typedef enum {
   DECLARATIONS_NODE     = (1 << 16),
   ARGUMENTS_NODE        = (1 << 17),
   ARGUMENTS_OPT_NODE    = (1 << 18),
-  BOOL_NODE             = (1 << 19)
+  BOOL_NODE             = (1 << 19),
+  VARIABLE_NODE         = (1 << 20)
 } node_kind;
 
 struct node_ {
@@ -150,6 +151,10 @@ struct node_ {
     struct {
       node *expr;   //expression or variable
     } expression_expr;
+
+    struct {
+      node *expr;   //expression or variable
+    } variable_expr;
 
   };
 };

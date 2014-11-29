@@ -732,7 +732,11 @@ int generateAssembly(node * ast){
 	    case DECLARATION_NODE:
 	    	fprintf(filePointer, "#DECLARATION\n");
 	    	if(ast->declaration_expr.constant == 261){
-	    		if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE){
+	    		if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE || 
+	    				ast->declaration_expr.right->kind == UNARY_EXPRESSION_NODE ||
+	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
+	    				ast->declaration_expr.right->kind == FUNCTION_NODE ||
+	    				ast->declaration_expr.right->kind == EXPRESSION_NODE){
 	    			generateAssembly(ast->declaration_expr.right);
 	    			fprintf(filePointer, "PARAM %s = tempVar%d;\n", ast->declaration_expr.id, tempCount);
 	    		}else{
@@ -748,7 +752,8 @@ int generateAssembly(node * ast){
 	    			if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE || 
 	    				ast->declaration_expr.right->kind == UNARY_EXPRESSION_NODE ||
 	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
-	    				ast->declaration_expr.right->kind == FUNCTION_NODE){
+	    				ast->declaration_expr.right->kind == FUNCTION_NODE ||
+	    				ast->declaration_expr.right->kind == EXPRESSION_NODE){
 
 	    				s = generateAssembly(ast->declaration_expr.right);
 	    				fprintf(filePointer, "MOV %s, tempVar%d;\n",  ast->declaration_expr.id, s);
@@ -773,7 +778,8 @@ int generateAssembly(node * ast){
 				if(ast->if_expr.if_comparison->kind == BINARY_EXPRESSION_NODE || 
 					ast->if_expr.if_comparison->kind == UNARY_EXPRESSION_NODE ||
 					ast->if_expr.if_comparison->kind == CONSTRUCTOR_NODE ||
-					ast->if_expr.if_comparison->kind == FUNCTION_NODE){
+					ast->if_expr.if_comparison->kind == FUNCTION_NODE ||
+					ast->if_expr.if_comparison->kind == EXPRESSION_NODE){
 					s = generateAssembly(ast->if_expr.if_comparison);
 					fprintf(filePointer, "CMP condVar%d, tempVar%d;\n", ifFlag, s);
 				}else{
@@ -806,7 +812,8 @@ int generateAssembly(node * ast){
 		    	if(ast->assign_expr.right->kind == BINARY_EXPRESSION_NODE || 
 					ast->assign_expr.right->kind == UNARY_EXPRESSION_NODE ||
 					ast->assign_expr.right->kind == CONSTRUCTOR_NODE ||
-					ast->assign_expr.right->kind == FUNCTION_NODE){
+					ast->assign_expr.right->kind == FUNCTION_NODE ||
+					ast->assign_expr.right->kind == EXPRESSION_NODE){
 					s = generateAssembly(ast->assign_expr.right);
 					fprintf(filePointer, "MOV ");
 					generateAssembly(ast->assign_expr.left);
@@ -823,7 +830,8 @@ int generateAssembly(node * ast){
 				if(ast->assign_expr.right->kind == BINARY_EXPRESSION_NODE || 
 					ast->assign_expr.right->kind == UNARY_EXPRESSION_NODE ||
 					ast->assign_expr.right->kind == CONSTRUCTOR_NODE ||
-					ast->assign_expr.right->kind == FUNCTION_NODE){
+					ast->assign_expr.right->kind == FUNCTION_NODE ||
+					ast->assign_expr.right->kind == EXPRESSION_NODE){
 					s = generateAssembly(ast->assign_expr.right);
 					for(i = ifFlag; i >= 1; i--){
 						if(i == 1){

@@ -1941,7 +1941,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 302 "parser.y"
-    { (yyval.as_ast) = ast_allocate(EXPRESSION_NODE, (yyvsp[(1) - (1)].as_ast));
+    { (yyval.as_ast) = ast_allocate(VARIABLE_NODE, (yyvsp[(1) - (1)].as_ast));
         yTRACE("expression -> variable \n") }
     break;
 

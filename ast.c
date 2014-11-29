@@ -120,7 +120,11 @@ node *ast_allocate(node_kind kind, ...) {
       break;
 
     case EXPRESSION_NODE:
-      ast->expression_expr.expr = va_arg(args, node *);   //For either brackets or accessing a variable
+      ast->expression_expr.expr = va_arg(args, node *);   //For brackets
+      break;
+
+    case VARIABLE_NODE:
+      ast->variable_expr.expr = va_arg(args, node *);   //For accessing a variable
       break;
 
     default: break;
@@ -252,6 +256,12 @@ void ast_free(node *ast) {
     case EXPRESSION_NODE:
       if(ast->expression_expr.expr != NULL)
         ast_free(ast->expression_expr.expr);
+      free(ast);
+      break;
+
+    case VARIABLE_NODE:
+      if(ast->variable_expr.expr != NULL)
+        ast_free(ast->variable_expr.expr);
       free(ast);
       break;
 
@@ -518,6 +528,11 @@ void ast_print(node * ast) {
     
     case EXPRESSION_NODE:
       ast_print(ast->expression_expr.expr);
+      //fprintf(dumpFile, "<---EXPRESSION_NODE\n");
+      break;
+
+    case VARIABLE_NODE:
+      ast_print(ast->variable_expr.expr);
       //fprintf(dumpFile, "<---EXPRESSION_NODE\n");
       break;
     
