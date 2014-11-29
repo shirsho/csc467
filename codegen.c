@@ -635,7 +635,7 @@ int generateAssembly(node * ast){
 						else
 	    				{
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "SLE tempVar%d, ", tempCount);
+		    				fprintf(filePointer, "SLT tempVar%d, ", tempCount);
 							generateAssembly(ast->binary_expr.left);
 							fprintf(filePointer, ", ");
 		    				generateAssembly(ast->binary_expr.right);
