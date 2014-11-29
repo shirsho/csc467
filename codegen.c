@@ -513,36 +513,8 @@ int generateAssembly(node * ast){
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
 	    				{
-	    					
-	    					printf("left recurse EQ\n");
+	    					//printf("left recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.left);
-	    				
-	    				}
-	    				else if(ast->binary_expr.left->kind == INT_NODE ||
-	    						ast->binary_expr.left->kind == FLOAT_NODE
-	    						)
-	    				{
-	    					/*
-	    					printf("----------binary expr left ---------\n");
-	    			  		printf("tempCount = %d\n", tempCount);
-		    				printf("TEMP tempVar%d;\n", tempCount);
-		    				printf("MOV tempVar%d, ", tempCount);
-		    				*/
-		    				//////////////
-		    				// STORING LEFT OF BINARY EXPRESSION
-		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
-		    				generateAssembly(ast->binary_expr.left);
-		    				fprintf(filePointer, ";\n");
-		    				
-		    				//////////////
-		    				//printf(";\n");
-		    				//printf("----------\n");
-
-		    				tempCount++;
-		    				//generateAssembly(ast->binary_expr.right);
-
-					
 	    				}
 	    			}
 	    			if(ast->binary_expr.right)
@@ -552,55 +524,35 @@ int generateAssembly(node * ast){
 	    					//printf("right recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.right);
 	    				}
-	    				else if(ast->binary_expr.right->kind == INT_NODE ||
-	    						ast->binary_expr.right->kind == FLOAT_NODE
-	    						)
+						else
 	    				{
-	    					/*
-	    					printf("----------binary expr right ---------\n");
-	    			  		printf("tempCount = %d\n", tempCount);
-		    				printf("TEMP tempVar%d;\n", tempCount);
-		    				printf("MOV tempVar%d, ", tempCount);
-		    				*/
-		    				////////////////////////////
-		    				// STORING RIGHT OF BINARY EXPRESSION
 		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "MOV tempVar%d, ", tempCount);
+		    				fprintf(filePointer, "SGE tempVar%d, ", tempCount);
+							generateAssembly(ast->binary_expr.left);
+							fprintf(filePointer, ", ");
 		    				generateAssembly(ast->binary_expr.right);
 		    				fprintf(filePointer, ";\n");
-		    				
-		    				///////////////////////
-		    				//printf(";\n");
-		    				//printf("----------\n");
-
-		    				// GENERATING INSTRUCTIONS TO DO EQ
-		    				tempCount++;
-			    			
-			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "SGE tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
-			    			
-							tempCount++;
-			    			
-			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "SGE tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 3, tempCount - 2);
-			    			
-
-		    				tempCount++;
-			    			
-			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "MUL tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
-
-							
-							tempCount++;
-			    			
-			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-		    				fprintf(filePointer, "MUL tempVar%d, -1, tempVar%d;\n", tempCount, tempCount - 1);
-			    			
 			    			tempCount++;
+
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+			    			fprintf(filePointer, "SGE tempVar%d, ", tempCount);
+							generateAssembly(ast->binary_expr.right);
+							fprintf(filePointer, ", ");
+		    				generateAssembly(ast->binary_expr.left);
+		    				fprintf(filePointer, ";\n");
+		    				tempCount++;
+
+		    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MUL tempVar%d, tempVar%d, tempVar%d;\n", tempCount, tempCount - 1, tempCount - 2);
+							tempCount++;
+			    			
+			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+		    				fprintf(filePointer, "MUL tempVar%d, -1, tempVar%d;\n", tempCount, tempCount - 1);			    			
+			    			tempCount++;
+
 			    			// THIS RESULT REGISTER STORES WHETHER THEY ARE EQUAL OR NOT
 			    			fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    			fprintf(filePointer, "CMP tempVar%d, tempVar%d, 1, -1;\n", tempCount, tempCount - 1);
-					
 	    				}
 		    		}
 	    			return tempCount;
