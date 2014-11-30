@@ -1236,14 +1236,10 @@ int generateAssembly(node * ast){
 						}
 					}
 				}else{
-					if(tempCount >= tempDeclared && ifFlag > 1){
-			    		tempDeclared += 1;
-			    		tempCount += 1;
+					if(ifFlag > 1){
 			    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    		s = tempCount;
-			    	}else{
 			    		tempCount += 1;
-			    		s = tempCount;
 			    	}
 					for(i = ifFlag; i >= 1; i--){
 						if(i == 1){
@@ -1263,56 +1259,41 @@ int generateAssembly(node * ast){
 							fprintf(filePointer, ";\n");
 						}
 					}
-					if(tempCount >= tempDeclared)
-	    				tempCount -= 1;
 				}
 				return s;
 			}
 	      	break;
 
 	    case FUNCTION_NODE:
-	    	if(tempCount >= tempDeclared){
-	    		tempDeclared += 1;
-	    		tempCount += 1;
-	    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-	    		s = tempCount;
-	    	}else{
-	    		tempCount += 1;
-	    		s = tempCount;
-	    	}
+    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+    		s = tempCount;
+    		tempCount += 1;
+	    	
 	    	constructfunc = 2;
 	    	if(ast->func_expr.func == 264){
-	    		fprintf(filePointer, "DP3 tempVar%d", tempCount);
+	    		fprintf(filePointer, "DP3 tempVar%d", s);
 	    		generateAssembly(ast->construt_expr.right);
 	    		fprintf(filePointer, ";\n");
 	    	}else if(ast->func_expr.func == 265){
-	    		fprintf(filePointer, "LIT tempVar%d", tempCount);
+	    		fprintf(filePointer, "LIT tempVar%d", s);
 	    		generateAssembly(ast->construt_expr.right);
 	    		fprintf(filePointer, ";\n");
 	    	}else if(ast->func_expr.func == 266){
-	    		fprintf(filePointer, "RSQ tempVar%d", tempCount);
+	    		fprintf(filePointer, "RSQ tempVar%d", s);
 	    		generateAssembly(ast->construt_expr.right);
 	    		fprintf(filePointer, ";\n");
 	    	}
-	    	if(tempCount >= tempDeclared)
-	    		tempCount -= 1;
 	    	return s;
 	      	break;
 
 	    case CONSTRUCTOR_NODE:
-	    	if(tempCount >= tempDeclared){
-	    		tempDeclared += 1;
-	    		tempCount += 1;
-	    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-	    		s = tempCount;
-	    	}else{
-	    		tempCount += 1;
-	    		s = tempCount;
-	    	}
+    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+    		s = tempCount;
+    		tempCount += 1;
+
 	    	constructfunc = 1;
 	    	generateAssembly(ast->construt_expr.right);
-	    	if(tempCount >= tempDeclared)
-	    		tempCount -= 1;
+
 	    	return s;
 	      	break;
 
@@ -1338,22 +1319,22 @@ int generateAssembly(node * ast){
 	    	if(ast->arguments_expr.left != NULL)
 	    		generateAssembly(ast->arguments_expr.left);
 	    	if(argumentsCount == 0 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount);
+	    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount - 1);
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
 	    		fprintf(filePointer, ";\n");
 	    	}else if(argumentsCount == 1 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount);
+	    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount - 1);
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
 	    		fprintf(filePointer, ";\n");
 	    	}else if(argumentsCount == 2 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount);
+	    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount - 1);
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
 	    		fprintf(filePointer, ";\n");
 	    	}else if(argumentsCount == 3 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount);
+	    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount - 1);
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
 	    		fprintf(filePointer, ";\n");

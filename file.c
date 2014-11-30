@@ -2,7 +2,7 @@
 	bool a = (true && true) || false;
 }*/
 
-/*{
+{
 	vec4 fCol = gl_Color;
 	vec4 fTex = gl_TexCoord;
 	vec4 eyeNorm;
@@ -23,9 +23,9 @@
 	shade = shade + coeff[1] * fCol;
 	shade = shade + coeff[2] * fCol;
 	gl_FragColor = shade;
-}*/
+}
 
-
+/*
 {
 	vec4 temp;
 	if (true){
@@ -39,7 +39,7 @@
 	}
 	gl_FragColor = temp;
 
-}
+}*/
 
 
 /*
