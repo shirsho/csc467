@@ -1,17 +1,23 @@
 !!ARBfp1.0
 #DECLARATION
-TEMP a;
+TEMP temp;
+TEMP condVar1;
+MOV condVar1, 1;
 TEMP tempVar0;
-ADD tempVar0, 1, 1;
+MUL tempVar0, fragment.color.x, fragment.position.x;
+CMP temp.x, condVar1, temp.x, tempVar0;
 TEMP tempVar1;
-SUB tempVar1, tempVar0, 1;
-TEMP tempVar2;
-CMP tempVar2, tempVar1, 1, -1;
-TEMP tempVar2;
-ADD tempVar2, -1;
+MUL tempVar1, fragment.color.y, fragment.position.y;
+CMP temp.y, condVar1, temp.y, tempVar1;
 TEMP tempVar3;
-MAX tempVar3, tempVar3, tempVar2;
-TEMP tempVar4;
-CMP tempVar4, tempVar3, -1, 1;
-MOV a, tempVar4;
+CMP temp.z, condVar1, temp.z, fragment.color.z;
+TEMP tempVar2;
+MUL tempVar2, fragment.color.w, fragment.position.x;
+TEMP tempVar3;
+MUL tempVar3, tempVar2, fragment.position.y;
+CMP temp.w, condVar1, temp.w, tempVar3;
+SUB condVar1, 0, condVar1;
+TEMP tempVar5;
+CMP temp, condVar1, temp, fragment.color;
+MOV result.color, temp;
 END
