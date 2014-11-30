@@ -9,7 +9,6 @@ CMP temp.x, condVar1, temp.x, tempVar0;
 TEMP tempVar1;
 MUL tempVar1, fragment.color.y, fragment.position.y;
 CMP temp.y, condVar1, temp.y, tempVar1;
-TEMP tempVar3;
 CMP temp.z, condVar1, temp.z, fragment.color.z;
 TEMP tempVar2;
 MUL tempVar2, fragment.color.w, fragment.position.x;
@@ -17,7 +16,6 @@ TEMP tempVar3;
 MUL tempVar3, tempVar2, fragment.position.y;
 CMP temp.w, condVar1, temp.w, tempVar3;
 SUB condVar1, 0, condVar1;
-TEMP tempVar5;
 CMP temp, condVar1, temp, fragment.color;
 MOV result.color, temp;
 END

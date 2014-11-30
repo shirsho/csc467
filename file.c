@@ -1,6 +1,6 @@
-{
+/*{
 	bool a = (true && true) || false;
-}
+}*/
 
 /*{
 	vec4 fCol = gl_Color;
@@ -25,7 +25,7 @@
 	gl_FragColor = shade;
 }*/
 
-/*
+
 {
 	vec4 temp;
 	if (true){
@@ -40,7 +40,7 @@
 	gl_FragColor = temp;
 
 }
-*/
+
 
 /*
 

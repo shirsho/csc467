@@ -1236,7 +1236,7 @@ int generateAssembly(node * ast){
 						}
 					}
 				}else{
-					if(tempCount >= tempDeclared){
+					if(tempCount >= tempDeclared && ifFlag > 1){
 			    		tempDeclared += 1;
 			    		tempCount += 1;
 			    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
