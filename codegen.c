@@ -1318,22 +1318,54 @@ int generateAssembly(node * ast){
 	    		argumentsCount++;
 	    		generateAssembly(ast->arguments_expr.left);
 	    	}
-	    	if(argumentsCount > 1 && constructfunc == 1){
-	    		generateAssembly(ast->arguments_expr.right);
-	    		fprintf(filePointer, ", ");
-	    		argumentsCount--;
-	    	}else if(argumentsCount == 1 && constructfunc == 1){
-	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount--;
-	    	}else if(argumentsCount == 1 && constructfunc == 2){
-	    		fprintf(filePointer, ", ");
-	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    	}else if(argumentsCount == 2 && constructfunc == 2){
-	    		fprintf(filePointer, ", ");
-	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    	}
+	    	if(param == 1){
+		    	if(argumentsCount > 1 && constructfunc == 1){
+		    		generateAssembly(ast->arguments_expr.right);
+		    		fprintf(filePointer, ", ");
+		    		argumentsCount--;
+		    	}else if(argumentsCount == 1 && constructfunc == 1){
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    	}else if(argumentsCount == 1 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    	}else if(argumentsCount == 2 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    	}
+		    }else{
+		    	if(argumentsCount == 4 && constructfunc == 1){
+		    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount - 1);
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    		fprintf(filePointer, ";\n");
+		    	}else if(argumentsCount == 3 && constructfunc == 1){
+		    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount - 1);
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    		fprintf(filePointer, ";\n");
+		    	}else if(argumentsCount == 2 && constructfunc == 1){
+		    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount - 1);
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    		fprintf(filePointer, ";\n");
+		    	}else if(argumentsCount == 1 && constructfunc == 1){
+		    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount - 1);
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    		fprintf(filePointer, ";\n");
+		    	}else if(argumentsCount == 1 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    	}else if(argumentsCount == 2 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount--;
+		    	}
+		    }
 	      	break;
 
 	    case ARGUMENTS_OPT_NODE:
