@@ -8,7 +8,7 @@ Samprit Raihan, 998138830
 #include "symbol.h"
 #include "semantic.h"
 int tempCount = 0;
-int tempDeclared = 0;
+int param = 0;
 int argumentsCount = 0;
 int constructfunc = 0;
 int ifFlag = 0;
@@ -1122,11 +1122,15 @@ int generateAssembly(node * ast){
 	    	if(ast->declaration_expr.constant == 261){
 	    		if(ast->declaration_expr.right->kind == BINARY_EXPRESSION_NODE || 
 	    				ast->declaration_expr.right->kind == UNARY_EXPRESSION_NODE ||
-	    				ast->declaration_expr.right->kind == CONSTRUCTOR_NODE ||
 	    				ast->declaration_expr.right->kind == FUNCTION_NODE ||
 	    				ast->declaration_expr.right->kind == EXPRESSION_NODE){
 	    			s = generateAssembly(ast->declaration_expr.right);
 	    			fprintf(filePointer, "PARAM %s = tempVar%d;\n", ast->declaration_expr.id, s);
+	    		}else if(ast->declaration_expr.right->kind == CONSTRUCTOR_NODE){
+	    			param = 1;
+	    			fprintf(filePointer, "PARAM %s = {", ast->declaration_expr.id);
+	    			generateAssembly(ast->declaration_expr.right);
+	    			fprintf(filePointer, "};\n");
 	    		}else{
 	    			fprintf(filePointer, "PARAM %s = ",  ast->declaration_expr.id);
 	    			generateAssembly(ast->declaration_expr.right);
@@ -1287,14 +1291,8 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case CONSTRUCTOR_NODE:
-    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-    		s = tempCount;
-    		tempCount += 1;
-
 	    	constructfunc = 1;
 	    	generateAssembly(ast->construt_expr.right);
-
-	    	return s;
 	      	break;
 
 	    case NESTED_SCOPE_NODE:
@@ -1316,33 +1314,22 @@ int generateAssembly(node * ast){
 
 	    case ARGUMENTS_NODE:
 	    	printf("ARGUMENTS\n");
-	    	if(ast->arguments_expr.left != NULL)
+	    	if(ast->arguments_expr.left != NULL){
+	    		argumentsCount++;
 	    		generateAssembly(ast->arguments_expr.left);
-	    	if(argumentsCount == 0 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount - 1);
+	    	}
+	    	if(argumentsCount > 1 && constructfunc == 1){
 	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    		fprintf(filePointer, ";\n");
+	    		fprintf(filePointer, ", ");
+	    		argumentsCount--;
 	    	}else if(argumentsCount == 1 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount - 1);
 	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    		fprintf(filePointer, ";\n");
-	    	}else if(argumentsCount == 2 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount - 1);
-	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    		fprintf(filePointer, ";\n");
-	    	}else if(argumentsCount == 3 && constructfunc == 1){
-	    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount - 1);
-	    		generateAssembly(ast->arguments_expr.right);
-	    		argumentsCount += 1;
-	    		fprintf(filePointer, ";\n");
-	    	}else if(argumentsCount == 0 && constructfunc == 2){
+	    		argumentsCount--;
+	    	}else if(argumentsCount == 1 && constructfunc == 2){
 	    		fprintf(filePointer, ", ");
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
-	    	}else if(argumentsCount == 1 && constructfunc == 2){
+	    	}else if(argumentsCount == 2 && constructfunc == 2){
 	    		fprintf(filePointer, ", ");
 	    		generateAssembly(ast->arguments_expr.right);
 	    		argumentsCount += 1;
@@ -1351,8 +1338,8 @@ int generateAssembly(node * ast){
 
 	    case ARGUMENTS_OPT_NODE:
 	    	printf("ARGUMENT OPS\n");
+	    	argumentsCount = 1;
 	    	generateAssembly(ast->arguments_opt_expr.argum);
-	    	argumentsCount = 0;
 	      	break;
 
 	    case EXPRESSION_NODE:
