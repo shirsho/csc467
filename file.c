@@ -1,5 +1,5 @@
 /*{
-	bool a = (true && true) || false;
+	vec3 a = vec3(1.0,0.0,0.0);
 }*/
 
 {

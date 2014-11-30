@@ -10,6 +10,7 @@ Samprit Raihan, 998138830
 int tempCount = 0;
 int param = 0;
 int argumentsCount = 0;
+int argumentsMax = 0;
 int constructfunc = 0;
 int ifFlag = 0;
 int ifMax = 0;
@@ -1291,8 +1292,15 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case CONSTRUCTOR_NODE:
+	    	if(param != 1){
+	    		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+    			s = tempCount;
+    			tempCount += 1;
+	    	}
 	    	constructfunc = 1;
 	    	generateAssembly(ast->construt_expr.right);
+	    	if(param != 1)
+	    		return s;
 	      	break;
 
 	    case NESTED_SCOPE_NODE:
@@ -1315,63 +1323,64 @@ int generateAssembly(node * ast){
 	    case ARGUMENTS_NODE:
 	    	printf("ARGUMENTS\n");
 	    	if(ast->arguments_expr.left != NULL){
-	    		argumentsCount++;
+	    		argumentsMax++;
 	    		generateAssembly(ast->arguments_expr.left);
 	    	}
 	    	if(param == 1){
-		    	if(argumentsCount > 1 && constructfunc == 1){
+		    	if(argumentsMax > argumentsCount && constructfunc == 1){
 		    		generateAssembly(ast->arguments_expr.right);
 		    		fprintf(filePointer, ", ");
-		    		argumentsCount--;
-		    	}else if(argumentsCount == 1 && constructfunc == 1){
+		    		argumentsCount++;
+		    	}else if(argumentsMax == argumentsCount && constructfunc == 1){
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
+		    	}else if(argumentsCount == 0 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount++;
 		    	}else if(argumentsCount == 1 && constructfunc == 2){
 		    		fprintf(filePointer, ", ");
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
-		    	}else if(argumentsCount == 2 && constructfunc == 2){
-		    		fprintf(filePointer, ", ");
-		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    	}
 		    }else{
-		    	if(argumentsCount == 4 && constructfunc == 1){
+		    	if(argumentsCount == 0 && constructfunc == 1){
 		    		fprintf(filePointer, "MOV tempVar%d.x, ", tempCount - 1);
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    		fprintf(filePointer, ";\n");
-		    	}else if(argumentsCount == 3 && constructfunc == 1){
+		    	}else if(argumentsCount == 1 && constructfunc == 1){
 		    		fprintf(filePointer, "MOV tempVar%d.y, ", tempCount - 1);
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    		fprintf(filePointer, ";\n");
 		    	}else if(argumentsCount == 2 && constructfunc == 1){
 		    		fprintf(filePointer, "MOV tempVar%d.z, ", tempCount - 1);
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    		fprintf(filePointer, ";\n");
-		    	}else if(argumentsCount == 1 && constructfunc == 1){
+		    	}else if(argumentsCount == 3 && constructfunc == 1){
 		    		fprintf(filePointer, "MOV tempVar%d.w, ", tempCount - 1);
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    		fprintf(filePointer, ";\n");
+		    	}else if(argumentsCount == 0 && constructfunc == 2){
+		    		fprintf(filePointer, ", ");
+		    		generateAssembly(ast->arguments_expr.right);
+		    		argumentsCount++;
 		    	}else if(argumentsCount == 1 && constructfunc == 2){
 		    		fprintf(filePointer, ", ");
 		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
-		    	}else if(argumentsCount == 2 && constructfunc == 2){
-		    		fprintf(filePointer, ", ");
-		    		generateAssembly(ast->arguments_expr.right);
-		    		argumentsCount--;
+		    		argumentsCount++;
 		    	}
 		    }
 	      	break;
 
 	    case ARGUMENTS_OPT_NODE:
 	    	printf("ARGUMENT OPS\n");
-	    	argumentsCount = 1;
 	    	generateAssembly(ast->arguments_opt_expr.argum);
+	    	argumentsCount = 0;
+	    	argumentsMax = 0;
 	      	break;
 
 	    case EXPRESSION_NODE:
