@@ -57,7 +57,7 @@ int generateAssembly(node * ast){
 	switch(ast->kind) {
   
 	    case SCOPE_NODE:
-	    	printf("SCOPE\n");
+	    	//printf("SCOPE\n");
 	    	if(ast->scope_expr.left != NULL){
 	    		generateAssembly(ast->scope_expr.left);
 	    	}
@@ -70,7 +70,7 @@ int generateAssembly(node * ast){
 	    	//printf("BINARY_EXPRESSION_NODE\n");
     		switch(ast->binary_expr.op){
     			case 43: // +
-    			  	printf("BINARY +\n");
+    			  	//printf("BINARY +\n");
     			  	if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -79,7 +79,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE  					       					   
     					  )
 	    				{
-	    					printf("left recurse add\n");	    					
+	    					//printf("left recurse add\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 	    					fprintf(filePointer, "ADD tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
@@ -96,7 +96,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					 	  )
 			    			{
-			    				printf("right recurse add\n");	    					
+			    				//printf("right recurse add\n");	    					
 		    					generateAssembly(ast->binary_expr.right);
 		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 		    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
@@ -123,7 +123,7 @@ int generateAssembly(node * ast){
     				return tempCount - 1;
     				break;
     			case 45: // -
-					printf("BINARY -\n");
+					//printf("BINARY -\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -132,7 +132,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
-	    					printf("left recurse sub\n");	    					
+	    					//printf("left recurse sub\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 	    					fprintf(filePointer, "SUB tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
@@ -149,7 +149,7 @@ int generateAssembly(node * ast){
     					       ast->binary_expr.left->kind == CONSTRUCTOR_NODE 
     					 	  )
 			    			{
-			    				printf("right recurse sub\n");	    					
+			    				//printf("right recurse sub\n");	    					
 		    					generateAssembly(ast->binary_expr.right);
 		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 		    					fprintf(filePointer, "SUB tempVar%d, ", tempCount);
@@ -176,7 +176,7 @@ int generateAssembly(node * ast){
     				return tempCount - 1;
  	  				break;
     			case 42: // *
-    				printf("BINARY *\n");
+    				//printf("BINARY *\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -185,7 +185,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
-	    					printf("left recurse mul\n");	    					
+	    					//printf("left recurse mul\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 	    					fprintf(filePointer, "MUL tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
@@ -202,7 +202,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					 	  )
 			    			{
-			    				printf("right recurse mul\n");	    					
+			    				//printf("right recurse mul\n");	    					
 		    					generateAssembly(ast->binary_expr.right);
 		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 		    					fprintf(filePointer, "MUL tempVar%d, ", tempCount);
@@ -227,7 +227,7 @@ int generateAssembly(node * ast){
 	    			return tempCount - 1;
     				break;
     			case 47: // /
-    				printf("BINARY /\n");
+    				//printf("BINARY /\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -236,7 +236,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
-	    					printf("left recurse div\n");	    					
+	    					//printf("left recurse div\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 
@@ -254,7 +254,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
-			    				printf("right recurse div\n");	    					
+			    				//printf("right recurse div\n");	    					
 		    					generateAssembly(ast->binary_expr.right);
 		    					// Generate reciprocal received from right expression
 		    					fprintf(filePointer, "RCP ");
@@ -309,23 +309,14 @@ int generateAssembly(node * ast){
 			    					fprintf(filePointer, "tempVar%d", tempCount -1);
 			    					fprintf(filePointer, ";\n");
 			    					tempCount++; 
-    					  		}    					  		
-			    				// Now multiply left operand with the reciprocal
-    					  // 		fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
-			    				// fprintf(filePointer, "MUL tempVar%d, ", tempCount);	
-    					  // 		generateAssembly(ast->binary_expr.left);
-		    					// fprintf(filePointer, ", ");
-		    					// generateAssembly(ast->binary_expr.right);
-		    					// fprintf(filePointer, ";\n");
-		    					// tempCount++;
-    					  // 	}									    					
+    					  		}  							    					
 	    					}
 	    				}
 	    			}
 	    			return tempCount - 1;
     				break;
     			case 94: // ^
-    				printf("BINARY ^\n");
+    				//printf("BINARY ^\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -334,7 +325,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
-	    					printf("left recurse pow\n");	    					
+	    					//printf("left recurse pow\n");	    					
 	    					generateAssembly(ast->binary_expr.left);
 	    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 	    					fprintf(filePointer, "POW tempVar%d, tempVar%d, ", tempCount, tempCount - 1);
@@ -350,7 +341,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
-			    				printf("right recurse pow\n");	    					
+			    				//printf("right recurse pow\n");	    					
 		    					generateAssembly(ast->binary_expr.right);
 		    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 		    					fprintf(filePointer, "POW tempVar%d, ", tempCount);
@@ -375,7 +366,7 @@ int generateAssembly(node * ast){
 	    			return tempCount - 1;
     				break;
     			case AND:
-    				printf("BINARY AND\n");
+    				//printf("BINARY AND\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -384,7 +375,7 @@ int generateAssembly(node * ast){
     					  )
 	    				{
 
-	    					printf("left recurse AND\n");
+	    					//printf("left recurse AND\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    					// Now evaluate right side
 
@@ -392,7 +383,6 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
     					 	  )
 	    					{
-	    						printf("if\n");
 	    						generateAssembly(ast->binary_expr.right);
 	    					}
 	    					else
@@ -434,7 +424,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
-			    				printf("right recurse AND\n");
+			    				//printf("right recurse AND\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == FUNCTION_NODE
@@ -493,7 +483,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case OR:
-    				printf("BINARY OR\n");
+    				//printf("BINARY OR\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -502,7 +492,7 @@ int generateAssembly(node * ast){
     					  )
 	    				{
 
-	    					printf("left recurse OR\n");
+	    					//printf("left recurse OR\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    					// Now evaluate right side
 
@@ -552,7 +542,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					   	   )
 			    			{
-			    				printf("right recurse OR\n");
+			    				//printf("right recurse OR\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == FUNCTION_NODE
@@ -602,7 +592,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case NEQ:
-    				printf("BINARY NEQ\n");
+    				//printf("BINARY NEQ\n");
 					if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -662,7 +652,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case EQ:
-    				printf("BINARY EQ\n");
+    				//printf("BINARY EQ\n");
     				if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -718,7 +708,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case 60: // LESS THAN
-    				printf("BINARY <\n");
+    				//printf("BINARY <\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -727,7 +717,7 @@ int generateAssembly(node * ast){
     					  )
 	    				{
 
-	    					printf("left recurse <\n");
+	    					//printf("left recurse <\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    					// Now evaluate right side
 
@@ -761,7 +751,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
-			    				printf("right recurse <\n");
+			    				//printf("right recurse <\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
     					   		   ast->binary_expr.left->kind == FUNCTION_NODE
@@ -806,7 +796,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case 62: // GREATER THAN
-    				printf("BINARY >\n");
+    				//printf("BINARY >\n");
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -815,7 +805,7 @@ int generateAssembly(node * ast){
     					  )
 	    				{
 
-	    					printf("left recurse >\n");
+	    					//printf("left recurse >\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    					// Now evaluate right side
 
@@ -849,7 +839,7 @@ int generateAssembly(node * ast){
     					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
-			    				printf("right recurse >\n");
+			    				//printf("right recurse >\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
     					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
     					   		   ast->binary_expr.left->kind == FUNCTION_NODE
@@ -894,7 +884,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case LEQ:
-    				printf("BINARY LEQ\n");
+    				//printf("BINARY LEQ\n");
     				if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -903,7 +893,7 @@ int generateAssembly(node * ast){
 	    				  )
 	    				{
 	    					
-	    					printf("left recurse LEQ\n");
+	    					//printf("left recurse LEQ\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    				
 	    				}
@@ -915,7 +905,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == FUNCTION_NODE
 	    				  )
 	    				{
-	    					printf("left recurse GEQ\n");
+	    					//printf("left recurse GEQ\n");
 	    					generateAssembly(ast->binary_expr.right);
 	    				}
 						else
@@ -972,7 +962,7 @@ int generateAssembly(node * ast){
 	    			return tempCount;
     				break;
     			case GEQ:
-    				printf("BINARY GEQ\n");
+    				//printf("BINARY GEQ\n");
     				if(ast->binary_expr.left)
 	    			{
 	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
@@ -981,7 +971,7 @@ int generateAssembly(node * ast){
 	    			      )
 	    				{
 	    					
-	    					printf("left recurse GEQ\n");
+	    					//printf("left recurse GEQ\n");
 	    					generateAssembly(ast->binary_expr.left);
 	    				
 	    				}
@@ -993,7 +983,7 @@ int generateAssembly(node * ast){
     					   ast->binary_expr.left->kind == FUNCTION_NODE
     					  )
 	    				{
-	    					printf("left recurse GEQ\n");
+	    					//printf("left recurse GEQ\n");
 	    					generateAssembly(ast->binary_expr.right);
 	    				}
 						else
@@ -1014,7 +1004,7 @@ int generateAssembly(node * ast){
 	    case UNARY_EXPRESSION_NODE:
 
 			//fprintf(filePointer, "#UNARY EXPRESSION\n");
-			printf("UNARY_EXPRESSION_NODE\n");
+			//printf("UNARY_EXPRESSION_NODE\n");
 			if(ast->unary_expr.op == UMINUS){
 				printf("UMINUS\n");
 				// subtract the expression from zero
@@ -1045,7 +1035,7 @@ int generateAssembly(node * ast){
 				}
 			}
 			else{
-				printf("UNARY_NOT\n");
+				//printf("UNARY_NOT\n");
 				if(ast->unary_expr.right != NULL){
 					// implement unary NOT
 					// compare the unary expression with TRUE or FALSE
@@ -1078,7 +1068,7 @@ int generateAssembly(node * ast){
 	     	break;
 
 	    case BOOL_NODE:
-	    	printf("BOOL_NODE\n");
+	    	//printf("BOOL_NODE\n");
 	    	if(ast->bool_expr.val == 263)
 	    		fprintf(filePointer, "1");
 	    	if(ast->bool_expr.val == 262)
@@ -1086,7 +1076,7 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case VAR_NODE:
-	    	printf("VAR\n");
+	    	//printf("VAR\n");
 	    	for(i = 0; i < 13; i++){
 	    		if(!strcmp(glslPredefined[i], ast->var_expr.id)){
 	    			if(ast->var_expr.arr == -1){
@@ -1191,7 +1181,7 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case STATEMENT_NODE:
-	    	printf("STATEMENTS\n");
+	    	//printf("STATEMENTS\n");
 	    	if(ast->statement_expr.left != NULL){
 	    		generateAssembly(ast->statement_expr.left);
 	    	}
@@ -1304,14 +1294,14 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case NESTED_SCOPE_NODE:
-	    	printf("NESTED SCOPE\n");
+	    	//printf("NESTED SCOPE\n");
 	    	if(ast->nest_scope_expr.scope != NULL){
 	    		generateAssembly(ast->nest_scope_expr.scope);
 	    	}
 	      	break;
 
 	    case DECLARATIONS_NODE:
-	    	printf("DECLARATIONS\n");
+	    	//printf("DECLARATIONS\n");
 	    	if(ast->declarations_expr.left != NULL){
 	    		generateAssembly(ast->declarations_expr.left);
 	    	}
@@ -1321,7 +1311,7 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case ARGUMENTS_NODE:
-	    	printf("ARGUMENTS\n");
+	    	//printf("ARGUMENTS\n");
 	    	if(ast->arguments_expr.left != NULL){
 	    		argumentsMax++;
 	    		generateAssembly(ast->arguments_expr.left);
@@ -1377,7 +1367,7 @@ int generateAssembly(node * ast){
 	      	break;
 
 	    case ARGUMENTS_OPT_NODE:
-	    	printf("ARGUMENT OPS\n");
+	    	//printf("ARGUMENT OPS\n");
 	    	generateAssembly(ast->arguments_opt_expr.argum);
 	    	argumentsCount = 0;
 	    	argumentsMax = 0;
