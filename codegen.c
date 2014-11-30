@@ -73,7 +73,9 @@ int generateAssembly(node * ast){
     			  	if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE  					       					   
     					  )
 	    				{
 	    					printf("left recurse add\n");	    					
@@ -88,7 +90,9 @@ int generateAssembly(node * ast){
 						else
 	    				{
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    						   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   	   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					 	  )
 			    			{
 			    				printf("right recurse add\n");	    					
@@ -122,7 +126,9 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE  ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
 	    					printf("left recurse sub\n");	    					
@@ -137,7 +143,9 @@ int generateAssembly(node * ast){
 						else
 	    				{
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					       ast->binary_expr.left->kind == CONSTRUCTOR_NODE 
     					 	  )
 			    			{
 			    				printf("right recurse sub\n");	    					
@@ -171,7 +179,9 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
 	    					printf("left recurse mul\n");	    					
@@ -186,7 +196,9 @@ int generateAssembly(node * ast){
 						else
 	    				{
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   	   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					 	  )
 			    			{
 			    				printf("right recurse mul\n");	    					
@@ -218,7 +230,9 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
 	    					printf("left recurse div\n");	    					
@@ -233,8 +247,10 @@ int generateAssembly(node * ast){
 	    				}
 						else
 	    				{
+	    					// I am not convinced that the right node of division should be a constructor
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
 			    				printf("right recurse div\n");	    					
@@ -312,7 +328,9 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE ||
+    					   ast->binary_expr.left->kind == CONSTRUCTOR_NODE
     					  )
 	    				{
 	    					printf("left recurse pow\n");	    					
@@ -327,7 +345,8 @@ int generateAssembly(node * ast){
 						else
 	    				{
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
 			    				printf("right recurse pow\n");	    					
@@ -359,7 +378,8 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
     					  )
 	    				{
 
@@ -409,12 +429,14 @@ int generateAssembly(node * ast){
 	    				{	
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
 			    				printf("right recurse AND\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   	   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  	  )
 			    				{
 
@@ -424,8 +446,7 @@ int generateAssembly(node * ast){
 			    				{
 
 				    				generateAssembly(ast->binary_expr.right);
-				    				fprintf(filePointer, "\nProblem area\n" );
-			    					fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
+				    				fprintf(filePointer, "TEMP tempVar%d;\n", tempCount);
 			    					
 			    					fprintf(filePointer, "ADD tempVar%d, ", tempCount);
 			    					generateAssembly(ast->binary_expr.left);
@@ -475,7 +496,9 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE)
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
+    					  )
 	    				{
 
 	    					printf("left recurse OR\n");
@@ -483,7 +506,9 @@ int generateAssembly(node * ast){
 	    					// Now evaluate right side
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE)
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
+    					   	  )
     					   	{
 	    						generateAssembly(ast->binary_expr.right);
 	    					}
@@ -522,11 +547,15 @@ int generateAssembly(node * ast){
 	    				{	
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE)
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
+    					   	   )
 			    			{
 			    				printf("right recurse OR\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE)
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   	   	   ast->binary_expr.left->kind == FUNCTION_NODE
+    					   	   	   )
 			    				{
 			    					generateAssembly(ast->binary_expr.left);		
 			    				}
@@ -575,7 +604,9 @@ int generateAssembly(node * ast){
     				printf("BINARY NEQ\n");
 					if(ast->binary_expr.left)
 	    			{
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE)
 	    				{
 	    					//printf("left recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.left);
@@ -583,7 +614,9 @@ int generateAssembly(node * ast){
 	    			}
 	    			if(ast->binary_expr.right)
 	    			{
-	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE)
 	    				{
 	    					//printf("right recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.right);
@@ -629,7 +662,9 @@ int generateAssembly(node * ast){
     				printf("BINARY EQ\n");
     				if(ast->binary_expr.left)
 	    			{
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+    					   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE)
 	    				{
 	    					//printf("left recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.left);
@@ -637,7 +672,9 @@ int generateAssembly(node * ast){
 	    			}
 	    			if(ast->binary_expr.right)
 	    			{
-	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE||
+    					   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE)
 	    				{
 	    					//printf("right recurse EQ\n");
 	    					generateAssembly(ast->binary_expr.right);
@@ -680,7 +717,8 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
     					  )
 	    				{
 
@@ -689,7 +727,8 @@ int generateAssembly(node * ast){
 	    					// Now evaluate right side
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 	    					{
 	    						generateAssembly(ast->binary_expr.right);
@@ -713,12 +752,14 @@ int generateAssembly(node * ast){
 	    				{	
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
 			    				printf("right recurse <\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   		   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  	  )
 			    				{
 			    					generateAssembly(ast->binary_expr.left);		
@@ -764,7 +805,8 @@ int generateAssembly(node * ast){
     				if(ast->binary_expr.left && ast->binary_expr.right)
     				{
     					if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
     					  )
 	    				{
 
@@ -773,7 +815,8 @@ int generateAssembly(node * ast){
 	    					// Now evaluate right side
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 	    					{
 	    						generateAssembly(ast->binary_expr.right);
@@ -797,12 +840,14 @@ int generateAssembly(node * ast){
 	    				{	
 
 	    					if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
-    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE
+    					   	   ast->binary_expr.right->kind == EXPRESSION_NODE ||
+    					   	   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  )
 			    			{
 			    				printf("right recurse >\n");
 			    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
-    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE
+    					   	   	   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   		   ast->binary_expr.left->kind == FUNCTION_NODE
     					 	  	  )
 			    				{
 			    					generateAssembly(ast->binary_expr.left);		
@@ -847,7 +892,10 @@ int generateAssembly(node * ast){
     				printf("BINARY LEQ\n");
     				if(ast->binary_expr.left)
 	    			{
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+						   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
+	    				  )
 	    				{
 	    					
 	    					printf("left recurse LEQ\n");
@@ -857,7 +905,10 @@ int generateAssembly(node * ast){
 	    			}
 	    			if(ast->binary_expr.right)
 	    			{
-	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+						   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
+	    				  )
 	    				{
 	    					printf("left recurse GEQ\n");
 	    					generateAssembly(ast->binary_expr.right);
@@ -919,7 +970,10 @@ int generateAssembly(node * ast){
     				printf("BINARY GEQ\n");
     				if(ast->binary_expr.left)
 	    			{
-	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE ||
+						   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
+	    			      )
 	    				{
 	    					
 	    					printf("left recurse GEQ\n");
@@ -929,7 +983,10 @@ int generateAssembly(node * ast){
 	    			}
 	    			if(ast->binary_expr.right)
 	    			{
-	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE)
+	    				if(ast->binary_expr.right->kind == BINARY_EXPRESSION_NODE ||
+						   ast->binary_expr.left->kind == EXPRESSION_NODE ||
+    					   ast->binary_expr.left->kind == FUNCTION_NODE
+    					  )
 	    				{
 	    					printf("left recurse GEQ\n");
 	    					generateAssembly(ast->binary_expr.right);
